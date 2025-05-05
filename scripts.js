@@ -15,18 +15,18 @@ if (localStorage.getItem('todos')) {
 }
 
 function addTask() {
-    if (input.value === '') {
+    if (input.value.trim() === '') {
         checkWarningInput();
-        return false;
-    } else {
-        warningInput.innerHTML = '';
+        return;
     }
+
+    warningInput.textContent = '';
 
     todos.push(input.value);
     updateDisplay();
     input.value = '';
 
-    return false;
+    return;
 }
 
 function removeTask(index) {
@@ -41,7 +41,7 @@ function clearAllTodos() {
 }
 
 function updateDisplay() {
-    container.innerHTML = '';
+    container.textContent = '';
     todoCounter();
 
     todos.map((todo, index) => {
@@ -51,11 +51,11 @@ function updateDisplay() {
         const span = document.createElement('span');
         span.className = 'list_item-title';
         li.appendChild(span);
-        li.querySelector('span').innerHTML = todo;
+        li.querySelector('span').textContent = todo;
 
         const removeButton = document.createElement('button');
         removeButton.className = 'list_item-remove';
-        removeButton.innerHTML = 'Remove';
+        removeButton.textContent = 'Remove';
         removeButton.onclick = () => removeTask(index);
         li.appendChild(removeButton);
 
@@ -66,14 +66,14 @@ function updateDisplay() {
 }
 
 function checkWarningInput() {
-    warningInput.innerHTML = '';
+    warningInput.textContent = '';
 
     warningInput.classList.add('empty_input');
-    warningInput.innerHTML = 'Input is empty';
+    warningInput.textContent = 'Input is empty';
     warningInput.appendChild(span);
 }
 
 function todoCounter() {
-    if (!todos) return false;
-    counter.innerHTML = todos.length;
+    if (!todos) return;
+    counter.textContent = todos.length;
 }
