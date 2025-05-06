@@ -123,9 +123,11 @@ function editTodo(index, todoList) {
 }
 
 function saveEdit(value, todo, todoList) {
-    const validatedValue = value;
-    if (validatedValue === todo.text) {
+    const validatedValue = value.trim();
+    if (validatedValue === todo.text || validatedValue === '') {
         closeAllEditTodo();
+        updateDisplay(todoList);
+        return;
     }
 
     todo.text = validatedValue;
