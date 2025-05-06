@@ -1,9 +1,16 @@
 :root {
     --main-grey: #e0e0e0;
+    --light-grey: #f0f0f0;
+    --hard-grey: #616161;
     --light-orange: #ffc1a7;
     --hard-orange: #fca782;
-    --alarm-red: #fd0000;
+    --hard-alarm-red: #fd0000;
+    --light-alarm-red: #ffd3d5;
     --white: #fff;
+    --black: #000;
+    --hard-green: #008000;
+    --light-green: #5ce65c;
+    --light-gold: #fff5cf;
 }
 
 * {
@@ -91,14 +98,14 @@ body {
 }
 
 .input_warning {
-    color: var(--alarm-red);
+    color: var(--hard-alarm-red);
 }
 
 .todo_list {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 12px;
+    gap: 6px;
     width: 100%;
 }
 
@@ -108,11 +115,115 @@ body {
     justify-content: space-between;
     gap: 12px;
     list-style-type: none;
+    padding: 5px;
+    border-radius: 5px;
+
+    transition: 0.2s;
+}
+
+.list_item.completed {
+    background-color: var(--light-grey);
+}
+
+.list_item.completed .list_item-title {
+    color: var(--hard-grey);
+    text-decoration: line-through;
+}
+
+.list_item-context {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+.list_item-radio {
+    position: relative;
+    background-color: transparent;
+    border: solid 1px var(--light-orange);
+    border-radius: 5px;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+}
+
+.list_item-radio:hover .list_item-radio_image {
+    opacity: 0.6;
+}
+
+.list_item-radio_image {
+    position: absolute;
+    top: -1px;
+    left: 0px;
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+    transition: 0.2s;
+}
+
+.list_item.completed .list_item-radio_image {
+    opacity: 1;
 }
 
 .list_item-title {
     font-size: 18px;
     word-break: break-all;
+}
+
+.list_item-functional {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.list_item-edit {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: transparent;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: 0.75;
+    gap: 6px;
+    transition: 0.2s;
+}
+
+.list_item-edit:hover {
+    background-color: var(--light-gold);
+    cursor: pointer;
+    opacity: 1;
+}
+
+.list_item-edit_image {
+    width: 20px;
+    height: 20px;
+}
+
+.list_item-edit_input {
+    width: 100%;
+    font-size: 18px;
+    background-color: transparent;
+    border: solid 1px var(--hard-grey);
+    border-radius: 5px;
+    padding: 2px 10px 2px 10px;
+}
+
+.list_item-save_edit {
+    background-color: transparent;
+    opacity: 0.75;
+    padding: 5px;
+    border-radius: 5px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.list_item-save_edit:hover {
+    background-color: var(--light-green);
+    opacity: 1;
 }
 
 .list_item-remove {
@@ -125,7 +236,8 @@ body {
 
 .list_item-remove:hover {
     opacity: 0.95;
-    color: var(--alarm-red);
+    background-color: var(--light-alarm-red);
+    color: var(--hard-alarm-red);
 }
 
 .todo_footer {
@@ -144,5 +256,26 @@ body {
 
 .todos_cleaner:hover {
     opacity: 0.95;
-    color: var(--alarm-red);
+    background-color: var(--light-alarm-red);
+    color: var(--hard-alarm-red);
+}
+
+.todo_filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+}
+
+.todo_filter-item {
+    color: var(--hard-grey);
+    opacity: 0.7;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.todo_filter-item.active {
+    opacity: 1;
+    color: var(--black);
+    text-decoration: underline;
 }
