@@ -6,19 +6,41 @@ const counter = document.querySelector('.count_item');
 const filters = document.querySelectorAll('.todo_filter-item');
 
 let todos;
+let currentFilter;
 
 if (localStorage.getItem('todos')) {
     todos = JSON.parse(localStorage.getItem('todos'));
     closeAllEditTodo();
-    updateDisplay();
+    applyCurrentFilter();
 } else {
     closeAllEditTodo();
-    clearAllTodos();
     todos = [];
+}
+
+if (localStorage.getItem('filter')) {
+    currentFilter = JSON.parse(localStorage.getItem('filter'));
+    console.log(currentFilter);
+    applyCurrentFilter();
+} else {
+    currentFilter = 'all';
+    applyCurrentFilter();
+}
+
+function applyCurrentFilter() {
+    filters.forEach((filter) => {
+        const filterValue = filter.textContent.toLowerCase();
+        if (filterValue === currentFilter) {
+            filter.classList.add('active');
+        } else {
+            filter.classList.remove('active');
+        }
+    });
+    filterTodos(currentFilter);
 }
 
 function addTask() {
     if (input.value.trim() === '') {
+        closeAllEditTodo();
         checkWarningInput();
         return;
     }
@@ -33,6 +55,7 @@ function addTask() {
 
     updateDisplay();
     input.value = '';
+    closeAllEditTodo();
     return;
 }
 
@@ -66,7 +89,9 @@ function toggleTodoFilter() {
             filter.classList.add('active');
 
             const filterStatus = filter.textContent.toLowerCase();
-            filterTodos(filterStatus);
+            currentFilter = filterStatus;
+            localStorage.setItem('filter', JSON.stringify(currentFilter));
+            filterTodos(currentFilter);
         };
     });
 }
@@ -86,6 +111,10 @@ function filterTodos(filter) {
             break;
     }
 
+    if (filter) {
+        localStorage.setItem('filter', JSON.stringify(filter));
+    }
+
     closeAllEditTodo();
     updateDisplay(filteredTodos);
 }
@@ -102,7 +131,6 @@ function checkWarningInput() {
 
     warningInput.classList.add('empty_input');
     warningInput.textContent = 'Input is empty';
-    warningInput.appendChild(span);
 }
 
 function todoCounter(todoList) {
@@ -142,17 +170,22 @@ function closeEdit(todoList) {
 }
 
 function closeAllEditTodo() {
-    todos.forEach((todoItem) => (todoItem.isEdit = false));
+    todos?.forEach((todoItem) => (todoItem.isEdit = false));
     updateDisplay();
 }
 
+function getTodoList(filteredTodo) {
+    if (filteredTodo) return filteredTodo;
+    return currentFilter === 'all' ? todos : todos.filter((todo) => todo.status === currentFilter);
+}
+
 function updateDisplay(filteredTodo) {
-    const todoList = filteredTodo ? filteredTodo : todos;
+    const todoList = getTodoList(filteredTodo);
     container.textContent = '';
     toggleTodoFilter();
     todoCounter(todoList);
 
-    todoList.map((todo, index) => {
+    todoList?.map((todo, index) => {
         const li = document.createElement('li');
         li.className = 'todo_list-item list_item';
 
