@@ -170,9 +170,9 @@ function saveEdit(value, todo, todoList) {
     updateDisplay(todoList);
 }
 
-function closeEdit(todoList) {
+function closeEdit() {
     closeAllEditTodo();
-    updateDisplay(todoList);
+    updateDisplay();
 }
 
 function closeAllEditTodo() {
@@ -247,7 +247,7 @@ function updateDisplay(filteredTodo) {
         radioButton.onclick = () => toggleTodoStatus(li, todo);
         editButton.onclick = () => editTodo(index, todoList);
         saveEditButton.onclick = () => saveEdit(editInput.value, todo, todoList);
-        closeEditButton.onclick = () => closeEdit(todo);
+        closeEditButton.onclick = () => closeEdit();
         removeButton.onclick = () => removeTask(index);
 
         //Mounting elements
