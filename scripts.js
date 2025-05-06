@@ -19,7 +19,6 @@ if (localStorage.getItem('todos')) {
 
 if (localStorage.getItem('filter')) {
     currentFilter = JSON.parse(localStorage.getItem('filter'));
-    console.log(currentFilter);
     applyCurrentFilter();
 } else {
     currentFilter = 'all';
@@ -53,15 +52,22 @@ function addTask() {
         text: input.value,
     });
 
-    updateDisplay();
+    localStorage.setItem('todos', JSON.stringify(todos));
+    const activeFilter = document.querySelector('.todo_filter-item.active');
+    currentFilter = activeFilter ? activeFilter.textContent.toLowerCase() : 'all';
+
+    filterTodos(currentFilter);
     input.value = '';
     closeAllEditTodo();
-    return;
 }
 
-function removeTask(index) {
-    todos.splice(index, 1);
-    updateDisplay();
+function removeTask(todoToRemove) {
+    const realIndex = todos.findIndex((todo) => todo.text === todoToRemove.text && todo.status === todoToRemove.status);
+
+    if (realIndex !== -1) {
+        todos.splice(realIndex, 1);
+        filterTodos(currentFilter);
+    }
 }
 
 function toggleTodoStatus(li, todo) {
@@ -241,7 +247,7 @@ function updateDisplay(filteredTodo) {
         radioButton.onclick = () => toggleTodoStatus(li, todo);
         editButton.onclick = () => editTodo(index, todoList);
         saveEditButton.onclick = () => saveEdit(editInput.value, todo, todoList);
-        closeEditButton.onclick = () => closeEdit(todoList);
+        closeEditButton.onclick = () => closeEdit(todo);
         removeButton.onclick = () => removeTask(index);
 
         //Mounting elements
