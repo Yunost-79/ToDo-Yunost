@@ -134,6 +134,11 @@ function saveEdit(value, todo, todoList) {
     updateDisplay(todoList);
 }
 
+function closeEdit(todoList) {
+    closeAllEditTodo();
+    updateDisplay(todoList);
+}
+
 function closeAllEditTodo() {
     todos.forEach((todoItem) => (todoItem.isEdit = false));
     updateDisplay();
@@ -177,8 +182,12 @@ function updateDisplay(filteredTodo) {
         editInput.textContent = todo.text;
 
         const saveEditButton = document.createElement('button');
-        saveEditButton.className = 'list_item-save_edit';
+        saveEditButton.className = 'list_item-save_edit open';
         saveEditButton.textContent = 'Save';
+
+        const closeEditButton = document.createElement('button');
+        closeEditButton.className = 'list_item-save_edit close';
+        closeEditButton.textContent = 'Close';
 
         const functionalBlock = document.createElement('div');
         functionalBlock.className = 'list_item-functional';
@@ -197,6 +206,7 @@ function updateDisplay(filteredTodo) {
         radioButton.onclick = () => toggleTodoStatus(li, todo);
         editButton.onclick = () => editTodo(index, todoList);
         saveEditButton.onclick = () => saveEdit(editInput.value, todo, todoList);
+        closeEditButton.onclick = () => closeEdit(todoList);
         removeButton.onclick = () => removeTask(index);
 
         //Mounting elements
@@ -207,6 +217,7 @@ function updateDisplay(filteredTodo) {
 
         editBlock.appendChild(editInput);
         editBlock.appendChild(saveEditButton);
+        editBlock.appendChild(closeEditButton);
 
         todo.isEdit ? contextBlock.appendChild(editBlock) : contextBlock.appendChild(textSpan);
 
