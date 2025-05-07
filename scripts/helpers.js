@@ -1,53 +1,36 @@
-class CreateElement {
+class EventEmitter {
     constructor() {
-        this.element = null;
+        this.listeners = {};
     }
 
-    createElemTag(elemTag) {
-        if (!elemTag) return;
-        return (this.element = document.createElement(elemTag));
+    getCallbacks(eventName) {
+        return this.listeners[eventName] ?? [];
     }
 
-    createElemClass(elemClass) {
-        if (!elemClass || !this.element) return;
-        const parser = new Parsers();
-        const parsedElemClass = parser.classParser(elemClass);
-        console.log(parsedElemClass);
-        return (this.element.className = parsedElemClass);
+    setCallbacks(eventName, listeners) {
+        if (listeners.length === 0) {
+            delete this.listeners[eventName];
+        } else {
+            this.listeners[eventName] = listeners;
+        }
     }
 
-    createElemContent(elemContent) {
-        if (!elemContent || !this.element) return;
-        return (this.element.innerHTML = elemContent);
+    subscribe(eventName, callback) {
+        const subs = this.getCallbacks(eventName);
+        subs.push(callback);
+        this.setCallbacks(eventName, subs);
+
+        return () => this.unsubscribe(eventName, callback);
     }
 
-    createElemAttribute(elemAttribute) {
-        if (!elemAttribute || !this.element) return;
-        const parser = new Parsers();
-        const parsedElemAttribute = parser.attributeParser(elemAttribute);
-        parsedElemAttribute.forEach((elem) => {
-            return this.element.setAttribute(elem.key, elem.value);
-        });
+    unsubscribe(eventName, callback) {
+        const subs = this.getCallbacks(eventName);
+        const filteredSubs = subs.filter((item) => item !== callback);
+        this.setCallbacks(eventName, filteredSubs);
     }
 
-    render(elemTag, elemClass, elemContent, elemAttribute) {
-        this.createElemTag(elemTag);
-        this.createElemClass(elemClass);
-        this.createElemContent(elemContent);
-        this.createElemAttribute(elemAttribute);
-        return this.element;
-    }
-}
-
-class Parsers {
-    classParser(string) {
-        return string.split(' ').join(' ');
-    }
-
-    attributeParser(array) {
-        return array.map((item) => {
-            const elem = item.split(':');
-            return { key: elem[0], value: elem[1] };
-        });
+    dispatch(eventName, data) {
+        const subs = this.getCallbacks(eventName);
+        subs.forEach((callback) => callback(data));
     }
 }
