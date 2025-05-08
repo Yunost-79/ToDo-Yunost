@@ -4,11 +4,10 @@ export class TodoTemplate extends TodoList {
     constructor(app) {
         super();
         this.app = app;
-        this.currentFilter = 'all';
         this.filterBlock = [
-            { value: 'all', text: 'All', isActive: true },
-            { value: 'active', text: 'Active', isActive: false },
-            { value: 'completed', text: 'Completed', isActive: false },
+            { value: 'all', text: 'All', isActive: this.filterStatus === this.status.all },
+            { value: 'active', text: 'Active', isActive: this.filterStatus === this.status.active },
+            { value: 'completed', text: 'Completed', isActive: this.filterStatus === this.status.completed },
         ];
         this.setupSubscriptions();
         this.updateDisplay();
@@ -24,7 +23,6 @@ export class TodoTemplate extends TodoList {
     render() {
         const todosForRender = this.filteredTodos ? this.filteredTodos : this.todos;
         const empty = this.emptyBlockElement(this.filterStatus);
-        console.log(this.filterStatus);
         const todoSkeleton = `
             <div class="wrapper">
             <div class="container">
@@ -36,7 +34,7 @@ export class TodoTemplate extends TodoList {
                             <button class="todo_button todo_input-item" id="add-button">Add</button>
                         </div>
                         <div class="todo_block-input input_warning" id="warning"></div>
-                        ${todosForRender.length <= 0 ? empty : ''}
+                        ${todosForRender.length <= 0 && this.filterStatus !== this.status.all ? empty : ''}
                         <ul class="todo_list">${this.renderMap(todosForRender, (todo) => this.todoItemElement(todo))}</ul>
                         <div class="todo_footer">
                             <div class="todo_counter"><span>todos: </span><span class="count_item" id="todo-counter">0</span></div>
@@ -178,7 +176,7 @@ export class TodoTemplate extends TodoList {
     }
 
     handleFilterTodos(filterValue) {
-        this.currentFilter = filterValue;
+        this.filterStatus = filterValue;
         this.changeFiltersClass(filterValue);
         this.filteringTodos(filterValue);
     }
@@ -194,10 +192,4 @@ export class TodoTemplate extends TodoList {
         <button class="list_item-save_edit open">Save</button>
         <button class="list_item-save_edit close">Close</button>
     </div> */
-}
-
-{
-    /* <span class="todo_filter-item active" id="filter-button" data-value="all">All</span>
-<span class="todo_filter-item" id="filter-button" data-value="active">Active</span>
-<span class="todo_filter-item" id="filter-button" data-value="completed">Completed</span> */
 }

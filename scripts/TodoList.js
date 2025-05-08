@@ -12,7 +12,7 @@ export class TodoList extends EventEmitter {
 
         this.todos = [];
         this.filteredTodos = [];
-        this.filterStatus = this.status.all;
+        this.filterStatus = this.getFilter() || this.status.all;
 
         this.getData();
     }
@@ -22,26 +22,28 @@ export class TodoList extends EventEmitter {
     }
 
     getLocalStorage(storageName) {
-        return JSON.parse(localStorage.getItem(storageName)) ?? [];
-
-        // try {
-        //     return JSON.parse(localStorage.getItem(storageName)) ?? [];
-        // } catch (e) {
-        //     return [];
-        // }
+        return JSON.parse(localStorage.getItem(storageName));
     }
 
-    setData(storageName, storageData) {
+    setData(storageData) {
         this.todos = storageData;
-        this.setLocalStorage(storageName, this.todos);
+        this.setLocalStorage('todos', this.todos);
         this.filteringTodos(this.filterStatus);
         this.dispatch('update', this.filteredTodos);
     }
 
     getData() {
         const storedTodos = this.getLocalStorage('todos');
-        this.todos = storedTodos;
+        this.todos = storedTodos ?? [];
         this.filteringTodos(this.filterStatus);
+    }
+
+    setFilter() {
+        this.setLocalStorage('filter', this.filterStatus);
+    }
+
+    getFilter() {
+        return this.getLocalStorage('filter');
     }
 
     addTodo(value) {
@@ -55,17 +57,17 @@ export class TodoList extends EventEmitter {
         };
 
         this.todos.push(todo);
-        this.setData('todos', this.todos);
+        this.setData(this.todos);
     }
 
     removeTodo(id) {
         const filteredTodos = this.todos.filter((todo) => todo.id !== id);
-        this.setData('todos', filteredTodos);
+        this.setData(filteredTodos);
     }
 
     removeAllTodos() {
         this.todos = [];
-        this.setData('todos', this.todos);
+        this.setData(this.todos);
     }
 
     countTodos() {
@@ -82,7 +84,7 @@ export class TodoList extends EventEmitter {
             return todo;
         });
 
-        this.setData('todos', this.todos);
+        this.setData(this.todos);
     }
 
     filteringTodos(filterValue) {
@@ -100,7 +102,7 @@ export class TodoList extends EventEmitter {
             default:
                 this.filteredTodos = [...this.todos];
         }
-
+        this.setFilter();
         this.dispatch('update', this.filteredTodos);
     }
 
