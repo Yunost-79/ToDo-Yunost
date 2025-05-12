@@ -4,10 +4,11 @@ export class TodoTemplate extends TodoList {
     constructor(app) {
         super();
         this.app = app;
+        const status = this.status;
         this.filterBlock = [
-            { value: 'all', text: 'All', isActive: this.filterStatus === this.status.all },
-            { value: 'active', text: 'Active', isActive: this.filterStatus === this.status.active },
-            { value: 'completed', text: 'Completed', isActive: this.filterStatus === this.status.completed },
+            { value: 'all', text: 'All', isActive: this.filterStatus === status.all },
+            { value: 'active', text: 'Active', isActive: this.filterStatus === status.active },
+            { value: 'completed', text: 'Completed', isActive: this.filterStatus === status.completed },
         ];
         this.setupSubscriptions();
         this.updateDisplay();
@@ -21,9 +22,13 @@ export class TodoTemplate extends TodoList {
     }
 
     render() {
+        const filterStatus = this.filterStatus;
+        const status = this.status;
+
         const todosForRender = this.filteredTodos ? this.filteredTodos : this.todos;
-        const empty = this.emptyBlockElement(this.filterStatus);
-        const todoSkeleton = `
+        const empty = this.emptyBlockElement(filterStatus);
+
+        const mainElement = `
             <div class="wrapper">
             <div class="container">
                 <div class="todo_container">
@@ -34,10 +39,10 @@ export class TodoTemplate extends TodoList {
                             <button class="todo_button todo_input-item" id="add-button">Add</button>
                         </div>
                         <div class="todo_block-input input_warning" id="warning"></div>
-                        ${todosForRender.length <= 0 && this.filterStatus !== this.status.all ? empty : ''}
+                        ${todosForRender.length <= 0 && filterStatus !== status.all ? empty : ''}
                         <ul class="todo_list">${this.renderMap(todosForRender, (todo) => this.todoItemElement(todo))}</ul>
                         <div class="todo_footer">
-                            <div class="todo_counter"><span>todos: </span><span class="count_item" id="todo-counter">0</span></div>
+                            <div class="todo_counter"><span>Todos: </span><span class="count_item" id="todo-counter">0</span></div>
                             <div class="todo_filters">
                                ${this.renderMap(this.filterBlock, (filter) => this.filterBlockElement(filter.value, filter.text, filter.isActive))}
                             </div>
@@ -49,51 +54,78 @@ export class TodoTemplate extends TodoList {
         </div>
         `;
 
-        return (this.app.innerHTML = todoSkeleton);
+        return (this.app.innerHTML = mainElement);
+    }
+
+    textTodoElement(text) {
+        const element = `
+            <span class="list_item-title" id="span-text" title="Double click to edit todo">${text}</span>
+        `;
+        return element;
+    }
+
+    editTodoElement(text) {
+        const element = `
+            <div class="list_item-edit" id="edit-block">
+                <input class="list_item-edit_input" type="text" value="${text}" id="edit-input"/>
+                <button class="list_item-save_edit save" id="edit-save">Save</button>
+                <button class="list_item-save_edit close" id="edit-close">Close</button>
+            </div>
+        `;
+        return element;
     }
 
     emptyBlockElement(filterStatus) {
-        const status = filterStatus.charAt(0).toUpperCase() + filterStatus.slice(1);
-        console.log('status', status);
-        const emptyElement = `
+        const element = `
             <div class="todo_list-empty">
-                <span>${status} is empty</span>
+                <span>No ${filterStatus} tasks</span>
                 <img src="./assets/ghost.svg"/>
             </div>
         `;
+        return element;
+    }
 
-        return emptyElement;
+    openEditBlockButton() {
+        const element = `
+            <button class="list_item-edit" id="edit-button">
+                <img class="list_item-edit_image" src="./assets/edit.svg" />
+            </button>
+        `;
+
+        return element;
     }
 
     todoItemElement(todo) {
         const status = this.status;
         const completedClass = todo.status === status.completed ? status.completed : '';
-        const todoElement = `
-            <li class="todo_list-item list_item ${completedClass}" id="${todo.id}">
+
+        const editElement = this.editTodoElement(todo.value);
+        const textElement = this.textTodoElement(todo.value);
+        const openEditElement = this.openEditBlockButton();
+        const element = `
+            <li class="todo_list-item list_item ${completedClass}" id="list-item" data-id="${todo.id}">
                 <div class="list_item-context">
                     <button class="list_item-radio" id="status-button">
                         <img class="list_item-radio_image" src="./assets/check.svg" />
                     </button>
-                    <span class="list_item-title">${todo.text}</span>
+                    ${todo.isEdit ? editElement : textElement}
                 </div>
                 <div class="list_item-functional">
-                    <button class="list_item-edit">
-                        <img class="list_item-edit_image" src="./assets/edit.svg" />
-                    </button>
+                    ${!todo.isEdit ? openEditElement : ''}
+
                     <button class="list_item-remove" id="remove-button">Remove</button>
                 </div>
             </li>
         `;
-        return todoElement;
+        return element;
     }
 
     filterBlockElement(value, text, isActive) {
         const status = this.status;
-        const filterSpan = `
+        const element = `
             <span class="todo_filter-item ${isActive ? status.active : ''}" id="filter-button" data-value="${value}">${text}</span>
-
         `;
-        return filterSpan;
+        return element;
     }
 
     updateDisplay() {
@@ -103,41 +135,60 @@ export class TodoTemplate extends TodoList {
     }
 
     bindElements() {
-        this.li = document.querySelector('.list_item');
         this.addInput = document.querySelector('#add-input');
         this.warningAlert = document.querySelector('#warning');
         this.todosCounter = document.querySelector('#todo-counter');
 
+        const li = document.querySelectorAll('#list-item');
         const addButton = document.querySelector('#add-button');
         const removeAllTodosButtons = document.querySelector('#all-todos-clear');
+        const filterButtons = document.querySelectorAll('#filter-button');
+        const editTodoBlock = document.querySelectorAll('#edit-block');
 
         addButton.onclick = () => this.handleAddTodo();
         removeAllTodosButtons.onclick = () => this.handleRemoveAllTodos();
-
-        const filterButtons = document.querySelectorAll('#filter-button');
 
         filterButtons.forEach((button) => {
             const buttonValue = button.getAttribute('data-value');
             button.onclick = () => this.handleFilterTodos(buttonValue, button, filterButtons);
         });
 
-        if (this.li) {
-            const removeTodoButtons = document.querySelectorAll('#remove-button');
-            removeTodoButtons.forEach((btn) => {
-                const id = btn.closest('.list_item').id;
-                btn.onclick = () => this.handleRemoveTodo(Number(id));
-            });
+        if (li) {
+            li.forEach((todoItem) => {
+                const removeTodoButtons = todoItem.querySelector('#remove-button');
+                const toggleStatusButton = todoItem.querySelector('#status-button');
+                const startEditTodoButton = todoItem.querySelector('#edit-button');
+                const spanText = todoItem.querySelector('#span-text');
 
-            const toggleStatusButton = document.querySelectorAll('#status-button');
-            toggleStatusButton.forEach((btn) => {
-                const todoLi = btn.closest('.list_item');
-                btn.onclick = () => this.handleToggleStatus(todoLi);
+                const id = todoItem.attributes['data-id'].value;
+
+                removeTodoButtons.onclick = () => this.handleRemoveTodo(Number(id));
+                toggleStatusButton.onclick = () => this.handleToggleStatus(Number(id));
+
+                if (!startEditTodoButton && !spanText) return;
+
+                startEditTodoButton.onclick = () => this.handleOpenEditTodo(Number(id), true);
+                spanText.ondblclick = () => this.handleOpenEditTodo(Number(id), true);
+            });
+        }
+
+        if (editTodoBlock) {
+            editTodoBlock.forEach((editBlock) => {
+                const closeBtn = editBlock.querySelector('#edit-close');
+                const saveBtn = editBlock.querySelector('#edit-save');
+                const input = editBlock.querySelector('#edit-input');
+
+                const id = editBlock.closest('.list_item').attributes['data-id'].value;
+
+                closeBtn.onclick = () => this.handleCloseEditTodo(Number(id));
+                saveBtn.onclick = () => this.handleChangeTodoContext(Number(id), input.value);
             });
         }
     }
 
     handleAddTodo() {
         const value = this.addInput.value.trim();
+        this.closeAllEditTodos();
 
         if (value === '') {
             this.setWarning();
@@ -158,6 +209,7 @@ export class TodoTemplate extends TodoList {
     }
 
     handleRemoveTodo(id) {
+        this.closeAllEditTodos();
         this.removeTodo(id);
     }
 
@@ -166,30 +218,36 @@ export class TodoTemplate extends TodoList {
     }
 
     handleCountTodos() {
-        const counter = this.countTodos();
-        this.todosCounter.textContent = counter;
+        this.todosCounter.textContent = this.countTodos();
     }
 
-    handleToggleStatus(li) {
-        const id = Number(li.id);
+    handleToggleStatus(id) {
         this.toggleStatus(id);
     }
 
     handleFilterTodos(filterValue) {
+        this.closeAllEditTodos();
         this.filterStatus = filterValue;
-        this.changeFiltersClass(filterValue);
+        this.handleChangeFiltersClass(filterValue);
         this.filteringTodos(filterValue);
     }
 
-    changeFiltersClass(activeFilterValue) {
-        this.filterBlock = this.filterBlock.map((filter) => ({ ...filter, isActive: filter.value === activeFilterValue }));
+    handleChangeFiltersClass(activeFilterValue) {
+        this.filterBlock = this.changeFiltersClass(this.filterBlock, activeFilterValue);
     }
-}
 
-{
-    /* <div class="list_item-edit">
-        <input class="list_item-edit_input" type="text" value="TextText" placeholder="TextText" />
-        <button class="list_item-save_edit open">Save</button>
-        <button class="list_item-save_edit close">Close</button>
-    </div> */
+    handleOpenEditTodo(id, isOpen) {
+        this.closeAllEditTodos();
+        this.openCloseEditTodo(id, isOpen);
+    }
+
+    handleCloseEditTodo() {
+        this.closeAllEditTodos();
+    }
+
+    handleChangeTodoContext(id, value) {
+        const validatedValue = value.trim();
+        this.changeTodoContext(id, validatedValue);
+        this.closeAllEditTodos();
+    }
 }

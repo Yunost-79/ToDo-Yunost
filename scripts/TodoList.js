@@ -51,7 +51,7 @@ export class TodoList extends EventEmitter {
 
         const todo = {
             id: Date.now(),
-            text: value,
+            value: value,
             isEdit: false,
             status: status.active,
         };
@@ -104,6 +104,38 @@ export class TodoList extends EventEmitter {
         }
         this.setFilter();
         this.dispatch('update', this.filteredTodos);
+    }
+
+    changeFiltersClass(filterBlock, activeFilterValue) {
+        return filterBlock.map((filter) => ({ ...filter, isActive: filter.value === activeFilterValue }));
+    }
+
+    openCloseEditTodo(id, editState) {
+        this.todos = this.todos.map((todo) => {
+            if (todo.id === id) {
+                return { ...todo, isEdit: editState };
+            }
+            return todo;
+        });
+
+        this.setData(this.todos);
+    }
+
+    closeAllEditTodos() {
+        if (!this.todos) return;
+        this.todos.forEach((todo) => (todo.isEdit = false));
+        this.setData(this.todos);
+    }
+
+    changeTodoContext(id, value) {
+        this.todos = this.todos.map((todo) => {
+            if (todo.value === value || value === '') return todo;
+            if (todo.id === id) {
+                return { ...todo, value };
+            }
+            return todo;
+        });
+        this.setData(this.todos);
     }
 
     updateTodos(currentTodos) {
