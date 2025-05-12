@@ -42,7 +42,9 @@ export class TodoTemplate extends TodoList {
                         ${todosForRender.length <= 0 && filterStatus !== status.all ? empty : ''}
                         <ul class="todo_list">${this.renderMap(todosForRender, (todo) => this.todoItemElement(todo))}</ul>
                         <div class="todo_footer">
-                            <div class="todo_counter"><span>Todos: </span><span class="count_item" id="todo-counter">0</span></div>
+                            <div class="todo_counter"><span>${
+                                filterStatus && filterStatus !== status.all ? `Todos ${filterStatus}: ` : 'Todos: '
+                            }</span><span class="count_item" id="todo-counter">0</span></div>
                             <div class="todo_filters">
                                ${this.renderMap(this.filterBlock, (filter) => this.filterBlockElement(filter.value, filter.text, filter.isActive))}
                             </div>
