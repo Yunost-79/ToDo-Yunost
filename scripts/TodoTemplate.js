@@ -16,9 +16,10 @@ export class TodoTemplate extends TodoList {
     }
 
     setupSubscriptions() {
-        this.subscribe('update', (todo) => {
+        state.subscribe('update', (todo) => {
             this.todoItemElement(todo);
             this.updateDisplay();
+            this.filterBlockElement();
         });
     }
 
@@ -26,10 +27,13 @@ export class TodoTemplate extends TodoList {
         const filterStatus = this.filterStatus;
         const status = this.status;
 
-        const todosForRender = this.filteredTodos ? this.filteredTodos : this.todos;
-        const empty = this.emptyBlockElement(filterStatus);
-
+        const filteredTodos = state.getState('filteredTodos');
+        const todos = state.getState('todos');
         const counter = state.getState('counter');
+
+        // const todosForRender = this.filteredTodos ? this.filteredTodos : this.todos;
+        const todosForRender = todos;
+        const empty = this.emptyBlockElement(filterStatus);
 
         const mainElement = `
             <div class="wrapper">
@@ -134,7 +138,6 @@ export class TodoTemplate extends TodoList {
     }
 
     updateDisplay() {
-        this.countTodos();
         this.render();
         this.bindElements();
     }

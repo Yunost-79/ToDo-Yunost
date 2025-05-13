@@ -1,30 +1,24 @@
-class Store {
+import { EventEmitter } from './EventEmitter.js';
+
+class Store extends EventEmitter {
     constructor() {
-        this.state = [];
+        super();
+        this.state = {
+            todos: JSON.parse(localStorage.getItem('todos')) || [],
+            filteredTodos: JSON.parse(localStorage.getItem('filteredTodos')) || [],
+            filter: 'all',
+            counter: 0,
+        };
     }
 
-    setState(key, value, type) {
-        switch (type) {
-            case Number || String || Boolean:
-                this.state[key] = value;
-                break;
-
-            case Array:
-                if (!this.state[key]) {
-                    this.state[key] = [value];
-                } else {
-                    this.state[key] = [...this.state[key], value];
-                }
-                console.log(this.state);
-                break;
-        }
-
-        return this.state;
+    setState(key, value) {
+        this.state[key] = value;
+        this.dispatch('update', this.state[key]);
+        localStorage.setItem(key, JSON.stringify(value));
     }
 
     getState(key) {
         if (!key) return this.state;
-        console.log('this.state', this.state[key]);
         return this.state[key];
     }
 }
