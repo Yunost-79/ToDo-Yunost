@@ -5,7 +5,7 @@ class Store extends EventEmitter {
         super();
         this.state = {
             todos: JSON.parse(localStorage.getItem('todos')) || [],
-            filteredTodos: JSON.parse(localStorage.getItem('filteredTodos')) || [],
+            // filteredTodos: JSON.parse(localStorage.getItem('filteredTodos')) || [],
             filter: 'all',
             counter: 0,
         };

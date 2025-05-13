@@ -62,6 +62,41 @@ export class TodoList extends EventEmitter {
         console.log('state after toggle status todos:', state.getState('todos'));
     }
 
+    openCloseEditTodo(id, editState) {
+        const todos = state.getState('todos');
+
+        const openEditTodo = todos.map((todo) => {
+            if (todo.id === id) {
+                return { ...todo, isEdit: editState };
+            }
+            return todo;
+        });
+        state.setState('todos', openEditTodo);
+        console.log('state after open edit todo todos:', state.getState('todos'));
+    }
+
+    closeAllEditTodos() {
+        const todos = state.getState('todos');
+
+        if (!todos) return;
+        todos.forEach((todo) => (todo.isEdit = false));
+        state.setState('todos', todos);
+        console.log('state after open edit todo todos:', state.getState('todos'));
+    }
+
+    changeTodoContext(id, value) {
+        const todos = state.getState('todos');
+
+        const changedTodoContext = todos.map((todo) => {
+            if (todo.value === value || value === '') return todo;
+            if (todo.id === id) {
+                return { ...todo, value };
+            }
+            return todo;
+        });
+        state.setState('todos', changedTodoContext);
+    }
+
     // filteringTodos(filterValue) {
     //     const status = this.status;
 
@@ -140,12 +175,12 @@ export class TodoList extends EventEmitter {
     //     this.setData(this.todos);
     // }
 
-    countTodos() {
-        if (!this.filteredTodos) return;
+    // countTodos() {
+    //     if (!this.filteredTodos) return;
 
-        state.setState('counter', this.filteredTodos.length || 0);
-        // return this.filteredTodos.length;
-    }
+    //     state.setState('counter', this.filteredTodos.length || 0);
+    //     // return this.filteredTodos.length;
+    // }
 
     // toggleStatus(id) {
     //     const status = this.status;
@@ -159,62 +194,62 @@ export class TodoList extends EventEmitter {
     //     this.setData(this.todos);
     // }
 
-    // filteringTodos(filterValue) {
-    //     const status = this.status;
+    filteringTodos(filterValue) {
+        const status = this.status;
 
-    //     this.filterStatus = filterValue || status.all;
+        this.filterStatus = filterValue || status.all;
 
-    //     switch (filterValue) {
-    //         case status.active:
-    //             this.filteredTodos = this.todos.filter((todo) => todo.status === status.active);
-    //             break;
-    //         case status.completed:
-    //             this.filteredTodos = this.todos.filter((todo) => todo.status === status.completed);
-    //             break;
-    //         default:
-    //             this.filteredTodos = [...this.todos];
-    //     }
-    //     this.setFilter();
-    //     this.dispatch('update', this.filteredTodos);
-    // }
+        switch (filterValue) {
+            case status.active:
+                this.filteredTodos = this.todos.filter((todo) => todo.status === status.active);
+                break;
+            case status.completed:
+                this.filteredTodos = this.todos.filter((todo) => todo.status === status.completed);
+                break;
+            default:
+                this.filteredTodos = [...this.todos];
+        }
+        this.setFilter();
+        this.dispatch('update', this.filteredTodos);
+    }
 
     changeFiltersClass(filterBlock, activeFilterValue) {
         return filterBlock.map((filter) => ({ ...filter, isActive: filter.value === activeFilterValue }));
     }
 
-    openCloseEditTodo(id, editState) {
-        this.todos = this.todos.map((todo) => {
-            if (todo.id === id) {
-                return { ...todo, isEdit: editState };
-            }
-            return todo;
-        });
+    // openCloseEditTodo(id, editState) {
+    //     this.todos = this.todos.map((todo) => {
+    //         if (todo.id === id) {
+    //             return { ...todo, isEdit: editState };
+    //         }
+    //         return todo;
+    //     });
 
-        this.setData(this.todos);
-    }
+    //     this.setData(this.todos);
+    // }
 
-    closeAllEditTodos() {
-        if (!this.todos) return;
-        this.todos.forEach((todo) => (todo.isEdit = false));
-        this.setData(this.todos);
-    }
+    // closeAllEditTodos() {
+    //     if (!this.todos) return;
+    //     this.todos.forEach((todo) => (todo.isEdit = false));
+    //     this.setData(this.todos);
+    // }
 
-    changeTodoContext(id, value) {
-        this.todos = this.todos.map((todo) => {
-            if (todo.value === value || value === '') return todo;
-            if (todo.id === id) {
-                return { ...todo, value };
-            }
-            return todo;
-        });
-        this.setData(this.todos);
-    }
+    // changeTodoContext(id, value) {
+    //     this.todos = this.todos.map((todo) => {
+    //         if (todo.value === value || value === '') return todo;
+    //         if (todo.id === id) {
+    //             return { ...todo, value };
+    //         }
+    //         return todo;
+    //     });
+    //     this.setData(this.todos);
+    // }
 
-    updateTodos(currentTodos) {
-        this.todos = currentTodos;
-        this.filteringTodos(this.filterStatus);
-        return this.filteredTodos;
-    }
+    // updateTodos(currentTodos) {
+    //     this.todos = currentTodos;
+    //     this.filteringTodos(this.filterStatus);
+    //     return this.filteredTodos;
+    // }
 }
 
 // state.setState('test', 1);

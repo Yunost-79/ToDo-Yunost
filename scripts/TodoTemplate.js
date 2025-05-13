@@ -27,7 +27,7 @@ export class TodoTemplate extends TodoList {
         const filterStatus = this.filterStatus;
         const status = this.status;
 
-        const filteredTodos = state.getState('filteredTodos');
+        // const filteredTodos = state.getState('filteredTodos');
         const todos = state.getState('todos');
         const counter = state.getState('counter');
 
