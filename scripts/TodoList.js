@@ -1,4 +1,5 @@
 import { EventEmitter } from './EventEmitter.js';
+import { state } from './Store.js';
 
 export class TodoList extends EventEmitter {
     constructor() {
@@ -56,8 +57,14 @@ export class TodoList extends EventEmitter {
             status: status.active,
         };
 
-        this.todos.push(todo);
-        this.setData(this.todos);
+        state.setState('todos', todo, Array);
+        const todos = state.getState('todos');
+
+        console.log(todos);
+
+        // this.todos.push(todo);
+        // this.setData(this.todos);
+        this.setData(todos);
     }
 
     removeTodo(id) {
@@ -72,7 +79,9 @@ export class TodoList extends EventEmitter {
 
     countTodos() {
         if (!this.filteredTodos) return;
-        return this.filteredTodos.length;
+
+        state.setState('counter', this.filteredTodos.length || 0, Number);
+        // return this.filteredTodos.length;
     }
 
     toggleStatus(id) {
@@ -144,3 +153,9 @@ export class TodoList extends EventEmitter {
         return this.filteredTodos;
     }
 }
+
+// state.setState('test', 1);
+
+// const test = state.getState('test');
+
+// console.log(test);

@@ -1,3 +1,4 @@
+import { state } from './Store.js';
 import { TodoList } from './TodoList.js';
 
 export class TodoTemplate extends TodoList {
@@ -28,6 +29,8 @@ export class TodoTemplate extends TodoList {
         const todosForRender = this.filteredTodos ? this.filteredTodos : this.todos;
         const empty = this.emptyBlockElement(filterStatus);
 
+        const counter = state.getState('counter');
+
         const mainElement = `
             <div class="wrapper">
             <div class="container">
@@ -44,7 +47,7 @@ export class TodoTemplate extends TodoList {
                         <div class="todo_footer">
                             <div class="todo_counter"><span>${
                                 filterStatus && filterStatus !== status.all ? `Todos ${filterStatus}: ` : 'Todos: '
-                            }</span><span class="count_item" id="todo-counter">0</span></div>
+                            }</span><span class="count_item" id="todo-counter">${counter}</span></div>
                             <div class="todo_filters">
                                ${this.renderMap(this.filterBlock, (filter) => this.filterBlockElement(filter.value, filter.text, filter.isActive))}
                             </div>
@@ -131,9 +134,9 @@ export class TodoTemplate extends TodoList {
     }
 
     updateDisplay() {
+        this.countTodos();
         this.render();
         this.bindElements();
-        this.handleCountTodos();
     }
 
     bindElements() {
@@ -217,10 +220,6 @@ export class TodoTemplate extends TodoList {
 
     handleRemoveAllTodos() {
         this.removeAllTodos();
-    }
-
-    handleCountTodos() {
-        this.todosCounter.textContent = this.countTodos();
     }
 
     handleToggleStatus(id) {
