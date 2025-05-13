@@ -77,9 +77,9 @@ export class TodoList extends EventEmitter {
     //         default:
     //             this.filteredTodos = [...this.todos];
     //     }
-        // this.setFilter();
-        // this.dispatch('update', this.filteredTodos);
-    }
+    // this.setFilter();
+    // this.dispatch('update', this.filteredTodos);
+    // }
 
     // setLocalStorage(storageName, storageData) {
     //     return localStorage.setItem(storageName, JSON.stringify(storageData));
