@@ -57,8 +57,6 @@ export class TodoList {
     openCloseEditTodo(id, editState) {
         const todos = state.getState('todos');
 
-        console.log('todos in open Edit', todos);
-
         const openEditTodo = todos.map((todo) => {
             if (todo.id === id) {
                 return { ...todo, isEdit: editState };
