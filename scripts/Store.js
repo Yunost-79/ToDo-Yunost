@@ -10,9 +10,9 @@ class Store extends EventEmitter {
         this.state = {
             todos: JSON.parse(localStorage.getItem('todos')) || [],
             filteredTodos: JSON.parse(localStorage.getItem('filteredTodos')) || [],
-            // filter: helpers.status.all,
             filter: JSON.parse(localStorage.getItem('filter')) || status.all,
             counter: 0,
+            warning: '',
         };
     }
 

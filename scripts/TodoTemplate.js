@@ -31,11 +31,13 @@ export class TodoTemplate extends TodoList {
         const status = this.helpers.status;
         const renderMap = this.helpers.renderMap;
 
-        const empty = this.emptyBlockElement(filterStatus);
-
         const filteredTodos = state.getState('filteredTodos');
         const todos = state.getState('todos');
         const counter = state.getState('counter');
+        const warning = state.getState('warning');
+
+        const emptyElement = this.emptyBlockElement(filterStatus);
+        const warningElement = this.warningTodosElement(warning);
 
         const todosForRender = filteredTodos ? filteredTodos : todos;
 
@@ -49,9 +51,10 @@ export class TodoTemplate extends TodoList {
                             <input class="todo_input todo_input-item" id="add-input" type="text" placeholder="Enter your todo" />
                             <button class="todo_button todo_input-item" id="add-button">Add</button>
                         </div>
-                        <div class="todo_block-input input_warning" id="warning"></div>
-                        ${todosForRender.length <= 0 && filterStatus !== status.all ? empty : ''}
+                        ${warning && warningElement}
+                        ${todosForRender.length <= 0 && filterStatus !== status.all ? emptyElement : ''}
                         <ul class="todo_list">${renderMap(todosForRender, (todo) => this.todoItemElement(todo))}</ul>
+                        
                         <div class="todo_footer">
                             <div class="todo_counter"><span>${
                                 filterStatus && filterStatus !== status.all ? `Todos ${filterStatus}: ` : 'Todos: '
@@ -84,6 +87,13 @@ export class TodoTemplate extends TodoList {
                 <button class="list_item-save_edit save" id="edit-save">Save</button>
                 <button class="list_item-save_edit close" id="edit-close">Close</button>
             </div>
+        `;
+        return element;
+    }
+
+    warningTodosElement(warning) {
+        const element = `
+            <div class="todo_block-input input_warning ${warning ? 'empty_input' : ''}" id="warning">${warning ? warning : ''}</div>
         `;
         return element;
     }
@@ -149,8 +159,6 @@ export class TodoTemplate extends TodoList {
 
     bindElements() {
         this.addInput = document.querySelector('#add-input');
-        this.warningAlert = document.querySelector('#warning');
-        this.todosCounter = document.querySelector('#todo-counter');
 
         const li = document.querySelectorAll('#list-item');
         const addButton = document.querySelector('#add-button');
@@ -208,17 +216,14 @@ export class TodoTemplate extends TodoList {
             return;
         }
 
-        this.warningAlert.textContent = '';
-
+        state.setState('warning', '');
         this.addTodo(value);
         this.addInput.value = '';
     }
 
     setWarning() {
-        this.warningAlert.textContent = '';
-
-        this.warningAlert.classList.add('empty_input');
-        this.warningAlert.textContent = 'Input is empty';
+        state.setState('warning', '');
+        state.setState('warning', 'Input is empty');
     }
 
     handleRemoveTodo(id) {
