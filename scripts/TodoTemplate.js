@@ -1,11 +1,14 @@
+import { Helpers } from './helpers.js';
 import { state } from './Store.js';
 import { TodoList } from './TodoList.js';
 
 export class TodoTemplate extends TodoList {
     constructor(app) {
         super();
+        this.helpers = new Helpers();
+
+        const status = this.helpers.status;
         this.app = app;
-        const status = this.status;
         this.filterBlock = [
             { value: 'all', text: 'All', isActive: this.filterStatus === status.all },
             { value: 'active', text: 'Active', isActive: this.filterStatus === status.active },
@@ -25,15 +28,16 @@ export class TodoTemplate extends TodoList {
 
     render() {
         const filterStatus = this.filterStatus;
-        const status = this.status;
+        const status = this.helpers.status;
+        const renderMap = this.helpers.renderMap;
 
-        // const filteredTodos = state.getState('filteredTodos');
+        const empty = this.emptyBlockElement(filterStatus);
+
+        const filteredTodos = state.getState('filteredTodos');
         const todos = state.getState('todos');
         const counter = state.getState('counter');
 
-        // const todosForRender = this.filteredTodos ? this.filteredTodos : this.todos;
-        const todosForRender = todos;
-        const empty = this.emptyBlockElement(filterStatus);
+        const todosForRender = filteredTodos ? filteredTodos : todos;
 
         const mainElement = `
             <div class="wrapper">
@@ -47,13 +51,13 @@ export class TodoTemplate extends TodoList {
                         </div>
                         <div class="todo_block-input input_warning" id="warning"></div>
                         ${todosForRender.length <= 0 && filterStatus !== status.all ? empty : ''}
-                        <ul class="todo_list">${this.renderMap(todosForRender, (todo) => this.todoItemElement(todo))}</ul>
+                        <ul class="todo_list">${renderMap(todosForRender, (todo) => this.todoItemElement(todo))}</ul>
                         <div class="todo_footer">
                             <div class="todo_counter"><span>${
                                 filterStatus && filterStatus !== status.all ? `Todos ${filterStatus}: ` : 'Todos: '
                             }</span><span class="count_item" id="todo-counter">${counter}</span></div>
                             <div class="todo_filters">
-                               ${this.renderMap(this.filterBlock, (filter) => this.filterBlockElement(filter.value, filter.text, filter.isActive))}
+                               ${renderMap(this.filterBlock, (filter) => this.filterBlockElement(filter.value, filter.text, filter.isActive))}
                             </div>
                             <button class="todos_cleaner" id="all-todos-clear">Clear all todos</button>
                         </div>
@@ -105,12 +109,13 @@ export class TodoTemplate extends TodoList {
     }
 
     todoItemElement(todo) {
-        const status = this.status;
+        const status = this.helpers.status;
         const completedClass = todo.status === status.completed ? status.completed : '';
 
         const editElement = this.editTodoElement(todo.value);
         const textElement = this.textTodoElement(todo.value);
         const openEditElement = this.openEditBlockButton();
+
         const element = `
             <li class="todo_list-item list_item ${completedClass}" id="list-item" data-id="${todo.id}">
                 <div class="list_item-context">
@@ -130,7 +135,7 @@ export class TodoTemplate extends TodoList {
     }
 
     filterBlockElement(value, text, isActive) {
-        const status = this.status;
+        const status = this.helpers.status;
         const element = `
             <span class="todo_filter-item ${isActive ? status.active : ''}" id="filter-button" data-value="${value}">${text}</span>
         `;
