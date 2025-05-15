@@ -1,0 +1,45 @@
+import styled from '@emotion/styled'
+import { Component } from 'react'
+import TodoFooter from '../components/TodoFooter/TodoFooter'
+import TodoHeader from '../components/TodoHeader/TodoHeader'
+import TodoInputBlock from '../components/TodoInputBlock/TodoInputBlock'
+import TodoList from '../components/TodoList/TodoList'
+import { COLORS } from '../globalVariables/styledVariables'
+
+class TodoPage extends Component {
+    render() {
+        return (
+            <StyledContainer>
+                <StyledTodoContainer>
+                    <TodoHeader />
+                    <TodoInputBlock />
+                    <TodoList />
+                    <TodoFooter />
+                </StyledTodoContainer>
+            </StyledContainer>
+        )
+    }
+}
+const StyledContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+`
+
+const StyledTodoContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    background-color: ${COLORS.WHITE};
+    width: 50%;
+    padding: 24px;
+    border-radius: 8px;
+
+    @media (max-width: 1025px) {
+        width: 80%;
+    }
+`
+export default TodoPage
