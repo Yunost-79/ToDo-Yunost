@@ -9,7 +9,7 @@ type TodoListProps = {
     toggleTodoStatus: (id: number) => void
     editTodoContext: (id: number, value: string) => void
     handleTodoEdit: (id: number) => void
-    handleCloseAllTodoEdit: () => void
+    closeAllTodoEdit: () => void
 }
 
 class TodoList extends Component<TodoListProps> {
@@ -20,10 +20,10 @@ class TodoList extends Component<TodoListProps> {
             toggleTodoStatus,
             editTodoContext,
             handleTodoEdit,
-            handleCloseAllTodoEdit,
+            closeAllTodoEdit,
         } = this.props
         const { todos } = todoState
-        
+
         const sortedTodos = todos.sort((a, b) => b.dateOfCreation - a.dateOfCreation)
         return (
             <StyledUl>
@@ -35,7 +35,7 @@ class TodoList extends Component<TodoListProps> {
                         toggleTodoStatus={toggleTodoStatus}
                         editTodoContext={editTodoContext}
                         handleTodoEdit={handleTodoEdit}
-                        handleCloseAllTodoEdit={handleCloseAllTodoEdit}
+                        closeAllTodoEdit={closeAllTodoEdit}
                     />
                 ))}
             </StyledUl>

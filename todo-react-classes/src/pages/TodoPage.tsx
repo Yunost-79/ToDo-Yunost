@@ -10,6 +10,7 @@ import { FilterStatus, Todo, Warning } from '../globalVariables/typesVariables'
 
 type TodoPageState = {
     todos: Todo[]
+    filteredTodos: Todo[]
     counter: number
     filter: FilterStatus
     warning: Warning
@@ -18,6 +19,7 @@ type TodoPageState = {
 class TodoPage extends Component<{}, TodoPageState> {
     state: TodoPageState = {
         todos: [],
+        filteredTodos: [],
         counter: 0,
         filter: FILTER_STATUS.all,
         warning: {
@@ -33,6 +35,7 @@ class TodoPage extends Component<{}, TodoPageState> {
             const stateData = JSON.parse(storedState)
             this.setState({
                 todos: stateData.todos || [],
+                filteredTodos: stateData.filteredTodos || [],
                 counter: stateData.counter || 0,
                 filter: stateData.filter || FILTER_STATUS.all,
             })
@@ -44,10 +47,15 @@ class TodoPage extends Component<{}, TodoPageState> {
 
         const checkedState = {
             todos: state.todos || [],
+            filteredTodos: state.filteredTodos || [],
             counter: state.counter || 0,
             filter: state.filter || FILTER_STATUS.all,
         }
         localStorage.setItem('state', JSON.stringify(checkedState))
+    }
+
+    updateTodoState = (newState: Partial<TodoPageState>) => {
+        this.setState(newState as TodoPageState, () => this.setData(this.state))
     }
 
     addTodo = (value: string) => {
@@ -74,7 +82,6 @@ class TodoPage extends Component<{}, TodoPageState> {
         this.setState(
             {
                 todos: [...this.state.todos, todo],
-                counter: this.state.todos.length + 1,
                 warning: {
                     isWarning: false,
                 },
@@ -86,6 +93,10 @@ class TodoPage extends Component<{}, TodoPageState> {
     removeTodo = (id: number) => {
         const filteredTodos = this.state.todos.filter((todo) => todo.id !== id)
         this.setState({ todos: filteredTodos }, () => this.setData(this.state))
+    }
+
+    removeAllTodos = () => {
+        this.setState({ todos: [] }, () => this.setData(this.state))
     }
 
     toggleTodoStatus = (id: number) => {
@@ -130,14 +141,41 @@ class TodoPage extends Component<{}, TodoPageState> {
         this.setState({ todos: todosForEdit }, () => this.setData(this.state))
     }
 
-    handleCloseAllTodoEdit = () => {
+    closeAllTodoEdit = () => {
         const closedAllTodosEdit = this.state.todos.map((todo) => {
             return { ...todo, isEdit: false }
         })
 
-        console.log(closedAllTodosEdit)
-
         this.setState({ todos: closedAllTodosEdit }, () => this.setData(this.state))
+    }
+
+    filteringTodos = (filterStatus: FilterStatus) => {
+        const status = filterStatus || FILTER_STATUS.all
+
+        let filteredTodos = []
+
+        switch (status) {
+            case FILTER_STATUS.all:
+                filteredTodos = this.state.todos.filter(
+                    (todo) => todo.status === FILTER_STATUS.active,
+                )
+                break
+            case FILTER_STATUS.completed:
+                filteredTodos = this.state.todos.filter(
+                    (todo) => todo.status === FILTER_STATUS.completed,
+                )
+                break
+            default:
+                filteredTodos = [...this.state.todos]
+        }
+
+        console.log('filteredTodos', filteredTodos)
+
+        this.setState({
+            filteredTodos,
+            filter: status,
+            counter: filteredTodos.length,
+        })
     }
 
     render() {
@@ -152,9 +190,14 @@ class TodoPage extends Component<{}, TodoPageState> {
                         removeTodo={this.removeTodo}
                         editTodoContext={this.editTodoContext}
                         handleTodoEdit={this.handleTodoEdit}
-                        handleCloseAllTodoEdit={this.handleCloseAllTodoEdit}
+                        closeAllTodoEdit={this.closeAllTodoEdit}
                     />
-                    <TodoFooter />
+                    <TodoFooter
+                        todoState={this.state}
+                        setTodoState={this.updateTodoState}
+                        filteringTodos={this.filteringTodos}
+                        removeAllTodos={this.removeAllTodos}
+                    />
                 </StyledTodoContainer>
             </StyledContainer>
         )

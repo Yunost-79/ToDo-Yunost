@@ -13,7 +13,7 @@ type TodoContextProps = {
     id: number
     toggleTodoStatus: (id: number) => void
     editTodoContext: (id: number, value: string) => void
-    handleCloseAllTodoEdit: () => void
+    closeAllTodoEdit: () => void
 }
 
 type TodoContextState = {
@@ -39,7 +39,7 @@ class TodoContext extends Component<TodoContextProps, TodoContextState> {
     }
 
     render() {
-        const { isEdit, value, status, id, toggleTodoStatus, handleCloseAllTodoEdit } = this.props
+        const { isEdit, value, status, id, toggleTodoStatus, closeAllTodoEdit } = this.props
         const { inputValue } = this.state
 
         return (
@@ -60,7 +60,7 @@ class TodoContext extends Component<TodoContextProps, TodoContextState> {
                         value={inputValue.length ? inputValue : value}
                         onChange={this.handleChange}
                         handleSaveEdit={() => this.handleSaveEdit(id, inputValue)}
-                        handleCloseEdit={() => handleCloseAllTodoEdit()}
+                        handleCloseEdit={() => closeAllTodoEdit()}
                     />
                     // <ContextEdit>
                     //     <EditInput

@@ -12,7 +12,7 @@ type TodoItemProps = {
     toggleTodoStatus: (id: number) => void
     editTodoContext: (id: number, value: string) => void
     handleTodoEdit: (id: number) => void
-    handleCloseAllTodoEdit: () => void
+    closeAllTodoEdit: () => void
 }
 
 class TodoItem extends Component<TodoItemProps> {
@@ -23,7 +23,7 @@ class TodoItem extends Component<TodoItemProps> {
             toggleTodoStatus,
             editTodoContext,
             handleTodoEdit,
-            handleCloseAllTodoEdit,
+            closeAllTodoEdit,
         } = this.props
 
         return (
@@ -35,7 +35,7 @@ class TodoItem extends Component<TodoItemProps> {
                     id={todo.id}
                     toggleTodoStatus={toggleTodoStatus}
                     editTodoContext={editTodoContext}
-                    handleCloseAllTodoEdit={handleCloseAllTodoEdit}
+                    closeAllTodoEdit={closeAllTodoEdit}
                 />
                 <TodoControl
                     id={todo.id}

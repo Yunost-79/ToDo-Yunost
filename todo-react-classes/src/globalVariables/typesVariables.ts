@@ -12,6 +12,7 @@ export type Todo = {
 
 export type TodoState = {
     todos: Todo[]
+    filteredTodos: Todo[]
     counter: number
     filter: FilterStatus
     warning: Warning

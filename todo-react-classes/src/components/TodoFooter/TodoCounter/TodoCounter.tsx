@@ -2,7 +2,10 @@ import styled from '@emotion/styled'
 import { Component } from 'react'
 import { COLORS } from '../../../globalVariables/styledVariables'
 
-class TodoCounter extends Component {
+type TodoCounterProps = {
+}
+
+class TodoCounter extends Component<TodoCounterProps> {
     render() {
         return (
             <StyledTodoCounter>
