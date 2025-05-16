@@ -2,29 +2,99 @@ import styled from '@emotion/styled'
 import { Component } from 'react'
 import { COLORS } from '../../../globalVariables/styledVariables'
 import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
-import { Todo } from '../../../globalVariables/typesVariables'
+import { Todo, TodoState } from '../../../globalVariables/typesVariables'
 import TodoContext from '../TodoContext/TodoContext'
 import TodoControl from '../TodoControl/TodoControl'
 
 type TodoItemProps = {
     todo: Todo
-    removeTodo: (id: number) => void
-    toggleTodoStatus: (id: number) => void
-    editTodoContext: (id: number, value: string) => void
-    handleTodoEdit: (id: number) => void
-    closeAllTodoEdit: () => void
+    todoState: TodoState
+    setTodoState: (state: TodoState, callback?: () => void) => void
+
 }
 
 class TodoItem extends Component<TodoItemProps> {
+    removeTodo = (id: number) => {
+        const { todoState, setTodoState } = this.props
+        const filteredTodos = todoState.todos.filter((todo) => todo.id !== id)
+        setTodoState({
+            ...todoState,
+            todos: filteredTodos,
+        })
+    }
+
+    toggleTodoStatus = (id: number) => {
+        const { todoState, setTodoState } = this.props
+
+        const toggledTodos = todoState.todos.map((todo) => {
+            if (todo.id === id) {
+                return {
+                    ...todo,
+                    status:
+                        todo.status === FILTER_STATUS.active
+                            ? FILTER_STATUS.completed
+                            : FILTER_STATUS.active,
+                }
+            }
+            return todo
+        })
+
+        setTodoState({
+            ...todoState,
+            todos: toggledTodos,
+        })
+    }
+
+    editTodoContext = (id: number, value: string) => {
+        const { todoState, setTodoState } = this.props
+
+        const checkedValue = value.trim()
+
+        const changedTodosWithContext = todoState.todos.map((todo) => {
+            if (checkedValue === '' || todo.value === checkedValue) return todo
+            if (todo.id === id) {
+                return { ...todo, value: checkedValue, isEdit: false }
+            }
+            return todo
+        })
+
+        setTodoState({
+            ...todoState,
+            todos: changedTodosWithContext,
+        })
+    }
+
+    handleTodoEdit = (id: number) => {
+        const { todoState, setTodoState } = this.props
+
+        const todosForEdit = todoState.todos.map((todo) => {
+            if (todo.id === id) {
+                return { ...todo, isEdit: true }
+            }
+            return { ...todo, isEdit: false }
+        })
+
+        setTodoState({
+            ...todoState,
+            todos: todosForEdit,
+        })
+    }
+
+    closeAllTodoEdit = () => {
+        const { todoState, setTodoState } = this.props
+
+        const closedAllTodosEdit = todoState.todos.map((todo) => {
+            return { ...todo, isEdit: false }
+        })
+
+        setTodoState({
+            ...todoState,
+            todos: closedAllTodosEdit,
+        })
+    }
+
     render() {
-        const {
-            todo,
-            removeTodo,
-            toggleTodoStatus,
-            editTodoContext,
-            handleTodoEdit,
-            closeAllTodoEdit,
-        } = this.props
+        const { todo } = this.props
 
         return (
             <StyledLi className={todo.status === FILTER_STATUS.completed ? 'completed' : ''}>
@@ -33,14 +103,15 @@ class TodoItem extends Component<TodoItemProps> {
                     isEdit={todo.isEdit}
                     value={todo.value}
                     id={todo.id}
-                    toggleTodoStatus={toggleTodoStatus}
-                    editTodoContext={editTodoContext}
-                    closeAllTodoEdit={closeAllTodoEdit}
+                    toggleTodoStatus={this.toggleTodoStatus}
+                    handleTodoEdit={() => this.handleTodoEdit(todo.id)}
+                    editTodoContext={this.editTodoContext}
+                    closeAllTodoEdit={this.closeAllTodoEdit}
                 />
                 <TodoControl
                     id={todo.id}
-                    removeTodo={() => removeTodo(todo.id)}
-                    handleTodoEdit={() => handleTodoEdit(todo.id)}
+                    removeTodo={() => this.removeTodo(todo.id)}
+                    handleTodoEdit={() => this.handleTodoEdit(todo.id)}
                 />
             </StyledLi>
         )

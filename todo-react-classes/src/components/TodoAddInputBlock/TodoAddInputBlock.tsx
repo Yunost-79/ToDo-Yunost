@@ -1,13 +1,14 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Component } from 'react'
-import { Warning } from '../../globalVariables/typesVariables'
+import { FILTER_STATUS } from '../../globalVariables/todoVariables'
+import { Todo, TodoState } from '../../globalVariables/typesVariables'
 import AddButton from './UI/AddButton'
 import AddInput from './UI/AddInput'
 
 type TodoAddInputBlockProps = {
-    addTodo: (value: string) => void
-    warning: Warning
+    todoState: TodoState
+    setTodoState: (state: TodoState, callback?: () => void) => void
 }
 
 type TodoAddInputBlockState = {
@@ -19,6 +20,39 @@ class TodoAddInputBlock extends Component<TodoAddInputBlockProps, TodoAddInputBl
         inputValue: '',
     }
 
+    addTodo = (value: string) => {
+        const { todoState, setTodoState } = this.props
+
+        const checkedValue = value.trim()
+
+        if (checkedValue === '') {
+            setTodoState({
+                ...todoState,
+                warning: {
+                    isWarning: true,
+                    warningText: 'Input is empty',
+                },
+            })
+            return
+        }
+
+        const todo: Todo = {
+            id: Date.now(),
+            value: checkedValue,
+            isEdit: false,
+            status: FILTER_STATUS.active,
+            dateOfCreation: Date.now(),
+        }
+
+        setTodoState({
+            ...todoState,
+            todos: [...todoState.todos, todo],
+            warning: {
+                isWarning: false,
+            },
+        })
+    }
+
     handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
 
@@ -27,22 +61,24 @@ class TodoAddInputBlock extends Component<TodoAddInputBlockProps, TodoAddInputBl
     }
 
     handleAddTodo = (value: string) => {
-        const { addTodo } = this.props
-
-        addTodo(value)
+        this.addTodo(value)
         this.setState({ inputValue: '' })
     }
 
     render() {
-        const { warning } = this.props
+        const { todoState } = this.props
         const { inputValue } = this.state
 
         return (
             <StyledTodoAddInputBlock>
                 <AddInput
                     customStyles={CssInputItem}
-                    warning={warning}
-                    placeholder={warning.isWarning ? warning.warningText : 'Enter your todo'}
+                    warning={todoState.warning}
+                    placeholder={
+                        todoState.warning.isWarning
+                            ? todoState.warning.warningText
+                            : 'Enter your todo'
+                    }
                     type="text"
                     value={inputValue}
                     onChange={this.handleChange}

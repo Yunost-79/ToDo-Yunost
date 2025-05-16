@@ -4,13 +4,6 @@ import { Component } from 'react'
 import { COLORS } from './globalVariables/styledVariables'
 import TodoPage from './pages/TodoPage'
 
-// injectGlobal`
-//     body{
-//         background-color: ${COLORS.MAIN_GREY};
-//         font-family: 'Helvetica', Sans-Serif;
-//     }
-// `
-
 class App extends Component {
     render() {
         return (

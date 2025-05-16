@@ -54,128 +54,8 @@ class TodoPage extends Component<{}, TodoPageState> {
         localStorage.setItem('state', JSON.stringify(checkedState))
     }
 
-    updateTodoState = (newState: Partial<TodoPageState>) => {
-        this.setState(newState as TodoPageState, () => this.setData(this.state))
-    }
-
-    addTodo = (value: string) => {
-        const checkedValue = value.trim()
-
-        if (checkedValue === '') {
-            this.setState({
-                warning: {
-                    isWarning: true,
-                    warningText: 'Input is empty',
-                },
-            })
-            return
-        }
-
-        const todo: Todo = {
-            id: Date.now(),
-            value: checkedValue,
-            isEdit: false,
-            status: FILTER_STATUS.active,
-            dateOfCreation: Date.now(),
-        }
-
-        this.setState(
-            {
-                todos: [...this.state.todos, todo],
-                warning: {
-                    isWarning: false,
-                },
-            },
-            () => this.setData(this.state),
-        )
-    }
-
-    removeTodo = (id: number) => {
-        const filteredTodos = this.state.todos.filter((todo) => todo.id !== id)
-        this.setState({ todos: filteredTodos }, () => this.setData(this.state))
-    }
-
-    removeAllTodos = () => {
-        this.setState({ todos: [] }, () => this.setData(this.state))
-    }
-
-    toggleTodoStatus = (id: number) => {
-        const toggledTodos = this.state.todos.map((todo) => {
-            if (todo.id === id) {
-                return {
-                    ...todo,
-                    status:
-                        todo.status === FILTER_STATUS.active
-                            ? FILTER_STATUS.completed
-                            : FILTER_STATUS.active,
-                }
-            }
-            return todo
-        })
-
-        this.setState({ todos: toggledTodos }, () => this.setData(this.state))
-    }
-
-    editTodoContext = (id: number, value: string) => {
-        const checkedValue = value.trim()
-
-        const changedTodosWithContext = this.state.todos.map((todo) => {
-            if (checkedValue === '' || todo.value === checkedValue) return todo
-            if (todo.id === id) {
-                return { ...todo, value: checkedValue, isEdit: false }
-            }
-            return todo
-        })
-
-        this.setState({ todos: changedTodosWithContext }, () => this.setData(this.state))
-    }
-
-    handleTodoEdit = (id: number) => {
-        const todosForEdit = this.state.todos.map((todo) => {
-            if (todo.id === id) {
-                return { ...todo, isEdit: true }
-            }
-            return { ...todo, isEdit: false }
-        })
-
-        this.setState({ todos: todosForEdit }, () => this.setData(this.state))
-    }
-
-    closeAllTodoEdit = () => {
-        const closedAllTodosEdit = this.state.todos.map((todo) => {
-            return { ...todo, isEdit: false }
-        })
-
-        this.setState({ todos: closedAllTodosEdit }, () => this.setData(this.state))
-    }
-
-    filteringTodos = (filterStatus: FilterStatus) => {
-        const status = filterStatus || FILTER_STATUS.all
-
-        let filteredTodos = []
-
-        switch (status) {
-            case FILTER_STATUS.all:
-                filteredTodos = this.state.todos.filter(
-                    (todo) => todo.status === FILTER_STATUS.active,
-                )
-                break
-            case FILTER_STATUS.completed:
-                filteredTodos = this.state.todos.filter(
-                    (todo) => todo.status === FILTER_STATUS.completed,
-                )
-                break
-            default:
-                filteredTodos = [...this.state.todos]
-        }
-
-        console.log('filteredTodos', filteredTodos)
-
-        this.setState({
-            filteredTodos,
-            filter: status,
-            counter: filteredTodos.length,
-        })
+    updateTodoState = (newState: any) => {
+        this.setState(newState, () => this.setData(this.state))
     }
 
     render() {
@@ -183,20 +63,17 @@ class TodoPage extends Component<{}, TodoPageState> {
             <StyledContainer>
                 <StyledTodoContainer>
                     <TodoHeader />
-                    <TodoAddInputBlock addTodo={this.addTodo} warning={this.state.warning} />
+                    <TodoAddInputBlock
+                        todoState={this.state}
+                        setTodoState={this.updateTodoState}
+                    />
                     <TodoList
                         todoState={this.state}
-                        toggleTodoStatus={this.toggleTodoStatus}
-                        removeTodo={this.removeTodo}
-                        editTodoContext={this.editTodoContext}
-                        handleTodoEdit={this.handleTodoEdit}
-                        closeAllTodoEdit={this.closeAllTodoEdit}
+                        setTodoState={this.updateTodoState}
                     />
                     <TodoFooter
                         todoState={this.state}
                         setTodoState={this.updateTodoState}
-                        filteringTodos={this.filteringTodos}
-                        removeAllTodos={this.removeAllTodos}
                     />
                 </StyledTodoContainer>
             </StyledContainer>

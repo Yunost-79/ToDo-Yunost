@@ -12,6 +12,7 @@ type TodoContextProps = {
     status: FilterStatus
     id: number
     toggleTodoStatus: (id: number) => void
+    handleTodoEdit: () => void
     editTodoContext: (id: number, value: string) => void
     closeAllTodoEdit: () => void
 }
@@ -33,13 +34,13 @@ class TodoContext extends Component<TodoContextProps, TodoContextState> {
     handleSaveEdit = (id: number, inputValue: string) => {
         const { editTodoContext } = this.props
 
-        console.log('inputValue', inputValue)
         editTodoContext(id, inputValue)
         this.setState({ inputValue: '' })
     }
 
     render() {
-        const { isEdit, value, status, id, toggleTodoStatus, closeAllTodoEdit } = this.props
+        const { isEdit, value, status, id, toggleTodoStatus, handleTodoEdit, closeAllTodoEdit } =
+            this.props
         const { inputValue } = this.state
 
         return (
@@ -51,7 +52,10 @@ class TodoContext extends Component<TodoContextProps, TodoContextState> {
                     <CheckImg />
                 </RadioButton>
                 {!isEdit ? (
-                    <ContextTitle className={status === FILTER_STATUS.completed ? 'completed' : ''}>
+                    <ContextTitle
+                        onDoubleClick={handleTodoEdit}
+                        className={status === FILTER_STATUS.completed ? 'completed' : ''}
+                    >
                         {value}
                     </ContextTitle>
                 ) : (
@@ -62,16 +66,6 @@ class TodoContext extends Component<TodoContextProps, TodoContextState> {
                         handleSaveEdit={() => this.handleSaveEdit(id, inputValue)}
                         handleCloseEdit={() => closeAllTodoEdit()}
                     />
-                    // <ContextEdit>
-                    //     <EditInput
-                    //         type="text"
-                    //         placeholder={value}
-                    //         value={inputValue}
-                    //         onChange={this.handleOnChangeTodoContext}
-                    //     />
-                    //     <EditSaveButton>Save</EditSaveButton>
-                    //     <EditCloseButton>Close</EditCloseButton>
-                    // </ContextEdit>
                 )}
             </StyledTodoContext>
         )

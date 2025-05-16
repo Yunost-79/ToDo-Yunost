@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { Component } from 'react'
-import { FilterStatus, TodoState } from '../../globalVariables/typesVariables'
+import { TodoState } from '../../globalVariables/typesVariables'
 import Filters from './Filters/Filters'
 import TodoCounter from './TodoCounter/TodoCounter'
 import ClearAllTodosButton from './UI/ClearAllTodosButton'
@@ -8,22 +8,24 @@ import ClearAllTodosButton from './UI/ClearAllTodosButton'
 type TodoFooterProps = {
     todoState: TodoState
     setTodoState: (state: TodoState, callback?: () => void) => void
-    filteringTodos: (filterStatus: FilterStatus) => void
-    removeAllTodos: () => void
 }
 
 class TodoFooter extends Component<TodoFooterProps> {
+    removeAllTodos = () => {
+        const { todoState, setTodoState } = this.props
+        setTodoState({
+            ...todoState,
+            todos: [],
+        })
+    }
+
     render() {
-        const { todoState, setTodoState, filteringTodos, removeAllTodos } = this.props
+        const { todoState, setTodoState } = this.props
         return (
             <StyledTodoFooter>
                 <TodoCounter />
-                <Filters
-                    todoState={todoState}
-                    setTodoState={setTodoState}
-                    filteringTodos={filteringTodos}
-                />
-                <ClearAllTodosButton onClick={removeAllTodos} />
+                <Filters todoState={todoState} setTodoState={setTodoState} />
+                <ClearAllTodosButton onClick={this.removeAllTodos} />
             </StyledTodoFooter>
         )
     }

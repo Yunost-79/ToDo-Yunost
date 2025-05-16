@@ -13,8 +13,6 @@ type FiltersForRender = {
 type FiltersProps = {
     todoState: TodoState
     setTodoState: (state: TodoState, callback?: () => void) => void
-
-    filteringTodos: (filterStatus: FilterStatus) => void
 }
 
 type FiltersState = {
@@ -30,6 +28,36 @@ class Filters extends Component<FiltersProps, FiltersState> {
         ],
     }
 
+    filteringTodos = (filterStatus: FilterStatus) => {
+        const { todoState, setTodoState } = this.props
+
+        const status = filterStatus || FILTER_STATUS.all
+
+        let filteredTodos = []
+
+        switch (status) {
+            case FILTER_STATUS.all:
+                filteredTodos = todoState.todos.filter(
+                    (todo) => todo.status === FILTER_STATUS.active,
+                )
+                break
+            case FILTER_STATUS.completed:
+                filteredTodos = todoState.todos.filter(
+                    (todo) => todo.status === FILTER_STATUS.completed,
+                )
+                break
+            default:
+                filteredTodos = [...todoState.todos]
+        }
+
+        setTodoState({
+            ...todoState,
+            filteredTodos,
+            filter: status,
+            counter: filteredTodos.length,
+        })
+    }
+
     handleChangeFilter = (status: FilterStatus) => {
         this.setState({
             filters: this.state.filters.map((filter) => ({
@@ -37,7 +65,7 @@ class Filters extends Component<FiltersProps, FiltersState> {
                 isActive: filter.status === status,
             })),
         })
-        const { todoState, setTodoState } = this.props
+        this.filteringTodos(status)
     }
 
     render() {

@@ -5,22 +5,16 @@ import TodoItem from './TodoItem/TodoItem'
 
 type TodoListProps = {
     todoState: TodoState
-    removeTodo: (id: number) => void
-    toggleTodoStatus: (id: number) => void
-    editTodoContext: (id: number, value: string) => void
-    handleTodoEdit: (id: number) => void
-    closeAllTodoEdit: () => void
+    setTodoState: (state: TodoState, callback?: () => void) => void
+
 }
 
 class TodoList extends Component<TodoListProps> {
     render() {
         const {
             todoState,
-            removeTodo,
-            toggleTodoStatus,
-            editTodoContext,
-            handleTodoEdit,
-            closeAllTodoEdit,
+            setTodoState,
+
         } = this.props
         const { todos } = todoState
 
@@ -31,11 +25,9 @@ class TodoList extends Component<TodoListProps> {
                     <TodoItem
                         key={todo.id}
                         todo={todo}
-                        removeTodo={removeTodo}
-                        toggleTodoStatus={toggleTodoStatus}
-                        editTodoContext={editTodoContext}
-                        handleTodoEdit={handleTodoEdit}
-                        closeAllTodoEdit={closeAllTodoEdit}
+                        todoState={todoState}
+                        setTodoState={setTodoState}
+
                     />
                 ))}
             </StyledUl>
