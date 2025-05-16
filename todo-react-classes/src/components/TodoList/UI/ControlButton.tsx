@@ -6,15 +6,16 @@ import { COLORS } from '../../../globalVariables/styledVariables'
 type ControlButtonProps = {
     children?: ReactElement | string
     status?: string
+    onClick?: () => void
     customStyles?: Interpolation<Theme>
 }
 
 class ControlButton extends Component<ControlButtonProps> {
     render() {
-        const { customStyles, status, children, ...props } = this.props
+        const { customStyles, status, onClick, children, ...props } = this.props
 
         return (
-            <Button className={status} customStyles={[customStyles]} {...props}>
+            <Button className={status} onClick={onClick} customStyles={[customStyles]} {...props}>
                 {children}
             </Button>
         )

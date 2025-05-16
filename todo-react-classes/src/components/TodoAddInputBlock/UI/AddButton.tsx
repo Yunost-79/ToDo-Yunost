@@ -7,15 +7,16 @@ interface AddInputState {}
 
 type AddButtonProps = {
     children?: ReactElement | string
+    onClick: () => void
     customStyles?: Interpolation<Theme>
 }
 
 class AddButton extends Component<AddButtonProps, AddInputState> {
     render() {
-        const { customStyles, children, ...props } = this.props
+        const { onClick, customStyles, children, ...props } = this.props
 
         return (
-            <Button customStyles={[customStyles]} {...props}>
+            <Button onClick={onClick} customStyles={[customStyles]} {...props}>
                 {children}
             </Button>
         )

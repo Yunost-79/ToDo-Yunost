@@ -1,12 +1,29 @@
 import styled from '@emotion/styled'
 import { Component } from 'react'
+import { TodoState } from '../../globalVariables/typesVariables'
 import TodoItem from './TodoItem/TodoItem'
 
-class TodoList extends Component {
+type TodoListProps = {
+    todoState: TodoState
+    removeTodo: (id: number) => void
+    toggleTodoStatus: (id: number) => void
+}
+
+class TodoList extends Component<TodoListProps> {
     render() {
+        const { todoState, removeTodo, toggleTodoStatus } = this.props
+        const { todos } = todoState
+
         return (
             <StyledUl>
-                <TodoItem />
+                {todos.map((todo) => (
+                    <TodoItem
+                        key={todo.id}
+                        todo={todo}
+                        removeTodo={removeTodo}
+                        toggleTodoStatus={toggleTodoStatus}
+                    />
+                ))}
             </StyledUl>
         )
     }

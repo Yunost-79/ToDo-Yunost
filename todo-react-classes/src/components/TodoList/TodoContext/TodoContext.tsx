@@ -3,24 +3,35 @@ import styled from '@emotion/styled'
 import { Component } from 'react'
 import { ReactComponent as CheckImg } from '../../../assets/check.svg'
 import { COLORS } from '../../../globalVariables/styledVariables'
+import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
+import { FilterStatus } from '../../../globalVariables/typesVariables'
 
 type TodoContextProps = {
     isEdit: boolean
+    value: string
+    status: FilterStatus
+    id: number
+    toggleTodoStatus: (id: number) => void
 }
 
 class TodoContext extends Component<TodoContextProps> {
     render() {
-        const { isEdit } = this.props
+        const { isEdit, value, status, id, toggleTodoStatus } = this.props
         return (
             <StyledTodoContext>
-                <RadioButton>
+                <RadioButton
+                    className={status === FILTER_STATUS.completed ? 'completed' : ''}
+                    onClick={() => toggleTodoStatus(id)}
+                >
                     <CheckImg />
                 </RadioButton>
                 {!isEdit ? (
-                    <ContextTitle>Todo title</ContextTitle>
+                    <ContextTitle className={status === FILTER_STATUS.completed ? 'completed' : ''}>
+                        {value}
+                    </ContextTitle>
                 ) : (
                     <ContextEdit>
-                        <EditInput placeholder="Todo title" />
+                        <EditInput placeholder={isEdit ? 'edit' : value} />
                         <EditSaveButton>Save</EditSaveButton>
                         <EditCloseButton>Close</EditCloseButton>
                     </ContextEdit>
@@ -57,7 +68,6 @@ const CssEditButton = css`
     border-radius: 5px;
     transition: 0.2s;
     cursor: pointer;
-    // border: solid 1px ${COLORS.HARD_GREY};
     border: none;
 
     &:hover {
@@ -98,6 +108,18 @@ const RadioButton = styled.button`
         opacity: 0;
         transition: 0.2s;
     }
+
+    &.completed {
+        svg {
+            opacity: 0.75;
+        }
+
+        &:hover {
+            svg {
+                opacity: 1;
+            }
+        }
+    }
 `
 
 const ContextTitle = styled.span`
@@ -108,6 +130,10 @@ const ContextTitle = styled.span`
 
     &:hover {
         color: ${COLORS.BLACK};
+    }
+
+    &.completed {
+        text-decoration: line-through;
     }
 `
 

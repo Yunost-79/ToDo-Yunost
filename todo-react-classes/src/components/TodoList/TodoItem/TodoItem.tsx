@@ -1,21 +1,30 @@
 import styled from '@emotion/styled'
 import { Component } from 'react'
+import { COLORS } from '../../../globalVariables/styledVariables'
+import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
+import { Todo } from '../../../globalVariables/typesVariables'
 import TodoContext from '../TodoContext/TodoContext'
 import TodoControl from '../TodoControl/TodoControl'
 
-type TodoItemState = {
-    isEdit: boolean
+type TodoItemProps = {
+    todo: Todo
+    removeTodo: (id: number) => void
+    toggleTodoStatus: (id: number) => void
 }
 
-class TodoItem extends Component {
-    state: TodoItemState = {
-        isEdit: true,
-    }
+class TodoItem extends Component<TodoItemProps> {
     render() {
+        const { todo, removeTodo, toggleTodoStatus } = this.props
         return (
-            <StyledLi>
-                <TodoContext isEdit={this.state.isEdit} />
-                <TodoControl />
+            <StyledLi className={todo.status === FILTER_STATUS.completed ? 'completed' : ''}>
+                <TodoContext
+                    status={todo.status}
+                    isEdit={todo.isEdit}
+                    value={todo.value}
+                    id={todo.id}
+                    toggleTodoStatus={toggleTodoStatus}
+                />
+                <TodoControl id={todo.id} removeTodo={removeTodo} />
             </StyledLi>
         )
     }
@@ -30,6 +39,10 @@ const StyledLi = styled.li`
     padding: 5px;
     border-radius: 5px;
     transition: 0.2s;
+
+    &.completed {
+        background-color: ${COLORS.LIGHT_GREY};
+    }
 `
 
 export default TodoItem

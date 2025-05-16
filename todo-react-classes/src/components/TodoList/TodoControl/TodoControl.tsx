@@ -4,14 +4,20 @@ import { ReactComponent as CloseImg } from '../../../assets/close.svg'
 import { ReactComponent as EditImg } from '../../../assets/edit.svg'
 import ControlButton from '../UI/ControlButton'
 
-class TodoControl extends Component {
+type TodoControlProps = {
+    id: number
+    removeTodo: (id: number) => void
+}
+
+class TodoControl extends Component<TodoControlProps> {
     render() {
+        const { id, removeTodo } = this.props
         return (
             <StyledTodoControl>
                 <ControlButton status="edit">
                     <EditImg />
                 </ControlButton>
-                <ControlButton status="close">
+                <ControlButton status="close" onClick={() => removeTodo(id)}>
                     <CloseImg />
                 </ControlButton>
             </StyledTodoControl>
