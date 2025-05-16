@@ -22,6 +22,7 @@ class TodoAddInputBlock extends Component<TodoAddInputBlockProps, TodoAddInputBl
     handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
 
+        e.preventDefault()
         this.setState({ inputValue: value })
     }
 

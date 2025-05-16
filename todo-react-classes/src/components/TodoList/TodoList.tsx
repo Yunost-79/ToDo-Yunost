@@ -7,21 +7,35 @@ type TodoListProps = {
     todoState: TodoState
     removeTodo: (id: number) => void
     toggleTodoStatus: (id: number) => void
+    editTodoContext: (id: number, value: string) => void
+    handleTodoEdit: (id: number) => void
+    handleCloseAllTodoEdit: () => void
 }
 
 class TodoList extends Component<TodoListProps> {
     render() {
-        const { todoState, removeTodo, toggleTodoStatus } = this.props
+        const {
+            todoState,
+            removeTodo,
+            toggleTodoStatus,
+            editTodoContext,
+            handleTodoEdit,
+            handleCloseAllTodoEdit,
+        } = this.props
         const { todos } = todoState
-
+        
+        const sortedTodos = todos.sort((a, b) => b.dateOfCreation - a.dateOfCreation)
         return (
             <StyledUl>
-                {todos.map((todo) => (
+                {sortedTodos.map((todo) => (
                     <TodoItem
                         key={todo.id}
                         todo={todo}
                         removeTodo={removeTodo}
                         toggleTodoStatus={toggleTodoStatus}
+                        editTodoContext={editTodoContext}
+                        handleTodoEdit={handleTodoEdit}
+                        handleCloseAllTodoEdit={handleCloseAllTodoEdit}
                     />
                 ))}
             </StyledUl>

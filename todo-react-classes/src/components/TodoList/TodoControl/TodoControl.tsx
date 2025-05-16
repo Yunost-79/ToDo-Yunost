@@ -6,18 +6,19 @@ import ControlButton from '../UI/ControlButton'
 
 type TodoControlProps = {
     id: number
-    removeTodo: (id: number) => void
+    removeTodo: () => void
+    handleTodoEdit: () => void
 }
 
 class TodoControl extends Component<TodoControlProps> {
     render() {
-        const { id, removeTodo } = this.props
+        const { id, removeTodo, handleTodoEdit } = this.props
         return (
             <StyledTodoControl>
-                <ControlButton status="edit">
+                <ControlButton status="edit" onClick={handleTodoEdit}>
                     <EditImg />
                 </ControlButton>
-                <ControlButton status="close" onClick={() => removeTodo(id)}>
+                <ControlButton status="close" onClick={removeTodo}>
                     <CloseImg />
                 </ControlButton>
             </StyledTodoControl>

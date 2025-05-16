@@ -10,11 +10,22 @@ type TodoItemProps = {
     todo: Todo
     removeTodo: (id: number) => void
     toggleTodoStatus: (id: number) => void
+    editTodoContext: (id: number, value: string) => void
+    handleTodoEdit: (id: number) => void
+    handleCloseAllTodoEdit: () => void
 }
 
 class TodoItem extends Component<TodoItemProps> {
     render() {
-        const { todo, removeTodo, toggleTodoStatus } = this.props
+        const {
+            todo,
+            removeTodo,
+            toggleTodoStatus,
+            editTodoContext,
+            handleTodoEdit,
+            handleCloseAllTodoEdit,
+        } = this.props
+
         return (
             <StyledLi className={todo.status === FILTER_STATUS.completed ? 'completed' : ''}>
                 <TodoContext
@@ -23,8 +34,14 @@ class TodoItem extends Component<TodoItemProps> {
                     value={todo.value}
                     id={todo.id}
                     toggleTodoStatus={toggleTodoStatus}
+                    editTodoContext={editTodoContext}
+                    handleCloseAllTodoEdit={handleCloseAllTodoEdit}
                 />
-                <TodoControl id={todo.id} removeTodo={removeTodo} />
+                <TodoControl
+                    id={todo.id}
+                    removeTodo={() => removeTodo(todo.id)}
+                    handleTodoEdit={() => handleTodoEdit(todo.id)}
+                />
             </StyledLi>
         )
     }

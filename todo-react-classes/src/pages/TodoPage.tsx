@@ -74,7 +74,7 @@ class TodoPage extends Component<{}, TodoPageState> {
         this.setState(
             {
                 todos: [...this.state.todos, todo],
-                counter: this.state.todos.length,
+                counter: this.state.todos.length + 1,
                 warning: {
                     isWarning: false,
                 },
@@ -85,12 +85,7 @@ class TodoPage extends Component<{}, TodoPageState> {
 
     removeTodo = (id: number) => {
         const filteredTodos = this.state.todos.filter((todo) => todo.id !== id)
-        this.setState(
-            {
-                todos: filteredTodos,
-            },
-            () => this.setData(this.state),
-        )
+        this.setState({ todos: filteredTodos }, () => this.setData(this.state))
     }
 
     toggleTodoStatus = (id: number) => {
@@ -107,12 +102,42 @@ class TodoPage extends Component<{}, TodoPageState> {
             return todo
         })
 
-        this.setState(
-            {
-                todos: toggledTodos,
-            },
-            () => this.setData(this.state),
-        )
+        this.setState({ todos: toggledTodos }, () => this.setData(this.state))
+    }
+
+    editTodoContext = (id: number, value: string) => {
+        const checkedValue = value.trim()
+
+        const changedTodosWithContext = this.state.todos.map((todo) => {
+            if (checkedValue === '' || todo.value === checkedValue) return todo
+            if (todo.id === id) {
+                return { ...todo, value: checkedValue, isEdit: false }
+            }
+            return todo
+        })
+
+        this.setState({ todos: changedTodosWithContext }, () => this.setData(this.state))
+    }
+
+    handleTodoEdit = (id: number) => {
+        const todosForEdit = this.state.todos.map((todo) => {
+            if (todo.id === id) {
+                return { ...todo, isEdit: true }
+            }
+            return { ...todo, isEdit: false }
+        })
+
+        this.setState({ todos: todosForEdit }, () => this.setData(this.state))
+    }
+
+    handleCloseAllTodoEdit = () => {
+        const closedAllTodosEdit = this.state.todos.map((todo) => {
+            return { ...todo, isEdit: false }
+        })
+
+        console.log(closedAllTodosEdit)
+
+        this.setState({ todos: closedAllTodosEdit }, () => this.setData(this.state))
     }
 
     render() {
@@ -125,6 +150,9 @@ class TodoPage extends Component<{}, TodoPageState> {
                         todoState={this.state}
                         toggleTodoStatus={this.toggleTodoStatus}
                         removeTodo={this.removeTodo}
+                        editTodoContext={this.editTodoContext}
+                        handleTodoEdit={this.handleTodoEdit}
+                        handleCloseAllTodoEdit={this.handleCloseAllTodoEdit}
                     />
                     <TodoFooter />
                 </StyledTodoContainer>
