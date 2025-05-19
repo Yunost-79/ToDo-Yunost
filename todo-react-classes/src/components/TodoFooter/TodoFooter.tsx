@@ -8,6 +8,7 @@ import ClearAllTodosButton from './UI/ClearAllTodosButton'
 type TodoFooterProps = {
     todoState: TodoState
     setTodoState: (state: TodoState, callback?: () => void) => void
+    closeAllTodoEdit: () => void
 }
 
 class TodoFooter extends Component<TodoFooterProps> {
@@ -20,11 +21,15 @@ class TodoFooter extends Component<TodoFooterProps> {
     }
 
     render() {
-        const { todoState, setTodoState } = this.props
+        const { todoState, setTodoState, closeAllTodoEdit } = this.props
         return (
             <StyledTodoFooter>
-                <TodoCounter />
-                <Filters todoState={todoState} setTodoState={setTodoState} />
+                <TodoCounter todoState={todoState} />
+                <Filters
+                    todoState={todoState}
+                    setTodoState={setTodoState}
+                    closeAllTodoEdit={closeAllTodoEdit}
+                />
                 <ClearAllTodosButton onClick={this.removeAllTodos} />
             </StyledTodoFooter>
         )

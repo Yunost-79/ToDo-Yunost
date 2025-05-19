@@ -10,7 +10,7 @@ type TodoItemProps = {
     todo: Todo
     todoState: TodoState
     setTodoState: (state: TodoState, callback?: () => void) => void
-
+    closeAllTodoEdit: () => void
 }
 
 class TodoItem extends Component<TodoItemProps> {
@@ -51,7 +51,6 @@ class TodoItem extends Component<TodoItemProps> {
         const checkedValue = value.trim()
 
         const changedTodosWithContext = todoState.todos.map((todo) => {
-            if (checkedValue === '' || todo.value === checkedValue) return todo
             if (todo.id === id) {
                 return { ...todo, value: checkedValue, isEdit: false }
             }
@@ -80,21 +79,8 @@ class TodoItem extends Component<TodoItemProps> {
         })
     }
 
-    closeAllTodoEdit = () => {
-        const { todoState, setTodoState } = this.props
-
-        const closedAllTodosEdit = todoState.todos.map((todo) => {
-            return { ...todo, isEdit: false }
-        })
-
-        setTodoState({
-            ...todoState,
-            todos: closedAllTodosEdit,
-        })
-    }
-
     render() {
-        const { todo } = this.props
+        const { todo, closeAllTodoEdit } = this.props
 
         return (
             <StyledLi className={todo.status === FILTER_STATUS.completed ? 'completed' : ''}>
@@ -106,7 +92,7 @@ class TodoItem extends Component<TodoItemProps> {
                     toggleTodoStatus={this.toggleTodoStatus}
                     handleTodoEdit={() => this.handleTodoEdit(todo.id)}
                     editTodoContext={this.editTodoContext}
-                    closeAllTodoEdit={this.closeAllTodoEdit}
+                    closeAllTodoEdit={closeAllTodoEdit}
                 />
                 <TodoControl
                     id={todo.id}

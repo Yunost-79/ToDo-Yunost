@@ -12,7 +12,7 @@ type TodoControlProps = {
 
 class TodoControl extends Component<TodoControlProps> {
     render() {
-        const { id, removeTodo, handleTodoEdit } = this.props
+        const { removeTodo, handleTodoEdit } = this.props
         return (
             <StyledTodoControl>
                 <ControlButton status="edit" onClick={handleTodoEdit}>

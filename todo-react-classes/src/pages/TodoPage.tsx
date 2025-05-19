@@ -29,10 +29,10 @@ class TodoPage extends Component<{}, TodoPageState> {
     }
 
     componentDidMount(): void {
-        const storedState = localStorage.getItem('state')
+        const storeJsonState = localStorage.getItem('state')
 
-        if (storedState) {
-            const stateData = JSON.parse(storedState)
+        if (storeJsonState) {
+            const stateData = JSON.parse(storeJsonState)
             this.setState({
                 todos: stateData.todos || [],
                 filteredTodos: stateData.filteredTodos || [],
@@ -54,8 +54,25 @@ class TodoPage extends Component<{}, TodoPageState> {
         localStorage.setItem('state', JSON.stringify(checkedState))
     }
 
-    updateTodoState = (newState: any) => {
-        this.setState(newState, () => this.setData(this.state))
+    setTodoState = (state: TodoPageState) => {
+        this.setState(state, () => this.setData(state))
+    }
+
+    closeAllTodoEdit = () => {
+        const closedAllTodosEdit = this.state.todos.map((todo) => {
+            return { ...todo, isEdit: false }
+        })
+
+        this.setState(
+            {
+                ...this.state,
+                todos: closedAllTodosEdit,
+                filteredTodos: closedAllTodosEdit,
+            },
+            () => {
+                this.setData(this.state)
+            },
+        )
     }
 
     render() {
@@ -63,17 +80,16 @@ class TodoPage extends Component<{}, TodoPageState> {
             <StyledContainer>
                 <StyledTodoContainer>
                     <TodoHeader />
-                    <TodoAddInputBlock
-                        todoState={this.state}
-                        setTodoState={this.updateTodoState}
-                    />
+                    <TodoAddInputBlock todoState={this.state} setTodoState={this.setTodoState} />
                     <TodoList
                         todoState={this.state}
-                        setTodoState={this.updateTodoState}
+                        setTodoState={this.setTodoState}
+                        closeAllTodoEdit={this.closeAllTodoEdit}
                     />
                     <TodoFooter
                         todoState={this.state}
-                        setTodoState={this.updateTodoState}
+                        setTodoState={this.setTodoState}
+                        closeAllTodoEdit={this.closeAllTodoEdit}
                     />
                 </StyledTodoContainer>
             </StyledContainer>

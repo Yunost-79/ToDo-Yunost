@@ -23,7 +23,7 @@ type TodoContextState = {
 
 class TodoContext extends Component<TodoContextProps, TodoContextState> {
     state = {
-        inputValue: '',
+        inputValue: this.props.value,
     }
 
     handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,10 +32,12 @@ class TodoContext extends Component<TodoContextProps, TodoContextState> {
     }
 
     handleSaveEdit = (id: number, inputValue: string) => {
-        const { editTodoContext } = this.props
+        const { value, editTodoContext } = this.props
+
+        if (inputValue.trim() === '') return editTodoContext(id, value)
 
         editTodoContext(id, inputValue)
-        this.setState({ inputValue: '' })
+        this.setState({ inputValue })
     }
 
     render() {
@@ -54,6 +56,7 @@ class TodoContext extends Component<TodoContextProps, TodoContextState> {
                 {!isEdit ? (
                     <ContextTitle
                         onDoubleClick={handleTodoEdit}
+                        title="Double click to edit todo"
                         className={status === FILTER_STATUS.completed ? 'completed' : ''}
                     >
                         {value}
@@ -61,7 +64,7 @@ class TodoContext extends Component<TodoContextProps, TodoContextState> {
                 ) : (
                     <ContextEdit
                         id={id}
-                        value={inputValue.length ? inputValue : value}
+                        value={inputValue}
                         onChange={this.handleChange}
                         handleSaveEdit={() => this.handleSaveEdit(id, inputValue)}
                         handleCloseEdit={() => closeAllTodoEdit()}

@@ -13,6 +13,7 @@ type FiltersForRender = {
 type FiltersProps = {
     todoState: TodoState
     setTodoState: (state: TodoState, callback?: () => void) => void
+    closeAllTodoEdit: () => void
 }
 
 type FiltersState = {
@@ -28,15 +29,33 @@ class Filters extends Component<FiltersProps, FiltersState> {
         ],
     }
 
+    componentDidMount(): void {
+        const { todoState } = this.props
+
+        this.filteringTodos(todoState.filter)
+    }
+
+    componentDidUpdate(prevProps: Readonly<FiltersProps>): void {
+        const { todoState, closeAllTodoEdit } = this.props
+
+        if (prevProps.todoState.filter !== todoState.filter) {
+            closeAllTodoEdit()
+        }
+
+        if (prevProps.todoState.todos !== todoState.todos) {
+            this.filteringTodos(todoState.filter)
+        }
+    }
+
     filteringTodos = (filterStatus: FilterStatus) => {
         const { todoState, setTodoState } = this.props
 
-        const status = filterStatus || FILTER_STATUS.all
+        const status = filterStatus || todoState.filter
 
         let filteredTodos = []
 
         switch (status) {
-            case FILTER_STATUS.all:
+            case FILTER_STATUS.active:
                 filteredTodos = todoState.todos.filter(
                     (todo) => todo.status === FILTER_STATUS.active,
                 )
@@ -59,22 +78,18 @@ class Filters extends Component<FiltersProps, FiltersState> {
     }
 
     handleChangeFilter = (status: FilterStatus) => {
-        this.setState({
-            filters: this.state.filters.map((filter) => ({
-                ...filter,
-                isActive: filter.status === status,
-            })),
-        })
         this.filteringTodos(status)
     }
 
     render() {
+        const { todoState } = this.props
+
         return (
             <StyledTodoFilters>
                 {this.state.filters.map((filter: FiltersForRender, index: number) => (
                     <FilterSpan
                         key={index}
-                        className={filter.isActive ? 'active' : ''}
+                        className={filter.status === todoState.filter ? 'active' : ''}
                         onClick={() => this.handleChangeFilter(filter.status)}
                     >
                         {filter.text}
