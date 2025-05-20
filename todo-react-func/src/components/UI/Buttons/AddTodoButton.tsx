@@ -3,13 +3,13 @@ import styled from '@emotion/styled'
 import { FC, ReactElement } from 'react'
 import { COLORS } from '../../../globalVariables/styledVariables'
 
-type AddButton = {
+type AddButtonProps = {
     children?: ReactElement | string
     onClick?: () => void
     customStyles?: Interpolation<Theme>
 }
 
-const AddButton: FC<AddButton> = ({ customStyles, onClick, children, ...props }) => {
+const AddTodoButton: FC<AddButtonProps> = ({ customStyles, onClick, children, ...props }) => {
     return (
         <Button customStyles={[customStyles]} onClick={onClick} {...props}>
             {children}
@@ -17,7 +17,7 @@ const AddButton: FC<AddButton> = ({ customStyles, onClick, children, ...props })
     )
 }
 
-const Button = styled.button<AddButton>`
+const Button = styled.button<AddButtonProps>`
     ${({ customStyles: cssProp }) => cssProp};
     background-color: ${COLORS.LIGHT_ORANGE};
     padding: 7px;
@@ -30,4 +30,4 @@ const Button = styled.button<AddButton>`
     }
 `
 
-export default AddButton
+export default AddTodoButton

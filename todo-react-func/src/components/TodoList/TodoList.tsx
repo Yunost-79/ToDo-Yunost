@@ -1,5 +1,7 @@
 import styled from '@emotion/styled'
+import { useSelector } from 'react-redux'
 import { FilterStatus, TodoState } from '../../globalVariables/typesVariables'
+import { RootState } from '../../redux/store'
 import TodoItem from './TodoItem/TodoItem'
 
 type TodoListProps = {
@@ -19,6 +21,9 @@ type TodoListState = {
 }
 
 const TodoList = () => {
+    const todosState: TodoState = useSelector((state: RootState) => state.todos)
+
+    const todosForRender = todosState.todos.sort((a, b) => b.dateOfCreation - a.dateOfCreation)
     // state = {
     //     emptyBlock: [
     //         {
@@ -28,7 +33,7 @@ const TodoList = () => {
     //         },
     //         {
     //             status: FILTER_STATUS.completed,
-    //             title: 'Completed tasks are empty',
+    //             title: 'Completed tasks are empty',T
     //             img: ghostImg,
     //         },
     //     ],
@@ -47,6 +52,10 @@ const TodoList = () => {
     // const sortedTodos = [...todosForRender].sort((a, b) => b.dateOfCreation - a.dateOfCreation)
     return (
         <StyledUl>
+            {todosForRender
+                ? todosForRender?.map((todo) => <TodoItem key={todo.id} todo={todo} />)
+                : ''}
+
             {/* {sortedTodos && sortedTodos.length > 0
                     ? sortedTodos.map((todo) => (
                           <TodoItem
@@ -58,13 +67,13 @@ const TodoList = () => {
                           />
                       ))
                     : emptyBlockElement && <EmptyBlock emptyBlock={emptyBlockElement} />} */}
-            <TodoItem
+            {/* <TodoItem
             // key={todo.id}
             // todo={todo}
             // todoState={todoState}
             // setTodoState={setTodoState}
             // closeAllTodoEdit={closeAllTodoEdit}
-            />
+            /> */}
         </StyledUl>
     )
 }

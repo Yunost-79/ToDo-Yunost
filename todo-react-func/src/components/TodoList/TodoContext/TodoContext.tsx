@@ -1,72 +1,65 @@
 import styled from '@emotion/styled'
-import { ReactComponent as CheckImg } from '../../../assets/check.svg'
+import { FC, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { COLORS } from '../../../globalVariables/styledVariables'
-import { FilterStatus } from '../../../globalVariables/typesVariables'
+import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
+import { Todo } from '../../../globalVariables/typesVariables'
+import { closeAllTodosIsEdit, editTodoContext } from '../../../redux/actions/todoActions'
+import ChangeStatusRadioButton from '../../UI/RadioButton/ChangeStatusRadioButton'
+import ContextEdit from './ContextEdit/ContextEdit'
 
 type TodoContextProps = {
-    isEdit: boolean
-    value: string
-    status: FilterStatus
-    id: number
-    toggleTodoStatus: (id: number) => void
-    handleTodoEdit: () => void
-    editTodoContext: (id: number, value: string) => void
-    closeAllTodoEdit: () => void
+    todo: Todo
+    toggleTodoStatus: () => void
+    handleTodoIsEdit: () => void
 }
 
-type TodoContextState = {
-    inputValue: string
-}
+const TodoContext: FC<TodoContextProps> = ({ todo, toggleTodoStatus, handleTodoIsEdit }) => {
+    const dispatch = useDispatch()
 
-const TodoContext = () => {
-    // state = {
-    //     inputValue: this.props.value,
-    // }
+    const [editInputValue, setEditInputValue] = useState<string>(todo.value)
 
-    // handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const value = e.target.value
-    //     this.setState({ inputValue: value })
-    // }
+    const handleSaveEdit = (id: number, value: string) => {
+        if (value.trim() === '') {
+            setEditInputValue(todo.value)
+            dispatch(closeAllTodosIsEdit())
+            return
+        }
 
-    // handleSaveEdit = (id: number, inputValue: string) => {
-    //     const { value, editTodoContext } = this.props
+        dispatch(editTodoContext(id, value))
+    }
 
-    //     if (inputValue.trim() === '') return editTodoContext(id, value)
+    const handleCloseEdit = () => {
+        dispatch(closeAllTodosIsEdit())
+    }
 
-    //     editTodoContext(id, inputValue)
-    //     this.setState({ inputValue })
-    // }
-
-    // const { isEdit, value, status, id, toggleTodoStatus, handleTodoEdit, closeAllTodoEdit } =
-    //     this.props
-    // const { inputValue } = this.state
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value
+        setEditInputValue(value)
+    }
 
     return (
         <StyledTodoContext>
-            <RadioButton
-            // className={status === FILTER_STATUS.completed ? 'completed' : ''}
-            // onClick={() => toggleTodoStatus(id)}
-            >
-                <CheckImg />
-            </RadioButton>
-            {/* {!isEdit ? ( */}
-            <ContextTitle
-            // onDoubleClick={handleTodoEdit}
-            // title="Double click to edit todo"
-            // className={status === FILTER_STATUS.completed ? 'completed' : ''}
-            >
-                {/* {value} */}
-                "TEST VALUE"
-            </ContextTitle>
-            {/* ) : (
+            <ChangeStatusRadioButton
+                className={todo.status === FILTER_STATUS.completed ? 'completed' : ''}
+                onClick={toggleTodoStatus}
+            />
+            {!todo.isEdit ? (
+                <ContextTitle
+                    onDoubleClick={handleTodoIsEdit}
+                    title="Double click to edit todo"
+                    className={todo.status === FILTER_STATUS.completed ? 'completed' : ''}
+                >
+                    {todo.value}
+                </ContextTitle>
+            ) : (
                 <ContextEdit
-                    id={id}
-                    value={inputValue}
-                    onChange={this.handleChange}
-                    handleSaveEdit={() => this.handleSaveEdit(id, inputValue)}
-                    handleCloseEdit={() => closeAllTodoEdit()}
+                    value={editInputValue}
+                    onChange={(e) => handleChange(e)}
+                    handleSaveEdit={() => handleSaveEdit(todo.id, editInputValue)}
+                    handleCloseEdit={() => handleCloseEdit()}
                 />
-            )} */}
+            )}
         </StyledTodoContext>
     )
 }
@@ -77,45 +70,6 @@ const StyledTodoContext = styled.div`
     align-items: center;
     justify-content: flex-start;
     gap: 12px;
-`
-const RadioButton = styled.button`
-    position: relative;
-    background-color: transparent;
-    border: solid 1px ${COLORS.LIGHT_ORANGE};
-    border-radius: 5px;
-    width: 22px;
-    height: 22px;
-    cursor: pointer;
-
-    &:hover {
-        border: solid 1px ${COLORS.HARD_ORANGE};
-
-        svg {
-            opacity: 0.75;
-        }
-    }
-
-    svg {
-        position: absolute;
-        top: -1px;
-        left: 0px;
-        width: 20px;
-        height: 20px;
-        opacity: 0;
-        transition: 0.2s;
-    }
-
-    &.completed {
-        svg {
-            opacity: 0.75;
-        }
-
-        &:hover {
-            svg {
-                opacity: 1;
-            }
-        }
-    }
 `
 
 const ContextTitle = styled.span`

@@ -1,28 +1,21 @@
 import styled from '@emotion/styled'
+import { FC } from 'react'
 import { ReactComponent as CloseImg } from '../../../assets/close.svg'
 import { ReactComponent as EditImg } from '../../../assets/edit.svg'
 import ControlButton from '../UI/ControlButton'
 
 type TodoControlProps = {
-    id: number
+    handleTodoIsEdit: () => void
     removeTodo: () => void
-    handleTodoEdit: () => void
 }
 
-const TodoControl = () => {
-    // const { removeTodo, handleTodoEdit } = this.props
+const TodoControl: FC<TodoControlProps> = ({ handleTodoIsEdit, removeTodo }) => {
     return (
         <StyledTodoControl>
-            <ControlButton
-                status="edit"
-                // onClick={handleTodoEdit}
-            >
+            <ControlButton status="edit" onClick={handleTodoIsEdit}>
                 <EditImg />
             </ControlButton>
-            <ControlButton
-                status="close"
-                // onClick={removeTodo}
-            >
+            <ControlButton status="close" onClick={removeTodo}>
                 <CloseImg />
             </ControlButton>
         </StyledTodoControl>

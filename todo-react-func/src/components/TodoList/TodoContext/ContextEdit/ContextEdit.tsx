@@ -1,27 +1,28 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Component } from 'react'
+import { FC } from 'react'
 import { COLORS } from '../../../../globalVariables/styledVariables'
 
 type ContextEditProps = {
-    id: number
     value: string
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-    handleSaveEdit: () => void
-    handleCloseEdit: () => void
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+    handleSaveEdit?: () => void
+    handleCloseEdit?: () => void
 }
 
-class ContextEdit extends Component<ContextEditProps> {
-    render() {
-        const { value, onChange, handleSaveEdit, handleCloseEdit } = this.props
-        return (
-            <StyledContextEdit>
-                <EditInput type="text" placeholder={value} value={value} onChange={onChange} />
-                <EditSaveButton onClick={handleSaveEdit}>Save</EditSaveButton>
-                <EditCloseButton onClick={handleCloseEdit}>Close</EditCloseButton>
-            </StyledContextEdit>
-        )
-    }
+const ContextEdit: FC<ContextEditProps> = ({
+    value,
+    onChange,
+    handleSaveEdit,
+    handleCloseEdit,
+}) => {
+    return (
+        <StyledContextEdit>
+            <EditInput type="text" placeholder={value} value={value} onChange={onChange} />
+            <EditSaveButton onClick={handleSaveEdit}>Save</EditSaveButton>
+            <EditCloseButton onClick={handleCloseEdit}>Close</EditCloseButton>
+        </StyledContextEdit>
+    )
 }
 
 const CssCommonButton = css`

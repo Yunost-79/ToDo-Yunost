@@ -5,7 +5,7 @@ import { COLORS } from '../../../globalVariables/styledVariables'
 import { Warning } from '../../../globalVariables/typesVariables'
 import { horizontalShake } from '../../../helpers/animations'
 
-type AddInput = {
+type AddTodoInputProps = {
     type: string
     placeholder?: string
     warning?: Warning
@@ -14,7 +14,13 @@ type AddInput = {
     customStyles?: Interpolation<Theme>
 }
 
-const AddInput: FC<AddInput> = ({ customStyles, value, onChange, warning, ...props }) => {
+const AddTodoInput: FC<AddTodoInputProps> = ({
+    customStyles,
+    value,
+    onChange,
+    warning,
+    ...props
+}) => {
     return (
         <Input
             value={value}
@@ -26,7 +32,7 @@ const AddInput: FC<AddInput> = ({ customStyles, value, onChange, warning, ...pro
     )
 }
 
-const Input = styled.input<AddInput>`
+const Input = styled.input<AddTodoInputProps>`
     ${({ customStyles: cssProp }) => cssProp};
     border: solid 2px ${COLORS.MAIN_GREY};
     width: 100%;
@@ -73,4 +79,4 @@ const Input = styled.input<AddInput>`
     }
 `
 
-export default AddInput
+export default AddTodoInput

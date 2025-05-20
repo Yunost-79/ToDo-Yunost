@@ -31,11 +31,7 @@ const TodoPage = () => {
                 <StyledTodoContainer>
                     <TodoHeader />
                     <TodoAddInputBlock />
-                    <TodoList
-                    // todoState={this.state}
-                    // setTodoState={this.setTodoState}
-                    // closeAllTodoEdit={this.closeAllTodoEdit}
-                    />
+                    <TodoList />
                     <TodoFooter
                     // todoState={this.state}
                     // setTodoState={this.setTodoState}
@@ -50,7 +46,7 @@ const StyledContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 100px;
+    margin: 100px 0;
 `
 
 const StyledTodoContainer = styled.div`

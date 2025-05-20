@@ -1,6 +1,6 @@
 import { Interpolation, Theme } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Component, ReactElement } from 'react'
+import { FC, ReactElement } from 'react'
 import { COLORS } from '../../../globalVariables/styledVariables'
 
 type ControlButtonProps = {
@@ -10,16 +10,18 @@ type ControlButtonProps = {
     customStyles?: Interpolation<Theme>
 }
 
-class ControlButton extends Component<ControlButtonProps> {
-    render() {
-        const { customStyles, status, onClick, children, ...props } = this.props
-
-        return (
-            <Button className={status} onClick={onClick} customStyles={[customStyles]} {...props}>
-                {children}
-            </Button>
-        )
-    }
+const ControlButton: FC<ControlButtonProps> = ({
+    customStyles,
+    status,
+    onClick,
+    children,
+    ...props
+}) => {
+    return (
+        <Button className={status} onClick={onClick} customStyles={[customStyles]} {...props}>
+            {children}
+        </Button>
+    )
 }
 
 const Button = styled.button<ControlButtonProps>`

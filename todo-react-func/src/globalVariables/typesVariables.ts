@@ -8,6 +8,7 @@ export type Todo = {
     isEdit: boolean
     status: FilterStatus
     dateOfCreation: number
+    dateOfChange: number
 }
 
 export type TodoState = {
@@ -15,10 +16,9 @@ export type TodoState = {
     filteredTodos: Todo[]
     counter: number
     filter: FilterStatus
-    warning: Warning
 }
 
 export type Warning = {
     isWarning: boolean
-    text?: string
+    warningText?: string
 }

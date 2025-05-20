@@ -1,17 +1,36 @@
 import { TodoState } from '../../globalVariables/typesVariables'
 import { ACTION_TYPES } from './actionTypes'
 
-export const setState = (payload: TodoState) => ({
+export const setState = (todosState: TodoState) => ({
     type: ACTION_TYPES.SET_STATE,
-    payload,
+    payload: todosState,
 })
 
-export const addTodo = (payload: string) => ({
+export const addTodo = (value: string) => ({
     type: ACTION_TYPES.ADD_TODO,
-    payload,
+    payload: value,
 })
 
-export const setWarning = (payload: string) => ({
-    type: ACTION_TYPES.SET_WARNING,
-    payload,
+export const removeTodo = (id: number) => ({
+    type: ACTION_TYPES.REMOVE_TODO,
+    payload: id,
+})
+
+export const changeTodoStatus = (id: number) => ({
+    type: ACTION_TYPES.CHANGE_TODO_STATUS,
+    payload: id,
+})
+
+export const changeTodoIsEdit = (id: number) => ({
+    type: ACTION_TYPES.CHANGE_TODO_IS_EDIT,
+    payload: id,
+})
+
+export const closeAllTodosIsEdit = () => ({
+    type: ACTION_TYPES.CLOSE_ALL_TODOS_IS_EDIT,
+})
+
+export const editTodoContext = (id: number, value: string) => ({
+    type: ACTION_TYPES.EDIT_TODO_CONTEXT,
+    payload: { id, value },
 })

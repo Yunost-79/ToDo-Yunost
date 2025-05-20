@@ -1,49 +1,49 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { addTodo, setWarning } from '../../redux/actions/todoActions'
-import { RootState } from '../../redux/store'
-import AddButton from '../UI/Buttons/AddButton'
-import AddInput from '../UI/Inputs/AddInput'
+import { useDispatch } from 'react-redux'
+import { Warning } from '../../globalVariables/typesVariables'
+import { addTodo } from '../../redux/actions/todoActions'
+import AddTodoButton from '../UI/Buttons/AddTodoButton'
+import AddTodoInput from '../UI/Inputs/AddTodoInput'
 
 const TodoAddInputBlock = () => {
-    const warning = useSelector((state: RootState) => state.todos?.warning)
     const dispatch = useDispatch()
 
-    const [inputValue, setInputValue] = useState<string>('')
+    const [addInputValue, setAddInputValue] = useState<string>('')
+    const [warning, setWarning] = useState<Warning>({ isWarning: false, warningText: '' })
 
     const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
         const value = e.target.value
-        setInputValue(value)
+        setAddInputValue(value)
     }
 
     const handleAddTodo = (value: string) => {
         if (value.trim() === '') {
-            const warningText = 'Input cannot be empty'
-            dispatch(setWarning(warningText))
-            setInputValue('')
+            setWarning({ isWarning: true, warningText: 'Input cannot be empty' })
+            setAddInputValue('')
             return
         }
 
         dispatch(addTodo(value))
-        setInputValue('')
+        setWarning({ isWarning: false, warningText: '' })
+        setAddInputValue('')
     }
 
     return (
         <StyledTodoAddInputBlock>
-            <AddInput
+            <AddTodoInput
                 customStyles={CssInputItem}
                 type="text"
-                value={inputValue}
+                value={addInputValue}
                 onChange={handleChangeInput}
                 warning={warning}
-                placeholder={warning.isWarning ? warning.text : 'Enter your todo'}
+                placeholder={warning?.isWarning ? warning.warningText : 'Enter your todo'}
             />
-            <AddButton customStyles={CssInputItem} onClick={() => handleAddTodo(inputValue)}>
+            <AddTodoButton customStyles={CssInputItem} onClick={() => handleAddTodo(addInputValue)}>
                 Add
-            </AddButton>
+            </AddTodoButton>
         </StyledTodoAddInputBlock>
     )
 }

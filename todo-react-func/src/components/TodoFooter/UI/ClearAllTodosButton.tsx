@@ -1,16 +1,13 @@
 import styled from '@emotion/styled'
-import { Component } from 'react'
+import { FC } from 'react'
 import { COLORS } from '../../../globalVariables/styledVariables'
 
 type ClearAllTodosButtonProps = {
     onClick?: () => void
 }
 
-class ClearAllTodosButton extends Component<ClearAllTodosButtonProps> {
-    render() {
-        const { onClick } = this.props
-        return <Button onClick={onClick}>Clear all todos</Button>
-    }
+const ClearAllTodosButton: FC<ClearAllTodosButtonProps> = ({ onClick }) => {
+    return <Button onClick={onClick}>Clear all todos</Button>
 }
 
 const Button = styled.button`
