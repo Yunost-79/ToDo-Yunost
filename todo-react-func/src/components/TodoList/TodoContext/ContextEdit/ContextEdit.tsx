@@ -2,6 +2,8 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { FC } from 'react'
 import { COLORS } from '../../../../globalVariables/styledVariables'
+import Button from '../../../UI/Buttons/Button'
+import Input from '../../../UI/Inputs/Input'
 
 type ContextEditProps = {
     value: string
@@ -18,14 +20,25 @@ const ContextEdit: FC<ContextEditProps> = ({
 }) => {
     return (
         <StyledContextEdit>
-            <EditInput type="text" placeholder={value} value={value} onChange={onChange} />
-            <EditSaveButton onClick={handleSaveEdit}>Save</EditSaveButton>
-            <EditCloseButton onClick={handleCloseEdit}>Close</EditCloseButton>
+            <Input
+                customStyles={StyledEditInput}
+                type="text"
+                placeholder={value}
+                value={value}
+                onChange={onChange}
+            />
+
+            <Button customStyles={StyledSaveButton} onClick={handleSaveEdit}>
+                Save
+            </Button>
+            <Button customStyles={StyledCloseButton} onClick={handleCloseEdit}>
+                Close
+            </Button>
         </StyledContextEdit>
     )
 }
 
-const CssCommonButton = css`
+const StyledContextEdit = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
@@ -45,24 +58,7 @@ const CssCommonButton = css`
     }
 `
 
-const CssEditButton = css`
-    background-color: transparent;
-    opacity: 0.75;
-    padding: 5px;
-    border-radius: 5px;
-    transition: 0.2s;
-    cursor: pointer;
-    border: none;
-
-    &:hover {
-        opacity: 1;
-    }
-`
-
-const StyledContextEdit = styled.div`
-    ${CssCommonButton}
-`
-const EditInput = styled.input`
+const StyledEditInput = css`
     width: 100%;
     font-size: 18px;
     background-color: transparent;
@@ -81,19 +77,33 @@ const EditInput = styled.input`
     }
 `
 
-const EditSaveButton = styled.button`
-    ${CssEditButton}
+const CssEditButton = css`
+    background-color: transparent;
+    opacity: 0.75;
+    padding: 5px;
+    border-radius: 5px;
+    transition: 0.2s;
+    cursor: pointer;
+    border: none;
+
     &:hover {
-        background-color: ${COLORS.LIGHT_GREEN};
+        opacity: 1;
         color: ${COLORS.BLACK};
     }
 `
-const EditCloseButton = styled.button`
+
+const StyledSaveButton = css`
+    ${CssEditButton}
+
+    &:hover {
+        background-color: ${COLORS.LIGHT_GREEN};
+    }
+`
+const StyledCloseButton = css`
     ${CssEditButton}
 
     &:hover {
         background-color: ${COLORS.LIGHT_ALARM_RED};
-        color: ${COLORS.BLACK};
     }
 `
 

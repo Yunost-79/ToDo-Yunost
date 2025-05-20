@@ -7,8 +7,8 @@ export type Todo = {
     value: string
     isEdit: boolean
     status: FilterStatus
-    dateOfCreation: number
-    dateOfChange: number
+    dateOfCreation: Date
+    dateOfChange: Date | null
 }
 
 export type TodoState = {

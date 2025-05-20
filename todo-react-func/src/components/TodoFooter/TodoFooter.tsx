@@ -1,37 +1,53 @@
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { COLORS } from '../../globalVariables/styledVariables'
 import { TodoState } from '../../globalVariables/typesVariables'
+import { removeAllTodos } from '../../redux/actions/todoActions'
+import { RootState } from '../../redux/store'
+import Button from '../UI/Buttons/Button'
 import Filters from './Filters/Filters'
+import FooterRemoveAllModal from './FooterRemoveAllModal/FooterRemoveAllModal'
 import TodoCounter from './TodoCounter/TodoCounter'
-import ClearAllTodosButton from './UI/ClearAllTodosButton'
-
-type TodoFooterProps = {
-    todoState: TodoState
-    setTodoState: (state: TodoState, callback?: () => void) => void
-    closeAllTodoEdit: () => void
-}
 
 const TodoFooter = () => {
-    // removeAllTodos = () => {
-    //     const { todoState, setTodoState } = this.props
-    //     setTodoState({
-    //         ...todoState,
-    //         todos: [],
-    //     })
-    // }
+    const todosState: TodoState = useSelector((state: RootState) => state.todos)
+    const dispatch = useDispatch()
 
-    // const { todoState, setTodoState, closeAllTodoEdit } = this.props
+    const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+
+    const handleRemoveAllTodos = () => {
+        dispatch(removeAllTodos())
+        setIsOpenModal(false)
+    }
+
+    const handleOpenModal = () => {
+        setIsOpenModal(true)
+    }
+
+    const handleCloseModal = () => {
+        setIsOpenModal(false)
+    }
+
     return (
         <StyledTodoFooter>
-            <TodoCounter
-            // todoState={todoState}
-            />
-            <Filters
-            // todoState={todoState}
-            // setTodoState={setTodoState}
-            // closeAllTodoEdit={closeAllTodoEdit}
-            />
-            <ClearAllTodosButton
-            // onClick={this.removeAllTodos}
+            <TodoCounter />
+            <Filters />
+
+            <Button
+                customStyles={StyledRemoveButton}
+                disabled={todosState.todos?.length <= 0}
+                onClick={() => handleOpenModal()}
+                title="Empty todo list"
+            >
+                Remove all todos
+            </Button>
+
+            <FooterRemoveAllModal
+                isOpenModal={isOpenModal}
+                handleRemoveAllTodos={handleRemoveAllTodos}
+                handleCloseModal={handleCloseModal}
             />
         </StyledTodoFooter>
     )
@@ -41,6 +57,33 @@ const StyledTodoFooter = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
+`
+const StyledRemoveButton = css`
+    opacity: 0.75;
+    background-color: ${COLORS.LIGHT_GREY};
+    color: ${COLORS.HARD_GREY};
+    padding: 7px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: none;
+    transition: 0.2s;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.95;
+        background-color: ${COLORS.LIGHT_ALARM_RED};
+        color: ${COLORS.HARD_ALARM_RED};
+    }
+
+    &:disabled,
+    &[disabled] {
+        background-color: ${COLORS.MAIN_GREY};
+        color: ${COLORS.HARD_GREY};
+
+        &:hover {
+            opacity: 0.75;
+        }
+    }
 `
 
 export default TodoFooter

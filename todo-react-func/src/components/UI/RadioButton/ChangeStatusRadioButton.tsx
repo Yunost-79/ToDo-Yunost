@@ -1,17 +1,14 @@
 import styled from '@emotion/styled'
-import { FC } from 'react'
-import { ReactComponent as CheckImg } from '../../../assets/check.svg'
+import { ButtonHTMLAttributes, FC } from 'react'
 import { COLORS } from '../../../globalVariables/styledVariables'
+import CheckIcon from '../Icons/CheckIcon'
 
-type RadioButtonProps = {
-    className: string
-    onClick: () => void
-}
+type RadioButtonProps = ButtonHTMLAttributes<HTMLButtonElement>
 
-const ChangeStatusRadioButton: FC<RadioButtonProps> = ({ className, onClick, ...props }) => {
+const ChangeStatusRadioButton: FC<RadioButtonProps> = ({ ...props }) => {
     return (
-        <StyledRadioButton className={className} onClick={onClick}>
-            <CheckImg />
+        <StyledRadioButton {...props}>
+            <CheckIcon color={COLORS.HARD_GREY} />
         </StyledRadioButton>
     )
 }

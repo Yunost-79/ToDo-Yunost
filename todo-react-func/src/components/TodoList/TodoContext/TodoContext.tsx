@@ -26,7 +26,8 @@ const TodoContext: FC<TodoContextProps> = ({ todo, toggleTodoStatus, handleTodoI
             return
         }
 
-        dispatch(editTodoContext(id, value))
+        const currentData = new Date()
+        dispatch(editTodoContext(id, value, currentData))
     }
 
     const handleCloseEdit = () => {

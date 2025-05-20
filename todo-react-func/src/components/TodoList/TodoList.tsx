@@ -1,29 +1,18 @@
 import styled from '@emotion/styled'
 import { useSelector } from 'react-redux'
-import { FilterStatus, TodoState } from '../../globalVariables/typesVariables'
+import { TodoState } from '../../globalVariables/typesVariables'
 import { RootState } from '../../redux/store'
 import TodoItem from './TodoItem/TodoItem'
-
-type TodoListProps = {
-    todoState: TodoState
-    setTodoState: (state: TodoState, callback?: () => void) => void
-    closeAllTodoEdit: () => void
-}
-
-type Empty = {
-    status: FilterStatus
-    title: string
-    img: React.FC<React.SVGProps<SVGSVGElement>>
-}
-
-type TodoListState = {
-    emptyBlock: Empty[]
-}
 
 const TodoList = () => {
     const todosState: TodoState = useSelector((state: RootState) => state.todos)
 
-    const todosForRender = todosState.todos.sort((a, b) => b.dateOfCreation - a.dateOfCreation)
+    const todosForRender = todosState.todos.sort((a, b) => {
+        const dateA = new Date(a.dateOfCreation).getTime()
+        const dateB = new Date(b.dateOfCreation).getTime()
+
+        return dateB - dateA
+    })
     // state = {
     //     emptyBlock: [
     //         {

@@ -2,10 +2,12 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { COLORS } from '../../globalVariables/styledVariables'
 import { Warning } from '../../globalVariables/typesVariables'
+import { horizontalShake } from '../../helpers/animations'
 import { addTodo } from '../../redux/actions/todoActions'
-import AddTodoButton from '../UI/Buttons/AddTodoButton'
-import AddTodoInput from '../UI/Inputs/AddTodoInput'
+import Button from '../UI/Buttons/Button'
+import Input from '../UI/Inputs/Input'
 
 const TodoAddInputBlock = () => {
     const dispatch = useDispatch()
@@ -33,26 +35,21 @@ const TodoAddInputBlock = () => {
 
     return (
         <StyledTodoAddInputBlock>
-            <AddTodoInput
-                customStyles={CssInputItem}
+            <Input
+                customStyles={StyledAddInput}
                 type="text"
                 value={addInputValue}
                 onChange={handleChangeInput}
-                warning={warning}
+                className={warning?.isWarning ? 'warning' : ''}
                 placeholder={warning?.isWarning ? warning.warningText : 'Enter your todo'}
             />
-            <AddTodoButton customStyles={CssInputItem} onClick={() => handleAddTodo(addInputValue)}>
+
+            <Button customStyles={StyledAddButton} onClick={() => handleAddTodo(addInputValue)}>
                 Add
-            </AddTodoButton>
+            </Button>
         </StyledTodoAddInputBlock>
     )
 }
-
-const CssInputItem = css`
-    border-radius: 5px;
-    font-size: 20px;
-    white-space: nowrap;
-`
 
 const StyledTodoAddInputBlock = styled.div`
     width: 100%;
@@ -60,6 +57,72 @@ const StyledTodoAddInputBlock = styled.div`
     align-items: center;
     justify-content: center;
     gap: 12px;
+`
+
+const StyledAddInputBlock = css`
+    border-radius: 5px;
+    font-size: 20px;
+    white-space: nowrap;
+`
+
+const StyledAddButton = css`
+    ${StyledAddInputBlock}
+    background-color: ${COLORS.LIGHT_ORANGE};
+    padding: 7px;
+    cursor: pointer;
+    transition: 0.2s;
+    border: none;
+
+    &:hover {
+        background-color: ${COLORS.HARD_ORANGE};
+    }
+`
+
+const StyledAddInput = css`
+    ${StyledAddInputBlock}
+    border: solid 2px ${COLORS.MAIN_GREY};
+    width: 100%;
+    padding: 5px;
+    transition: 0.25s;
+    outline: none;
+
+    &:hover {
+        border-color: ${COLORS.HARD_GREY};
+
+        &::placeholder {
+            color: ${COLORS.BLACK};
+        }
+    }
+
+    &:focus {
+        border: solid 2px ${COLORS.HARD_GREY};
+    }
+
+    &::placeholder {
+        color: ${COLORS.HARD_GREY};
+        transition: 0.25s;
+    }
+
+    &.warning {
+        border: solid 2px ${COLORS.MEDIUM_ALARM_RED};
+        animation: ${horizontalShake} 0.25s ease-in-out;
+
+        &::placeholder {
+            color: ${COLORS.MEDIUM_ALARM_RED};
+        }
+
+        &:hover {
+            border-color: ${COLORS.HARD_ALARM_RED};
+
+            &::placeholder {
+                color: ${COLORS.HARD_GREY};
+            }
+        }
+
+        &:focus {
+            border: solid 2px ${COLORS.HARD_ALARM_RED};
+        }
+    }
 `
 
 export default TodoAddInputBlock

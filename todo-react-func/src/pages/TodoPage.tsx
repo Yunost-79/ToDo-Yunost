@@ -32,11 +32,7 @@ const TodoPage = () => {
                     <TodoHeader />
                     <TodoAddInputBlock />
                     <TodoList />
-                    <TodoFooter
-                    // todoState={this.state}
-                    // setTodoState={this.setTodoState}
-                    // closeAllTodoEdit={this.closeAllTodoEdit}
-                    />
+                    <TodoFooter />
                 </StyledTodoContainer>
             </StyledContainer>
         </>

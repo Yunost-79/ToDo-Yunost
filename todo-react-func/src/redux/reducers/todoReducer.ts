@@ -18,24 +18,25 @@ const todoReducer = (state = initState, action: any) => {
 
         case ACTION_TYPES.ADD_TODO:
             const newTodo = {
-                id: Date.now(),
+                id: new Date().getTime(),
                 value: action.payload,
                 isEdit: false,
                 status: FILTER_STATUS.active,
-                dateOfCreation: Date.now(),
-                dateOfEdit: 0,
+                dateOfCreation: new Date(),
+                dateOfChange: null,
             }
 
             const todos = [...state.todos, newTodo]
 
-            return {
-                ...state,
-                todos,
-            }
+            return { ...state, todos }
 
         case ACTION_TYPES.REMOVE_TODO:
             const filteredTodos = state.todos.filter((todo) => todo.id !== action.payload)
+
             return { ...state, todos: filteredTodos }
+
+        case ACTION_TYPES.REMOVE_ALL_TODOS:
+            return { ...state, todos: [] }
 
         case ACTION_TYPES.CHANGE_TODO_STATUS:
             const toggledTodos = state.todos.map((todo) => {
@@ -68,14 +69,17 @@ const todoReducer = (state = initState, action: any) => {
                 return { ...todo, isEdit: false }
             })
 
-            console.log('closed all edit', closeAllTodosIsEdit)
-
             return { ...state, todos: closeAllTodosIsEdit }
 
         case ACTION_TYPES.EDIT_TODO_CONTEXT:
             const changedTodosWithContext = state.todos.map((todo) => {
                 if (todo.id === action.payload.id) {
-                    return { ...todo, value: action.payload.value, isEdit: false }
+                    return {
+                        ...todo,
+                        value: action.payload.value,
+                        isEdit: false,
+                        dateOfChange: action.payload.currentData,
+                    }
                 }
                 return todo
             })
