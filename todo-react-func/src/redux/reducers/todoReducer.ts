@@ -7,7 +7,7 @@ const initState: TodoState = {
     filteredTodos: [],
     counter: 0,
     filter: FILTER_STATUS.all,
-    todosState: undefined,
+    todosState: null
 }
 
 const todoReducer = (state = initState, action: any) => {
