@@ -7,22 +7,6 @@ import TodoList from '../components/TodoList/TodoList'
 import { COLORS } from '../globalVariables/styledVariables'
 
 const TodoPage = () => {
-    // closeAllTodoEdit = () => {
-    //     const closedAllTodosEdit = this.state.todos.map((todo) => {
-    //         return { ...todo, isEdit: false }
-    //     })
-
-    //     this.setState(
-    //         {
-    //             ...this.state,
-    //             todos: closedAllTodosEdit,
-    //             filteredTodos: closedAllTodosEdit,
-    //         },
-    //         () => {
-    //             this.setData(this.state)
-    //         },
-    //     )
-    // }
 
     return (
         <>

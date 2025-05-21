@@ -1,16 +1,18 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../globalVariables/styledVariables'
-import { Warning } from '../../globalVariables/typesVariables'
+import { TodoState, Warning } from '../../globalVariables/typesVariables'
 import { horizontalShake } from '../../helpers/animations'
-import { addTodo } from '../../redux/actions/todoActions'
+import { asyncAddTodo } from '../../redux/actions/todoActions'
+import { RootState } from '../../redux/store'
 import Button from '../UI/Buttons/Button'
 import Input from '../UI/Inputs/Input'
 
 const TodoAddInputBlock = () => {
     const dispatch = useDispatch()
+    const todoState: TodoState = useSelector((state: RootState) => state.todos)
 
     const [addInputValue, setAddInputValue] = useState<string>('')
     const [warning, setWarning] = useState<Warning>({ isWarning: false, warningText: '' })
@@ -28,10 +30,15 @@ const TodoAddInputBlock = () => {
             return
         }
 
-        dispatch(addTodo(value))
+        // dispatch(addTodo(value))
+        dispatch(asyncAddTodo(value))
         setWarning({ isWarning: false, warningText: '' })
         setAddInputValue('')
     }
+
+    useEffect(() => {
+        setWarning({ isWarning: false, warningText: '' })
+    }, [todoState.filter, todoState.todos])
 
     return (
         <StyledTodoAddInputBlock>

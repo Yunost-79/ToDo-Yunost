@@ -1,68 +1,50 @@
 import styled from '@emotion/styled'
 import { useSelector } from 'react-redux'
-import { TodoState } from '../../globalVariables/typesVariables'
+import { FILTER_STATUS } from '../../globalVariables/todoVariables'
+import { FilterStatus, TodoState } from '../../globalVariables/typesVariables'
+import { handleSetListElement } from '../../helpers/helpers'
 import { RootState } from '../../redux/store'
+import EmptyBlock from './EmptyBlock/EmptyBlock'
 import TodoItem from './TodoItem/TodoItem'
+
+type EmptyListItem = {
+    status: FilterStatus
+    title: string
+}
 
 const TodoList = () => {
     const todosState: TodoState = useSelector((state: RootState) => state.todos)
 
-    const todosForRender = todosState.todos.sort((a, b) => {
+    const emptyList: EmptyListItem[] = [
+        {
+            status: FILTER_STATUS.active,
+            title: 'Active todos are empty',
+        },
+        {
+            status: FILTER_STATUS.completed,
+            title: 'Completed tasks are empty',
+        },
+    ]
+
+    const emptyListForRender = handleSetListElement(emptyList, todosState)
+
+    const todosStateForRender =
+        todosState.filter !== FILTER_STATUS.all
+            ? todosState.todos.filter((todo) => todo.status === todosState.filter)
+            : todosState.todos
+
+    const todosForRender = todosStateForRender.sort((a, b) => {
         const dateA = new Date(a.dateOfCreation).getTime()
         const dateB = new Date(b.dateOfCreation).getTime()
 
         return dateB - dateA
     })
-    // state = {
-    //     emptyBlock: [
-    //         {
-    //             status: FILTER_STATUS.active,
-    //             title: 'Active todos are empty',
-    //             img: ghostImg,
-    //         },
-    //         {
-    //             status: FILTER_STATUS.completed,
-    //             title: 'Completed tasks are empty',T
-    //             img: ghostImg,
-    //         },
-    //     ],
-    // }
 
-    // const { todoState, setTodoState, closeAllTodoEdit } = this.props
-    // const { emptyBlock } = this.state
-
-    // const emptyBlockElement = handleSetListElement(emptyBlock, todoState)
-
-    // const todosForRender =
-    //     todoState.filter !== FILTER_STATUS.all
-    //         ? todoState.todos.filter((todo) => todo.status === todoState.filter)
-    //         : todoState.todos
-
-    // const sortedTodos = [...todosForRender].sort((a, b) => b.dateOfCreation - a.dateOfCreation)
     return (
         <StyledUl>
-            {todosForRender
+            {todosForRender && todosForRender.length > 0
                 ? todosForRender?.map((todo) => <TodoItem key={todo.id} todo={todo} />)
-                : ''}
-
-            {/* {sortedTodos && sortedTodos.length > 0
-                    ? sortedTodos.map((todo) => (
-                          <TodoItem
-                              key={todo.id}
-                              todo={todo}
-                              todoState={todoState}
-                              setTodoState={setTodoState}
-                              closeAllTodoEdit={closeAllTodoEdit}
-                          />
-                      ))
-                    : emptyBlockElement && <EmptyBlock emptyBlock={emptyBlockElement} />} */}
-            {/* <TodoItem
-            // key={todo.id}
-            // todo={todo}
-            // todoState={todoState}
-            // setTodoState={setTodoState}
-            // closeAllTodoEdit={closeAllTodoEdit}
-            /> */}
+                : emptyListForRender && <EmptyBlock title={emptyListForRender?.title} />}
         </StyledUl>
     )
 }

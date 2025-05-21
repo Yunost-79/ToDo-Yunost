@@ -1,98 +1,51 @@
 import styled from '@emotion/styled'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../../globalVariables/styledVariables'
-import { FilterStatus, TodoState } from '../../../globalVariables/typesVariables'
+import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
+import { FilterStatus } from '../../../globalVariables/typesVariables'
+import { closeAllTodosIsEdit, filteringTodosByStatus } from '../../../redux/actions/todoActions'
+import { RootState } from '../../../redux/store'
 
 type FiltersForRender = {
     text: string
     status: FilterStatus
-    isActive: boolean
-}
-
-type FiltersProps = {
-    todoState: TodoState
-    setTodoState: (state: TodoState, callback?: () => void) => void
-    closeAllTodoEdit: () => void
-}
-
-type FiltersState = {
-    filters: FiltersForRender[]
 }
 
 const Filters = () => {
-    // state = {
-    //     filters: [
-    //         { text: 'All', status: FILTER_STATUS.all, isActive: true },
-    //         { text: 'Active', status: FILTER_STATUS.active, isActive: false },
-    //         { text: 'Completed', status: FILTER_STATUS.completed, isActive: false },
-    //     ],
-    // }
+    const dispatch = useDispatch()
+    const filterStatus: FilterStatus = useSelector((state: RootState) => state.todos.filter)
 
-    // componentDidMount(): void {
-    //     const { todoState } = this.props
+    const filtersForRender: FiltersForRender[] = [
+        { text: 'All', status: FILTER_STATUS.all },
+        { text: 'Active', status: FILTER_STATUS.active },
+        { text: 'Completed', status: FILTER_STATUS.completed },
+    ]
 
-    //     this.filteringTodos(todoState.filter)
-    // }
+    const handleFilteringTodos = (status: FilterStatus) => {
+        dispatch(filteringTodosByStatus(status))
+    }
 
-    // componentDidUpdate(prevProps: Readonly<FiltersProps>): void {
-    //     const { todoState, closeAllTodoEdit } = this.props
+    const handleChangeFilterStatus = (status: FilterStatus) => {
+        handleFilteringTodos(status)
+    }
 
-    //     if (prevProps.todoState.filter !== todoState.filter) {
-    //         closeAllTodoEdit()
-    //     }
-
-    //     if (prevProps.todoState.todos !== todoState.todos) {
-    //         this.filteringTodos(todoState.filter)
-    //     }
-    // }
-
-    // filteringTodos = (filterStatus: FilterStatus) => {
-    //     const { todoState, setTodoState } = this.props
-
-    //     const status = filterStatus || todoState.filter
-
-    //     let filteredTodos = []
-
-    //     switch (status) {
-    //         case FILTER_STATUS.active:
-    //             filteredTodos = todoState.todos.filter(
-    //                 (todo) => todo.status === FILTER_STATUS.active,
-    //             )
-    //             break
-    //         case FILTER_STATUS.completed:
-    //             filteredTodos = todoState.todos.filter(
-    //                 (todo) => todo.status === FILTER_STATUS.completed,
-    //             )
-    //             break
-    //         default:
-    //             filteredTodos = [...todoState.todos]
-    //     }
-
-    //     setTodoState({
-    //         ...todoState,
-    //         filteredTodos,
-    //         filter: status,
-    //         counter: filteredTodos.length,
-    //     })
-    // }
-
-    // handleChangeFilter = (status: FilterStatus) => {
-    //     this.filteringTodos(status)
-    // }
-
-    // const { todoState } = this.props
+    useEffect(() => {
+        dispatch(filteringTodosByStatus(filterStatus))
+        dispatch(closeAllTodosIsEdit())
+    }, [filterStatus])
 
     return (
         <StyledTodoFilters>
-            {/* {this.state.filters.map((filter: FiltersForRender, index: number) => ( */}
-            <FilterSpan
-            // key={index}
-            // className={filter.status === todoState.filter ? 'active' : ''}
-            // onClick={() => this.handleChangeFilter(filter.status)}
-            >
-                {/* {filter.text} */}
-                All
-            </FilterSpan>
-            {/* ))} */}
+            {filtersForRender.map((filter: FiltersForRender, index: number) => (
+                <FilterSpan
+                    key={index}
+                    className={filter.status === filterStatus ? 'active' : ''}
+                    onClick={() => handleChangeFilterStatus(filter.status)}
+                >
+                    {filter.text}
+                </FilterSpan>
+            ))}
         </StyledTodoFilters>
     )
 }

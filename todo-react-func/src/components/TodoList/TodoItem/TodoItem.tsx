@@ -4,7 +4,11 @@ import { useDispatch } from 'react-redux'
 import { COLORS } from '../../../globalVariables/styledVariables'
 import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
 import { Todo } from '../../../globalVariables/typesVariables'
-import { changeTodoIsEdit, changeTodoStatus, removeTodo } from '../../../redux/actions/todoActions'
+import {
+    asyncRemoveTodo,
+    changeTodoIsEdit,
+    changeTodoStatus,
+} from '../../../redux/actions/todoActions'
 import TodoContext from '../TodoContext/TodoContext'
 import TodoControl from '../TodoControl/TodoControl'
 
@@ -16,7 +20,8 @@ const TodoItem: FC<TodoItemProps> = ({ todo }) => {
     const dispatch = useDispatch()
 
     const handleRemoveTodo = (id: number) => {
-        dispatch(removeTodo(id))
+        // dispatch(removeTodo(id))
+        dispatch(asyncRemoveTodo(id))
     }
 
     const handleTodoStatus = (id: number) => {
@@ -33,8 +38,6 @@ const TodoItem: FC<TodoItemProps> = ({ todo }) => {
                 todo={todo}
                 toggleTodoStatus={() => handleTodoStatus(todo.id)}
                 handleTodoIsEdit={() => handleTodoIsEdit(todo.id)}
-                // editTodoContext={this.editTodoContext}
-                // closeAllTodoEdit={closeAllTodoEdit}
             />
             <TodoControl
                 handleTodoIsEdit={() => handleTodoIsEdit(todo.id)}

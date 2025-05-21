@@ -54,11 +54,6 @@ const StyledModalOverlay = styled.div`
 
 const StyledModalContent = styled.div<ModalWindowProps>`
     z-index: 100;
-    // background-color: ${COLORS.WHITE};
-    // border-radius: 8px;
-
-    // // width: 100%;
-    // padding: 24px;
     max-height: 100%;
     overflow-y: auto;
     box-shadow: -1px 2px 500px 10px ${COLORS.HARD_GREY};

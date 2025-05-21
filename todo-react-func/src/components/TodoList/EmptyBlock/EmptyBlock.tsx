@@ -1,28 +1,19 @@
 import styled from '@emotion/styled'
-import { Component } from 'react'
+import { FC } from 'react'
 import { COLORS } from '../../../globalVariables/styledVariables'
-import { FilterStatus } from '../../../globalVariables/typesVariables'
-
-type EmptyElement = {
-    status: FilterStatus
-    title: string
-    img: React.FC<React.SVGProps<SVGSVGElement>>
-}
+import GhostIcon from '../../UI/Icons/GhostIcon'
 
 type EmptyBlockProps = {
-    emptyBlock: EmptyElement
+    title?: string
 }
 
-class EmptyBlock extends Component<EmptyBlockProps> {
-    render() {
-        const { emptyBlock } = this.props
-        return (
-            <StyledEmptyBlock>
-                <emptyBlock.img />
-                <Title>{emptyBlock.title}</Title>
-            </StyledEmptyBlock>
-        )
-    }
+const EmptyBlock: FC<EmptyBlockProps> = ({ title }) => {
+    return (
+        <StyledEmptyBlock>
+            <GhostIcon color={COLORS.HARD_GREY} />
+            <Title>{title}</Title>
+        </StyledEmptyBlock>
+    )
 }
 
 const StyledEmptyBlock = styled.div`
