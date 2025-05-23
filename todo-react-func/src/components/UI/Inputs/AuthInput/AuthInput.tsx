@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { FC, InputHTMLAttributes } from 'react'
+import { FC, InputHTMLAttributes, ReactNode } from 'react'
 import { COLORS } from '../../../../globalVariables/styledVariables'
 import { horizontalShake } from '../../../../helpers/animations'
 import Input from '../Input'
@@ -8,18 +8,22 @@ import Input from '../Input'
 type AuthInputProps = InputHTMLAttributes<HTMLInputElement> & {
     error?: boolean
     helperText?: string | false
+    img?: ReactNode
 }
 
-const AuthInput: FC<AuthInputProps> = ({ error, helperText, ...props }) => {
+const AuthInput: FC<AuthInputProps> = ({ error, helperText, img, ...props }) => {
     return (
         <StyledAuthInputBlock>
             <Input className={error ? 'warning' : ''} customStyles={StyledAuthInput} {...props} />
+            {img && <ImgWrapper>{img}</ImgWrapper>}
             {error && helperText && <WarningSpan>{helperText}</WarningSpan>}
         </StyledAuthInputBlock>
     )
 }
 
 const StyledAuthInputBlock = styled.div`
+    position: relative;
+
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -75,9 +79,20 @@ const StyledAuthInput = css`
     }
 `
 
+const ImgWrapper = styled.div`
+    position: absolute;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 2;
+
+    top: 20px;
+    right: 10px;
+`
+
 const WarningSpan = styled.span`
     font-size: 12px;
     color: ${COLORS.HARD_ALARM_RED};
+    white-space: pre-line;
 `
 
 export default AuthInput

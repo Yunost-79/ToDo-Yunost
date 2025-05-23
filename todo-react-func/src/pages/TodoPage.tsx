@@ -8,17 +8,15 @@ import { COLORS } from '../globalVariables/styledVariables'
 
 const TodoPage = () => {
     return (
-        <>
-            <StyledContainer>
-                <StyledTodoContainer>
-                    <TodoSignOut />
-                    <TodoHeader />
-                    <TodoAddInputBlock />
-                    <TodoList />
-                    <TodoFooter />
-                </StyledTodoContainer>
-            </StyledContainer>
-        </>
+        <StyledContainer>
+            <StyledTodoContainer>
+                <TodoSignOut />
+                <TodoHeader />
+                <TodoAddInputBlock />
+                <TodoList />
+                <TodoFooter />
+            </StyledTodoContainer>
+        </StyledContainer>
     )
 }
 

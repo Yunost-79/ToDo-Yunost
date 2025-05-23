@@ -16,26 +16,13 @@ type AuthResponse = {
     token: string
 }
 
-// const storeToken = (token: string) => {
-//     try {
-//         localStorage.setItem('token', token)
-//     } catch (e) {
-//         const err = e as Error
-//         console.error('Error in storeToken', err)
-//     }
-// }
-
-type TestDBState = [
-    {
-        username: string
-        passwordHash: string
-    },
-]
+// password: qweqweQ1!
+// username: username
 
 const signInRequest = async (credentials: SignInUserData) => {
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    const storedHash = generateHashPassword('password')
+    const storedHash = generateHashPassword('qweqweQ1!')
 
     const isMatchPasswords = comparePasswords(credentials.password, storedHash)
 

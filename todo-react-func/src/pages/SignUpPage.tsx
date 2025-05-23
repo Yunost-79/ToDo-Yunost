@@ -1,12 +1,15 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useFormik } from 'formik'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import AuthFooter from '../components/AuthFooter/AuthFooter'
 import AuthHeader from '../components/AuthHeader/AuthHeader'
 import AuthButton from '../components/UI/Buttons/AuthButton/AuthButton'
+import Button from '../components/UI/Buttons/Button'
+import HideIcon from '../components/UI/Icons/HideIcon'
+import ShowIcon from '../components/UI/Icons/ShowIcon'
 import AuthInput from '../components/UI/Inputs/AuthInput/AuthInput'
 import MainLoader from '../components/UI/Loaders/MainLoader'
 import ErrorSpan from '../components/UI/Spans/ErrorSpan'
@@ -18,7 +21,17 @@ import { removeAuthErrorAndLoading, signUpRequest } from '../redux/actions/authA
 import { RootState } from '../redux/store'
 import { signUpValidSchema } from '../utils/yup/yupSchemas'
 
+type Show = {
+    password: boolean
+    rePassword: boolean
+}
+
 const SignUpPage = () => {
+    const [show, setShow] = useState<Show>({
+        password: false,
+        rePassword: false,
+    })
+
     const dispatch = useDispatch()
     const { isLoading, error, token } = useSelector((state: RootState) => state.auth)
 
@@ -32,7 +45,7 @@ const SignUpPage = () => {
         if (token) {
             navigate(PATHS.MAIN)
         }
-    }, [token])
+    }, [token, navigate])
 
     const formik = useFormik({
         initialValues: {
@@ -77,23 +90,73 @@ const SignUpPage = () => {
                     />
                     <AuthInput
                         name={AUTH_VARS.password}
-                        type="password"
+                        type={show.password ? 'text' : 'password'}
                         placeholder="Enter your password"
                         value={formik.values.password}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         error={formik.touched.password && Boolean(formik.errors.password)}
                         helperText={formik.touched.password && formik.errors.password}
+                        img={
+                            <Button
+                                customStyles={ShowButton}
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    setShow((prev) => ({ ...prev, password: !prev.password }))
+                                }}
+                            >
+                                {show.password ? (
+                                    <HideIcon
+                                        error={
+                                            formik.touched.password &&
+                                            Boolean(formik.errors.password)
+                                        }
+                                    />
+                                ) : (
+                                    <ShowIcon
+                                        error={
+                                            formik.touched.password &&
+                                            Boolean(formik.errors.password)
+                                        }
+                                    />
+                                )}
+                            </Button>
+                        }
                     />
                     <AuthInput
                         name={AUTH_VARS.rePassword}
-                        type="password"
+                        type={show.rePassword ? 'text' : 'password'}
                         placeholder="Enter your password again"
                         value={formik.values.rePassword}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         error={formik.touched.rePassword && Boolean(formik.errors.rePassword)}
                         helperText={formik.touched.rePassword && formik.errors.rePassword}
+                        img={
+                            <Button
+                                customStyles={ShowButton}
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    setShow((prev) => ({ ...prev, rePassword: !prev.rePassword }))
+                                }}
+                            >
+                                {show.rePassword ? (
+                                    <HideIcon
+                                        error={
+                                            formik.touched.rePassword &&
+                                            Boolean(formik.errors.rePassword)
+                                        }
+                                    />
+                                ) : (
+                                    <ShowIcon
+                                        error={
+                                            formik.touched.rePassword &&
+                                            Boolean(formik.errors.rePassword)
+                                        }
+                                    />
+                                )}
+                            </Button>
+                        }
                     />
 
                     {error && <ErrorSpan>{error}</ErrorSpan>}
@@ -161,5 +224,27 @@ const StyledMainLoader = css`
     width: 20px;
     border: 3px solid ${COLORS.LIGHT_GREY};
     border-right-color: ${COLORS.HARD_GREY};
+`
+
+const ShowButton = css`
+    padding: 0;
+    border-radius: 50%;
+    border: none;
+
+    svg {
+        width: 25px;
+        height: 25px;
+        opacity: 0.6;
+        transition: 0.2s;
+    }
+
+    &:hover {
+        background-color: transparent;
+        border-color: none;
+
+        svg {
+            opacity: 1;
+        }
+    }
 `
 export default SignUpPage
