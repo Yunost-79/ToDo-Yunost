@@ -30,10 +30,14 @@ const Filters = () => {
         handleFilteringTodos(status)
     }
 
+    // useEffect(() => {
+    //     dispatch(filteringTodosByStatus(filterStatus))
+    //     dispatch(closeAllTodosIsEdit())
+    // }, [filterStatus])
+
     useEffect(() => {
-        dispatch(filteringTodosByStatus(filterStatus))
         dispatch(closeAllTodosIsEdit())
-    }, [filterStatus])
+    }, [])
 
     return (
         <StyledTodoFilters>

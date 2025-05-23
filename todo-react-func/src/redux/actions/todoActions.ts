@@ -6,6 +6,10 @@ export const setState = (todosState: TodoState) => ({
     payload: { todosState },
 })
 
+export const resetState = () => ({
+    type: ACTION_TYPES.RESET_STATE,
+})
+
 export const addTodo = (value: string) => ({
     type: ACTION_TYPES.ADD_TODO,
     payload: { value },

@@ -29,6 +29,8 @@ const TodoCounter = () => {
         dispatch(filteringTodosByStatus(todosState.filter))
     }, [todosState.todos])
 
+    console.log(todosState)
+
     return (
         <StyledTodoCounter>
             <CounterSpan>{counterTitle?.title}</CounterSpan>

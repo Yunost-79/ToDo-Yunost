@@ -4,4 +4,3 @@ export const PATHS = {
     SIGN_UP: '/sign-up',
 } as const
 
-export const TEST_TOKEN = false

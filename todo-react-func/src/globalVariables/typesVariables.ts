@@ -12,14 +12,29 @@ export type Todo = {
 }
 
 export type TodoState = {
-    todosState: any
     todos: Todo[]
     filteredTodos: Todo[]
-    counter: number
     filter: FilterStatus
 }
 
 export type Warning = {
     isWarning: boolean
     warningText?: string
+}
+
+export type SignInUserData = {
+    username: string
+    password: string
+}
+
+export type SignUpUserData = {
+    username: string
+    password: string
+    rePassword?: string
+}
+
+export type AuthState = {
+    token: string | null
+    isLoading: boolean
+    error: string | null | Error
 }

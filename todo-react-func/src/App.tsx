@@ -6,15 +6,24 @@ import { COLORS } from './globalVariables/styledVariables'
 import SignInPage from './pages/SignInPage'
 import SignUpPage from './pages/SignUpPage'
 import TodoPage from './pages/TodoPage'
-import PrivateRoutes from './utils/PrivateRoute'
-import PublicRoutes from './utils/PublicRoute'
+
+import PersistState from './hooks/PersistState/PersistState'
+import PrivateRoutes from './utils/routes/PrivateRoute'
+import PublicRoutes from './utils/routes/PublicRoute'
 
 const App = () => {
     return (
         <>
             <Global styles={globalStyles} />
             <StyledWrapper>
-                <Router>
+                <PersistState />
+
+                <Router
+                    future={{
+                        v7_startTransition: true,
+                        v7_relativeSplatPath: true,
+                    }}
+                >
                     <Routes>
                         <Route element={<PrivateRoutes />}>
                             <Route path={PATHS.MAIN} element={<TodoPage />} />

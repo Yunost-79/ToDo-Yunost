@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { TodoState } from '../../globalVariables/typesVariables'
 import { setState } from '../../redux/actions/todoActions'
 import { RootState } from '../../redux/store'
+import { getItem, setItem } from '../../utils/localStore/localStore'
 
 const PersistState = () => {
     const dispatch = useDispatch()
@@ -13,19 +14,18 @@ const PersistState = () => {
     useEffect(() => {
         if (hasLoaded) return
 
-        const serializedState = localStorage.getItem('todoState')
+        const persistedState = getItem('todoState')
 
-        if (serializedState && !hasLoaded) {
-            const parsedState = JSON.parse(serializedState)
-            dispatch(setState(parsedState))
-            setHasLoaded(true)
+        if (persistedState) {
+            dispatch(setState(persistedState))
         }
+
+        setHasLoaded(true)
     }, [dispatch, hasLoaded])
 
     useEffect(() => {
         if (hasLoaded) {
-            const serializedState = JSON.stringify(todosState)
-            localStorage.setItem('todoState', serializedState)
+            setItem('todoState', todosState)
         }
     }, [todosState, hasLoaded])
 

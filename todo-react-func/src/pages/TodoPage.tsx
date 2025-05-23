@@ -1,18 +1,17 @@
 import styled from '@emotion/styled'
-import PersistState from '../components/PersistState/PersistState'
 import TodoAddInputBlock from '../components/TodoAddInputBlock/TodoAddInputBlock'
 import TodoFooter from '../components/TodoFooter/TodoFooter'
 import TodoHeader from '../components/TodoHeader/TodoHeader'
 import TodoList from '../components/TodoList/TodoList'
+import TodoSignOut from '../components/TodoSignOut/TodoSignOut'
 import { COLORS } from '../globalVariables/styledVariables'
 
 const TodoPage = () => {
-
     return (
         <>
-            <PersistState />
             <StyledContainer>
                 <StyledTodoContainer>
+                    <TodoSignOut />
                     <TodoHeader />
                     <TodoAddInputBlock />
                     <TodoList />
@@ -22,6 +21,7 @@ const TodoPage = () => {
         </>
     )
 }
+
 const StyledContainer = styled.div`
     display: flex;
     flex-direction: column;

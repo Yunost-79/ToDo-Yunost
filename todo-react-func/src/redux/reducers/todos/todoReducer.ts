@@ -1,13 +1,11 @@
-import { FILTER_STATUS } from '../../globalVariables/todoVariables'
-import { TodoState } from '../../globalVariables/typesVariables'
-import { ACTION_TYPES } from '../actions/actionTypes'
+import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
+import { TodoState } from '../../../globalVariables/typesVariables'
+import { ACTION_TYPES } from '../../actions/actionTypes'
 
 const initState: TodoState = {
     todos: [],
     filteredTodos: [],
-    counter: 0,
     filter: FILTER_STATUS.all,
-    todosState: null
 }
 
 const todoReducer = (state = initState, action: any) => {
@@ -17,6 +15,8 @@ const todoReducer = (state = initState, action: any) => {
                 ...state,
                 ...action.payload.todosState,
             }
+        case ACTION_TYPES.RESET_STATE:
+            return { ...initState }
 
         case ACTION_TYPES.ADD_TODO:
             const newTodo = {

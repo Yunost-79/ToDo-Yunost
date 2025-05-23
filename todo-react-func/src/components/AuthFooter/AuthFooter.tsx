@@ -11,11 +11,11 @@ type AuthFooterProps = {
 const AuthFooter: FC<AuthFooterProps> = ({ to }) => {
     return to === PATHS.SIGN_IN ? (
         <Span>
-            For <Link to={PATHS.SIGN_IN}>registration</Link> if you don't have an account
+            For <Link to={PATHS.SIGN_IN}>login</Link> if you have an account
         </Span>
     ) : (
         <Span>
-            For <Link to={PATHS.SIGN_UP}>login</Link> if you have an account
+            For <Link to={PATHS.SIGN_UP}>registration</Link> if you don't have an account
         </Span>
     )
 }
