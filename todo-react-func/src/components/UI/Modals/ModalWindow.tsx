@@ -29,6 +29,7 @@ const StyledModalWindow = styled.div<ModalWindowProps>`
     align-items: center;
     display: flex;
     transition: 0.3s all ease-in-out;
+    z-index: 999;
     ${({ isOpen }) =>
         isOpen
             ? css`

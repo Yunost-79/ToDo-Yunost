@@ -3,7 +3,7 @@ import { getStoredToken } from '../../../utils/localStore/authLocalStore'
 import { ACTION_TYPES } from '../../actions/actionTypes'
 
 const initState: AuthState = {
-    token: getStoredToken() || null, // add something to string for isAuth
+    token: getStoredToken() || null,
     isLoading: false,
     error: null,
 }

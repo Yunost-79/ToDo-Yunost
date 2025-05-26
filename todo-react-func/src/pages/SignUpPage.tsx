@@ -68,8 +68,6 @@ const SignUpPage = () => {
                 const err = e as Error
                 console.error('Error in sign in page', err)
             }
-
-            console.log('token', token)
         },
     })
 

@@ -1,4 +1,4 @@
-import { getItem, removeItem, setItem } from "./localStore"
+import { getItem, removeItem, setItem } from './localStore'
 
 export const storeToken = (token: string): void => {
     setItem('authToken', token)

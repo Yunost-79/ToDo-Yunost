@@ -12,9 +12,9 @@ import {
     signUpSuccess,
 } from '../actions/authActions'
 
-type AuthResponse = {
-    token: string
-}
+// type AuthResponse = {
+//     token: string
+// }
 
 // password: qweqweQ1!
 // username: username
@@ -39,7 +39,7 @@ const signInRequest = async (credentials: SignInUserData) => {
 
 function* asyncSignInUser(action: { type: string; payload: { credentials: SignInUserData } }) {
     try {
-        const response: AuthResponse = yield call(signInRequest, action.payload.credentials)
+        const response: { token: string } = yield call(signInRequest, action.payload.credentials)
 
         if (response) {
             console.log('ok sign in', response)
@@ -57,8 +57,6 @@ const signUpRequest = async (credentials: SignUpUserData) => {
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
     // const hashPassword = generateHashPassword(credentials.password)
-    console.log('credentials in signUpRequest', credentials)
-
     if (credentials.username !== 'username') {
         return {
             userId: '12343211',
@@ -72,7 +70,7 @@ const signUpRequest = async (credentials: SignUpUserData) => {
 
 function* asyncSignUpUser(action: { type: string; payload: { credentials: SignInUserData } }) {
     try {
-        const response: AuthResponse = yield call(signUpRequest, action.payload.credentials)
+        const response: { token: string } = yield call(signUpRequest, action.payload.credentials)
 
         if (response) {
             console.log('ok sign up', response)
@@ -94,7 +92,7 @@ const signOutRequest = async () => {
 
 function* asyncSignOutUser() {
     try {
-        const response: AuthResponse = yield call(signOutRequest)
+        const response: { token: string } = yield call(signOutRequest)
 
         if (response) {
             console.log('ok sign out', response)

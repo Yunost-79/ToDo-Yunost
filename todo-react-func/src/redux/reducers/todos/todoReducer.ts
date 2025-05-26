@@ -103,7 +103,7 @@ const todoReducer = (state = initState, action: any) => {
                 filteredTodos = [...state.todos]
             }
 
-            return { ...state, filteredTodos, filter, counter: filteredTodos.length }
+            return { ...state, filteredTodos, filter }
 
         default:
             return state
