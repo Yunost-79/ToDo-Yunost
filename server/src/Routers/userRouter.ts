@@ -1,4 +1,5 @@
 import Router from 'koa-router'
+import tokenMiddleware from '../Middlewares/tokenMiddleware'
 
 const router = new Router({
     prefix: '/users',
@@ -14,7 +15,7 @@ router.post('/login', (ctx) => {
         message: '/post login',
     }
 })
-router.post('/refresh', (ctx) => {
+router.post('/refresh', tokenMiddleware, (ctx) => {
     ctx.body = {
         message: '/post refresh token',
     }
