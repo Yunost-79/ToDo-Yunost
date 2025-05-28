@@ -34,6 +34,7 @@ const createTask = async (ctx: Context) => {
             message: 'Create task failed',
             error: e.message,
         }
+        logger.color('red').log(e.message)
     }
 }
 

@@ -73,6 +73,7 @@ const updateTaskById = async (ctx: Context) => {
             message: 'Update task failed',
             error: e.message,
         }
+        logger.color('red').log(e.message)
     }
 }
 

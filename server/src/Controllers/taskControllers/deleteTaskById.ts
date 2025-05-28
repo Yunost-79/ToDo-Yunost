@@ -1,7 +1,7 @@
 import { Context } from 'koa'
+import logger from 'node-color-log'
 import { Task } from '../../Models/TaskModel'
 import { STATUS_CODES } from '../../vars/statusCodesVars'
-import logger from 'node-color-log'
 
 const deleteTaskById = async (ctx: Context) => {
     try {
@@ -41,6 +41,7 @@ const deleteTaskById = async (ctx: Context) => {
             message: 'Delete task by id failed',
             error: e.message,
         }
+        logger.color('red').log(e.message)
     }
 }
 

@@ -2,6 +2,7 @@ import cors from '@koa/cors'
 import dotenv from 'dotenv'
 import Koa, { DefaultContext, DefaultState } from 'koa'
 import bodyParser from 'koa-bodyparser'
+import KoaLogger from 'koa-logger'
 import logger from 'node-color-log'
 import routers from './Routers/routers'
 import { sequelize } from './db'
@@ -16,7 +17,7 @@ const runKoa = () => {
         }),
     )
     app.use(bodyParser())
-
+    app.use(KoaLogger())
     app.use(routers.routes())
     app.use(routers.allowedMethods())
 

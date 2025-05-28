@@ -37,7 +37,7 @@ const login = async (ctx: Context) => {
             avatar: currentUser.get('avatar'),
         }
 
-        generateTokenAndSetCookie(user.userId as number, ctx)
+        generateTokenAndSetCookie(ctx, user.userId as number)
 
         ctx.status = STATUS_CODES.OK
         ctx.body = {
@@ -54,6 +54,7 @@ const login = async (ctx: Context) => {
             message: 'Login failed',
             error: e.message,
         }
+        logger.color('red').log(e.message)
     }
 }
 

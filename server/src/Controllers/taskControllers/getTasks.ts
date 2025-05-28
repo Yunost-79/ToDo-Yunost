@@ -29,6 +29,7 @@ const getTasks = async (ctx: Context) => {
             message: 'Get tasks failed',
             error: e.message,
         }
+        logger.color('red').log(e.message)
     }
 }
 

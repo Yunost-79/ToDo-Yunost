@@ -5,7 +5,8 @@ import { STATUS_CODES } from '../../vars/statusCodesVars'
 
 const logout = async (ctx: Context) => {
     try {
-        removeToken(ctx)
+        removeToken(ctx, 'access')
+        removeToken(ctx, 'refresh')
 
         ctx.status = STATUS_CODES.OK
         ctx.body = {
@@ -21,6 +22,7 @@ const logout = async (ctx: Context) => {
             message: 'Logout failed',
             error: e.message,
         }
+        logger.color('red').log(e.message)
     }
 }
 

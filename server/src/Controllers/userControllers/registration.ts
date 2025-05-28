@@ -57,6 +57,7 @@ const registration = async (ctx: Context) => {
             message: 'Registration failed',
             error: e.message,
         }
+        logger.color('red').log(e.message)
     }
 }
 
