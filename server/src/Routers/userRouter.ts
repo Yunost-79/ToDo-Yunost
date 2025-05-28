@@ -1,23 +1,14 @@
 import Router from 'koa-router'
-import tokenMiddleware from '../Middlewares/tokenMiddleware'
+import login from '../Controllers/userControllers/login'
+import logout from '../Controllers/userControllers/logout'
+import registration from '../Controllers/userControllers/registration'
 
 const router = new Router({
     prefix: '/users',
 })
 
-router.post('/register', (ctx) => {
-    ctx.body = {
-        message: '/post register',
-    }
-})
-router.post('/login', (ctx) => {
-    ctx.body = {
-        message: '/post login',
-    }
-})
-router.post('/refresh', tokenMiddleware, (ctx) => {
-    ctx.body = {
-        message: '/post refresh token',
-    }
-})
+router.post('/register', registration)
+router.post('/login', login)
+router.post('/logout', logout)
+
 export default router

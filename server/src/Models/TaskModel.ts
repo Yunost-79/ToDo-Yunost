@@ -1,28 +1,27 @@
 import { DataTypes } from 'sequelize'
-import { FILTER_STATUS } from '../vars/tasksVars'
 import { sequelize } from '../db'
+import { FILTER_STATUS } from '../vars/tasksVars'
 
 export const Task = sequelize.define(
     'Task',
     {
-        id: {
-            type: DataTypes.STRING,
+        taskId: {
+            type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
+        },
+        userId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
         },
         value: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        isEdit: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false,
-        },
         status: {
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue: FILTER_STATUS.ALL,
+            defaultValue: FILTER_STATUS.ACTIVE,
         },
     },
     {

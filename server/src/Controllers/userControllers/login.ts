@@ -1,0 +1,60 @@
+import { Context } from 'koa'
+import logger from 'node-color-log'
+import { User } from '../../Models/UserModel'
+import { generateTokenAndSetCookie } from '../../helpers/tokenHelpers'
+import { STATUS_CODES } from '../../vars/statusCodesVars'
+
+type LoginReqBody = {
+    username: string
+    password: string
+}
+
+const login = async (ctx: Context) => {
+    try {
+        const { username, password } = ctx.request.body as LoginReqBody
+
+        if (!username || username.trim() === '')
+            ctx.throw(STATUS_CODES.BAD_REQUEST, 'Invalid or empty email')
+
+        if (!password || password.trim() === '')
+            ctx.throw(STATUS_CODES.BAD_REQUEST, 'Invalid or empty password')
+
+        const currentUser = await User.findOne({ where: { username } })
+
+        if (!currentUser) {
+            ctx.throw(STATUS_CODES.NOT_FOUNDS, `User with ${username} is not found`)
+        }
+
+        const isValidPassword = currentUser.dataValues.password === password
+
+        if (!isValidPassword) {
+            ctx.throw(STATUS_CODES.BAD_REQUEST, 'Incorrect password')
+        }
+
+        const user = {
+            userId: currentUser.get('userId'),
+            username: currentUser.get('username'),
+            avatar: currentUser.get('avatar'),
+        }
+
+        generateTokenAndSetCookie(user.userId as number, ctx)
+
+        ctx.status = STATUS_CODES.OK
+        ctx.body = {
+            message: `User ${user.username} logged in`,
+            user,
+        }
+
+        logger.color('green').log('User logged in')
+    } catch (e: any) {
+        const errStatus = e.status || STATUS_CODES.INTERNAL_SERVER_ERROR
+
+        ctx.status = errStatus
+        ctx.body = {
+            message: 'Login failed',
+            error: e.message,
+        }
+    }
+}
+
+export default login
