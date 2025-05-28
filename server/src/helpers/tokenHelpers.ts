@@ -4,40 +4,59 @@ import { Context } from 'koa'
 
 dotenv.config()
 
-const JWT_SECRET = process.env.JWT_SECRET
+const JWT_SECRET_ACCESS = process.env.JWT_SECRET_ACCESS
+const JWT_SECRET_REFRESH = process.env.JWT_SECRET_REFRESH
 
-if (!JWT_SECRET) {
+if (!JWT_SECRET_ACCESS || !JWT_SECRET_REFRESH) {
     throw new Error('Error with dotenv in generateTokenAndSetCookie')
 }
 
-export const generateTokenAndSetCookie = (userId: number, ctx: Context) => {
-    const token: string = jwt.sign({ userId }, JWT_SECRET as jwt.Secret, {
-        expiresIn: '1d',
+export const generateTokenAndSetCookie = (ctx: Context, userId: number) => {
+    const accessToken = jwt.sign({ userId }, JWT_SECRET_ACCESS as jwt.Secret, {
+        expiresIn: '30m',
+    })
+    const refreshToken = jwt.sign({ userId }, JWT_SECRET_REFRESH as jwt.Secret, {
+        expiresIn: '7d',
     })
 
-    const days = 1
+    const minutes = 30
+    const days = 7
 
-    return ctx.cookies.set('jwt', token, {
+    ctx.cookies.set('accessToken', accessToken, {
+        maxAge: minutes * 60 * 1000,
+        httpOnly: true,
+        sameSite: 'strict',
+        overwrite: true,
+    })
+
+    ctx.cookies.set('refreshToken', refreshToken, {
         maxAge: days * 24 * 60 * 60 * 1000,
         httpOnly: true,
         sameSite: 'strict',
         overwrite: true,
     })
+
+    return { accessToken, refreshToken }
 }
 
-export const getToken = (ctx: Context) => {
-    return ctx.cookies.get('jwt')
+export const getToken = (ctx: Context, cookie: 'access' | 'refresh') => {
+    const cookieName = cookie === 'access' ? 'accessToken' : 'refreshToken'
+    return ctx.cookies.get(cookieName)
 }
 
-export const removeToken = (ctx: Context) => {
-    return ctx.cookies.set('jwt', '', {
+export const removeToken = (ctx: Context, cookie: 'access' | 'refresh') => {
+    const cookieName = cookie === 'access' ? 'accessToken' : 'refreshToken'
+
+    return ctx.cookies.set(cookieName, '', {
         maxAge: 0,
     })
 }
 
-export const verifyToken = (token: string) => {
+export const verifyToken = (token: string, jwtFlag: 'access' | 'refresh') => {
+    const secretCode = jwtFlag === 'access' ? JWT_SECRET_ACCESS : JWT_SECRET_REFRESH
+
     try {
-        return jwt.verify(token, JWT_SECRET) as JwtPayload
+        return jwt.verify(token, secretCode) as JwtPayload
     } catch (e: any) {
         if (e instanceof TokenExpiredError) {
             throw new Error('Token expired')
