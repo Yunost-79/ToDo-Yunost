@@ -5,7 +5,7 @@ import { STATUS_CODES } from '../../vars/statusCodesVars'
 import { FILTER_STATUS, FilterStatus } from '../../vars/tasksVars'
 
 type UpdateTaskReqBody = {
-    value: string
+    value?: string
     status?: FilterStatus
 }
 
@@ -18,10 +18,10 @@ const updateTaskById = async (ctx: Context) => {
 
         if (!taskId) ctx.throw(STATUS_CODES.BAD_REQUEST, 'Invalid or empty task id in params')
 
-        if (!value && !status) ctx.throw(STATUS_CODES.BAD_REQUEST, 'No fields for update')
-
-        if (!value || value.trim() === '')
-            ctx.throw(STATUS_CODES.BAD_REQUEST, 'Invalid or empty task value')
+        if (value === undefined && status === undefined)
+            ctx.throw(STATUS_CODES.BAD_REQUEST, 'No fields for update')
+        // if (!value || value.trim() === '')
+        //     ctx.throw(STATUS_CODES.BAD_REQUEST, 'Invalid or empty task value')
 
         if (status && !Object.values(FILTER_STATUS).includes(status))
             ctx.throw(
@@ -38,9 +38,17 @@ const updateTaskById = async (ctx: Context) => {
 
         if (!task) ctx.throw(STATUS_CODES.NOT_FOUNDS, `Task with this id: ${taskId} not found`)
 
-        const updateData: { value: string; status?: FilterStatus } = { value: value.trim() }
+        const updateData: Partial<{ value: string; status: FilterStatus }> = {}
 
-        if (status) {
+        if (typeof value === 'string') {
+            const trimmed = value.trim()
+            if (trimmed === '') {
+                ctx.throw(STATUS_CODES.BAD_REQUEST, 'Value cannot be an empty string')
+            }
+            updateData.value = trimmed
+        }
+
+        if (status !== undefined) {
             updateData.status = status
         }
 

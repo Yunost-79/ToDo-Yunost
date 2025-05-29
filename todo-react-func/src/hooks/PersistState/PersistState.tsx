@@ -9,7 +9,7 @@ import { getItem, setItem } from '../../utils/localStore/localStore'
 
 const PersistState = () => {
     const dispatch = useDispatch()
-    const todosState: TodoState = useSelector((state: RootState) => state.todos)
+    const todosState = useSelector((state: RootState) => state.todos)
     const userState: UserState = useSelector((state: RootState) => state.user)
     const token = getAccessToken()
 

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { FilterStatus, TodoState } from '../../globalVariables/typesVariables'
+import { FilterStatus } from '../../globalVariables/typesVariables'
 import { getTodos } from '../../redux/actions/todoActions'
 import { RootState } from '../../redux/store'
 import TodoItem from './TodoItem/TodoItem'
@@ -12,17 +12,15 @@ type EmptyListItem = {
 }
 
 const TodoList = () => {
-    const todoState: TodoState = useSelector((state: RootState) => state.todos)
-    const { todos, filteredTodos, filter }: TodoState = useSelector(
-        (state: RootState) => state.todos,
-    )
+    const todoState = useSelector((state: RootState) => state.todos)
+    const { todos, filteredTodos, filter } = useSelector((state: RootState) => state.todos)
 
     const dispatch = useDispatch()
     console.log('todoState in TodoList', todoState)
 
     useEffect(() => {
         dispatch(getTodos())
-    }, [dispatch])
+    }, [])
 
     // const emptyList: EmptyListItem[] = [
     //     {
@@ -41,8 +39,8 @@ const TodoList = () => {
 
     // const todosStateForRender = todos
     const todosForRender = todos?.sort((a, b) => {
-        const dateA = new Date(a.dateOfCreation).getTime()
-        const dateB = new Date(b.dateOfCreation).getTime()
+        const dateA = new Date(a.createdAt).getTime()
+        const dateB = new Date(b.createdAt).getTime()
 
         return dateB - dateA
     })

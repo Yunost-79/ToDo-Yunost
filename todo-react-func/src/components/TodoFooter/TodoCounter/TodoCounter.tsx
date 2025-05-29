@@ -8,7 +8,7 @@ type CounterTitle = {
 }
 
 const TodoCounter = () => {
-    // const todosState: TodoState = useSelector((state: RootState) => state.todos)
+    // const todosState = useSelector((state: RootState) => state.todos)
     // const dispatch = useDispatch()
 
     // const counterTitleBlock: CounterTitle[] = [

@@ -12,7 +12,7 @@ import Input from '../UI/Inputs/Input'
 
 const TodoAddInputBlock = () => {
     const dispatch = useDispatch()
-    const todoState: TodoState = useSelector((state: RootState) => state.todos)
+    const todoState = useSelector((state: RootState) => state.todos)
 
     const [addInputValue, setAddInputValue] = useState<string>('')
     const [warning, setWarning] = useState<Warning>({ isWarning: false, warningText: '' })

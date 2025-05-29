@@ -7,6 +7,17 @@ export const setTodoState = (todosState: TodoState) => ({
     payload: { todosState },
 })
 
+export const changeTodoIsEdit = (taskId: number) => ({
+    type: ACTION_TYPES.CHANGE_TODO_IS_EDIT,
+    payload: { taskId },
+})
+
+export const closeAllTodosIsEdit = () => ({
+    type: ACTION_TYPES.CLOSE_ALL_TODOS_IS_EDIT,
+})
+
+//asyncs
+
 export const getTodos = () => ({
     type: ASYNC_ACTION_TYPES.ASYNC_GET_TODOS,
 })
@@ -30,13 +41,37 @@ export const addTodo = (value: string) => ({
     payload: { value },
 })
 
+export const removeTodo = (taskId: number) => ({
+    type: ASYNC_ACTION_TYPES.ASYNC_REMOVE_TODO,
+    payload: { taskId },
+})
+
+export const removeAllTodos = () => ({
+    type: ASYNC_ACTION_TYPES.ASYNC_REMOVE_ALL_TODOS,
+})
+
+export const editTodo = (taskId: number, value: string) => ({
+    type: ASYNC_ACTION_TYPES.ASYNC_EDIT_TODO,
+    payload: { taskId, value },
+})
+
+export const changeStatus = (taskId: number, status: 'active' | 'completed') => ({
+    type: ASYNC_ACTION_TYPES.ASYNC_CHANGE_TODO_STATUS,
+    payload: { taskId, status },
+})
+
 export type TodoActions =
     | ReturnType<typeof setTodoState>
+    | ReturnType<typeof changeTodoIsEdit>
+    | ReturnType<typeof closeAllTodosIsEdit>
     | ReturnType<typeof getTodos>
     | ReturnType<typeof setTodos>
     | ReturnType<typeof getFilteredTodos>
     | ReturnType<typeof setFilteredTodos>
     | ReturnType<typeof addTodo>
+    | ReturnType<typeof removeTodo>
+    | ReturnType<typeof editTodo>
+    | ReturnType<typeof changeStatus>
 
 // export const setTodosInState = (todos: Todo[]) => ({
 //     type: ACTION_TYPES.SET_TODOS_IN_STATE,
@@ -59,20 +94,6 @@ export type TodoActions =
 
 // export const removeAllTodos = () => ({
 //     type: ACTION_TYPES.REMOVE_ALL_TODOS,
-// })
-
-// export const changeTodoStatus = (id: number) => ({
-//     type: ACTION_TYPES.CHANGE_TODO_STATUS,
-//     payload: { id },
-// })
-
-// export const changeTodoIsEdit = (id: number) => ({
-//     type: ACTION_TYPES.CHANGE_TODO_IS_EDIT,
-//     payload: { id },
-// })
-
-// export const closeAllTodosIsEdit = () => ({
-//     type: ACTION_TYPES.CLOSE_ALL_TODOS_IS_EDIT,
 // })
 
 // export const editTodoContext = (id: number, value: string, currentDate: Date | null) => ({
@@ -105,7 +126,3 @@ export type TodoActions =
 // //     type: ASYNC_ACTION_TYPES.ASYNC_EDIT_TODO_CONTEXT,
 // //     payload: { id, value, currentDate },
 // // })
-
-// export const asyncRemoveAllTodos = () => ({
-//     type: ASYNC_ACTION_TYPES.ASYNC_REMOVE_ALL_TODOS,
-// })

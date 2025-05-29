@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../globalVariables/styledVariables'
-import { TodoState } from '../../globalVariables/typesVariables'
+import { removeAllTodos } from '../../redux/actions/todoActions'
 import { RootState } from '../../redux/store'
 import Button from '../UI/Buttons/Button'
 import Filters from './Filters/Filters'
@@ -11,12 +11,13 @@ import FooterRemoveAllModal from './FooterRemoveAllModal/FooterRemoveAllModal'
 import TodoCounter from './TodoCounter/TodoCounter'
 
 const TodoFooter = () => {
-    const todosState: TodoState = useSelector((state: RootState) => state.todos)
+    const todosState = useSelector((state: RootState) => state.todos)
     const dispatch = useDispatch()
 
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
 
     const handleRemoveAllTodos = () => {
+        dispatch(removeAllTodos())
         // dispatch(removeAllTodos())
         // dispatch(asyncRemoveAllTodos())
 
