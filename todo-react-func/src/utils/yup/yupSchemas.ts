@@ -12,9 +12,7 @@ const helperPasswordText = [
 
 export const signInValidSchema = Yup.object({
     username: Yup.string().required('Username is required'),
-    password: Yup.string()
-        .matches(passwordRegex, helperPasswordText)
-        .required('Password is required'),
+    password: Yup.string().required('Password is required'),
 })
 
 export const signUpValidSchema = Yup.object({

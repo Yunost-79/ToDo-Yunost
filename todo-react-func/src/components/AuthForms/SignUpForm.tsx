@@ -8,8 +8,9 @@ import { AUTH_VARS } from '../../globalVariables/authVariables'
 import { PATHS } from '../../globalVariables/pathsVariables'
 import { COLORS } from '../../globalVariables/styledVariables'
 import { SignUpUserData } from '../../globalVariables/typesVariables'
-import { signUpRequest } from '../../redux/actions/authActions'
+import { removeAuthErrorAndLoading, signUpRequest } from '../../redux/actions/authActions'
 import { RootState } from '../../redux/store'
+import { generateHashPassword } from '../../utils/bcrypt/bcrypt'
 import { signUpValidSchema } from '../../utils/yup/yupSchemas'
 import AuthButton from '../UI/Buttons/AuthButton/AuthButton'
 import Button from '../UI/Buttons/Button'
@@ -30,19 +31,19 @@ const SignUpForm = () => {
     })
 
     const dispatch = useDispatch()
-    const { isLoading, error, token } = useSelector((state: RootState) => state.auth)
+    const { isLoading, error, isSignedUp } = useSelector((state: RootState) => state.auth)
 
     const navigate = useNavigate()
 
-    // useEffect(() => {
-    //     dispatch(removeAuthErrorAndLoading())
-    // }, [dispatch])
+    useEffect(() => {
+        dispatch(removeAuthErrorAndLoading())
+    }, [dispatch])
 
     useEffect(() => {
-        if (token) {
-            navigate(PATHS.MAIN)
+        if (isSignedUp) {
+            navigate(PATHS.SIGN_IN)
         }
-    }, [token, navigate])
+    }, [isSignedUp, navigate])
 
     const formik = useFormik({
         initialValues: {
@@ -52,16 +53,16 @@ const SignUpForm = () => {
         },
         validationSchema: signUpValidSchema,
         onSubmit: (values) => {
+            const hashedPassword = generateHashPassword(values.password.trim())
+
             const signUpUserData: SignUpUserData = {
                 username: values.username.trim(),
-                password: values.password.trim(),
+                password: hashedPassword,
             }
 
             try {
                 dispatch(signUpRequest(signUpUserData))
             } catch (e) {
-                navigate(PATHS.SIGN_UP)
-
                 const err = e as Error
                 console.error('Error in sign in page', err)
             }
@@ -115,7 +116,7 @@ const SignUpForm = () => {
                 value={formik.values.rePassword}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.rePassword && Boolean(formik.errors.rePassword)}
+                error={error || (formik.touched.rePassword && Boolean(formik.errors.rePassword))}
                 helperText={formik.touched.rePassword && formik.errors.rePassword}
                 img={
                     <Button

@@ -34,7 +34,14 @@ export type SignUpUserData = {
 }
 
 export type AuthState = {
-    token: string | null
     isLoading: boolean
     error: string | null | Error
+    isSignedUp: boolean
+    isSignedIn: boolean
+}
+
+export type UserState = {
+    userId: number | null
+    username: string | null
+    avatar: string | null
 }

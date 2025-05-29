@@ -1,15 +1,11 @@
-import { put, select, takeLatest } from 'redux-saga/effects'
-import { getItem } from '../../utils/localStore/localStore'
+import { put, takeLatest } from 'redux-saga/effects'
+import { getAccessToken } from '../../utils/cookies/cookies'
 import { ACTION_TYPES } from '../actions/actionTypes'
-import { RootState } from '../store'
-
-const getToken = (state: RootState) => state.auth.token
 
 function* checkToken() {
-    const tokenInStore: string = yield select(getToken)
-    const tokenInLocalStore: string = getItem('authToken')
+    const token = getAccessToken()
 
-    if (!tokenInStore || !tokenInLocalStore) {
+    if (!token) {
         yield put({ type: ACTION_TYPES.SIGN_OUT_REQUEST })
     }
 }
@@ -17,7 +13,8 @@ function* checkToken() {
 export function* watchTodoStateChange() {
     yield takeLatest(
         [
-            ACTION_TYPES.SET_STATE,
+            ACTION_TYPES.SET_TODO_STATE,
+            ACTION_TYPES.SET_USER_STATE,
             ACTION_TYPES.ADD_TODO,
             ACTION_TYPES.REMOVE_TODO,
             ACTION_TYPES.REMOVE_ALL_TODOS,

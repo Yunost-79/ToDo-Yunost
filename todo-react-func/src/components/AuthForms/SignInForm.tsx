@@ -8,8 +8,10 @@ import { AUTH_VARS } from '../../globalVariables/authVariables'
 import { PATHS } from '../../globalVariables/pathsVariables'
 import { COLORS } from '../../globalVariables/styledVariables'
 import { SignInUserData } from '../../globalVariables/typesVariables'
-import { signInRequest } from '../../redux/actions/authActions'
+import { removeAuthErrorAndLoading, signInRequest } from '../../redux/actions/authActions'
 import { RootState } from '../../redux/store'
+import { generateHashPassword } from '../../utils/bcrypt/bcrypt'
+import { getAccessToken } from '../../utils/cookies/cookies'
 import { signInValidSchema } from '../../utils/yup/yupSchemas'
 import AuthButton from '../UI/Buttons/AuthButton/AuthButton'
 import Button from '../UI/Buttons/Button'
@@ -28,19 +30,28 @@ const SignInForm = () => {
     })
 
     const dispatch = useDispatch()
-    const { isLoading, error, token } = useSelector((state: RootState) => state.auth)
+    const { isLoading, error, isSignedIn } = useSelector((state: RootState) => state.auth)
+
+    const token = getAccessToken()
 
     const navigate = useNavigate()
 
-    // useEffect(() => {
-    //     dispatch(removeAuthErrorAndLoading())
-    // }, [dispatch])
+    useEffect(() => {
+        dispatch(removeAuthErrorAndLoading())
+    }, [dispatch])
 
     useEffect(() => {
-        if (token) {
+        if (isSignedIn && token) {
             navigate(PATHS.MAIN)
         }
-    }, [token, navigate])
+    }, [isSignedIn, token, navigate])
+
+    // useEffect(() => {
+    //     if (token) {
+    //         console.log('tokenin sign in ', token)
+    //         navigate(PATHS.MAIN)
+    //     }
+    // }, [token, navigate])
 
     const formik = useFormik({
         initialValues: {
@@ -49,15 +60,21 @@ const SignInForm = () => {
         },
         validationSchema: signInValidSchema,
         onSubmit: (values) => {
+            const hashedPassword = generateHashPassword(values.password.trim())
+
             const signInUserData: SignInUserData = {
                 username: values.username.trim(),
-                password: values.password.trim(),
+                password: hashedPassword,
             }
 
             try {
                 dispatch(signInRequest(signInUserData))
+
+                if (isSignedIn) {
+                    navigate(PATHS.MAIN)
+                }
             } catch (e) {
-                navigate(PATHS.SIGN_UP)
+                // navigate(PATHS.SIGN_UP)
 
                 const err = e as Error
                 console.error('Error in sign in page', err)

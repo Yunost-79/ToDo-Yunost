@@ -5,7 +5,7 @@ import { initTodoState } from '../initTodoState'
 
 const todoListReducer = (state: TodoState, action: any) => {
     switch (action.type) {
-        case ACTION_TYPES.SET_STATE:
+        case ACTION_TYPES.SET_TODO_STATE:
             return {
                 ...state,
                 ...action.payload.todosState,

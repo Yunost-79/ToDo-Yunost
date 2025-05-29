@@ -1,11 +1,6 @@
 import { SignInUserData, SignUpUserData } from '../../globalVariables/typesVariables'
 import { ACTION_TYPES } from './actionTypes'
 
-export const setToken = (token: string) => ({
-    type: ACTION_TYPES.SET_TOKEN,
-    payload: { token },
-})
-
 export const signInSuccess = (token: string) => ({
     type: ACTION_TYPES.SIGN_IN_SUCCESS,
     payload: { token },
@@ -21,9 +16,8 @@ export const signInRequest = (credentials: SignInUserData) => ({
     payload: { credentials },
 })
 
-export const signUpSuccess = (token: string) => ({
+export const signUpSuccess = () => ({
     type: ACTION_TYPES.SIGN_UP_SUCCESS,
-    payload: { token },
 })
 
 export const signUpFailure = (error: string) => ({

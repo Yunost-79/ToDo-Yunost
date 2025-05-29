@@ -1,8 +1,10 @@
+import { AxiosError, AxiosResponse } from 'axios'
 import { call, put, takeEvery } from 'redux-saga/effects'
+import instance from '../../API/axiosInstance'
 import { SignInUserData, SignUpUserData } from '../../globalVariables/typesVariables'
-import { comparePasswords, generateHashPassword } from '../../utils/bcrypt/bcrypt'
-import { clearToken, storeToken } from '../../utils/localStore/authLocalStore'
-import { ACTION_TYPES } from '../actions/actionTypes'
+import { getAccessToken } from '../../utils/cookies/cookies'
+import { removeItem } from '../../utils/localStore/localStore'
+import { ACTION_TYPES, ActionType } from '../actions/actionTypes'
 import {
     signInFailure,
     signInSuccess,
@@ -11,98 +13,60 @@ import {
     signUpFailure,
     signUpSuccess,
 } from '../actions/authActions'
+import { setUser } from '../actions/userActions'
 
-// type AuthResponse = {
-//     token: string
-// }
-
-// password: qweqweQ1!
-// username: username
-
-const signInRequest = async (credentials: SignInUserData) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    const storedHash = generateHashPassword('qweqweQ1!')
-
-    const isMatchPasswords = comparePasswords(credentials.password, storedHash)
-
-    if (credentials.username === 'username' && isMatchPasswords) {
-        return {
-            userId: '12343211',
-            username: credentials.username,
-            token: 'jwtToken',
-        }
-    }
-
-    throw new Error('Invalid username or password')
-}
-
-function* asyncSignInUser(action: { type: string; payload: { credentials: SignInUserData } }) {
+function* asyncSignInUser(action: { type: ActionType; payload: { credentials: SignInUserData } }) {
     try {
-        const response: { token: string } = yield call(signInRequest, action.payload.credentials)
+        const response: AxiosResponse = yield call(
+            instance.post,
+            '/users/login',
+            action.payload.credentials,
+        )
 
-        if (response) {
-            console.log('ok sign in', response)
-            yield call(storeToken, response.token)
-            yield put(signInSuccess(response.token))
+        const token = getAccessToken()
+
+        if (response && token) {
+            yield put(signInSuccess(token))
+            yield put(setUser(response.data.user))
         }
     } catch (err) {
-        const e = err as Error
+        const e = err as AxiosError | any
         console.error('Error in asyncSignInUser', e)
-        yield put(signInFailure(e.message))
+        yield put(signInFailure(e.response?.data.error))
     }
 }
 
-const signUpRequest = async (credentials: SignUpUserData) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // const hashPassword = generateHashPassword(credentials.password)
-    if (credentials.username !== 'username') {
-        return {
-            userId: '12343211',
-            username: credentials.username,
-            token: 'jwtToken',
-        }
-    }
-
-    throw new Error('A user with this username already exists')
-}
-
-function* asyncSignUpUser(action: { type: string; payload: { credentials: SignInUserData } }) {
+function* asyncSignUpUser(action: { type: ActionType; payload: { credentials: SignUpUserData } }) {
     try {
-        const response: { token: string } = yield call(signUpRequest, action.payload.credentials)
+        const response: AxiosResponse = yield call(
+            instance.post,
+            '/users/register',
+            action.payload.credentials,
+        )
 
         if (response) {
-            console.log('ok sign up', response)
-            yield call(storeToken, response.token)
-            yield put(signUpSuccess(response.token))
+            yield put(signUpSuccess())
+            yield alert(response.data.message)
         }
     } catch (err) {
-        const e = err as Error
+        const e = err as AxiosError | any
         console.error('Error in asyncSignUpUser', e)
-        yield put(signUpFailure(e.message))
+        yield put(signUpFailure(e.response?.data.error))
     }
-}
-
-const signOutRequest = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    return { message: 'User was logout' }
 }
 
 function* asyncSignOutUser() {
     try {
-        const response: { token: string } = yield call(signOutRequest)
-
+        const response: AxiosResponse = yield call(instance.post, '/users/logout')
         if (response) {
-            console.log('ok sign out', response)
-            yield call(clearToken)
             yield put(signOutSuccess())
+            yield removeItem('todoState')
+            yield removeItem('userState')
         }
     } catch (err) {
-        const e = err as Error
+        const e = err as AxiosError | any
         console.error('Error in asyncSignOutUser', e)
-        yield put(signOutFailure(e.message))
+        yield put(signOutFailure(e.response?.data.error))
     }
 }
 

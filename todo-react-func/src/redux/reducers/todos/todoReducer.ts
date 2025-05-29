@@ -7,7 +7,7 @@ import todoListReducer from './reducers/todoListReducer'
 
 const todoReducer = (state: TodoState = initTodoState, action: any) => {
     switch (action.type) {
-        case ACTION_TYPES.SET_STATE:
+        case ACTION_TYPES.SET_TODO_STATE:
         case ACTION_TYPES.RESET_STATE:
         case ACTION_TYPES.ADD_TODO:
         case ACTION_TYPES.REMOVE_TODO:

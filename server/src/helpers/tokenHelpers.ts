@@ -24,15 +24,17 @@ export const generateTokenAndSetCookie = (ctx: Context, userId: number) => {
 
     ctx.cookies.set('accessToken', accessToken, {
         maxAge: minutes * 60 * 1000,
-        httpOnly: true,
-        sameSite: 'strict',
+        httpOnly: false,
+        secure: false,
+        sameSite: 'lax',
         overwrite: true,
     })
 
     ctx.cookies.set('refreshToken', refreshToken, {
         maxAge: days * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        sameSite: 'strict',
+        secure: false,
+        sameSite: 'lax',
         overwrite: true,
     })
 

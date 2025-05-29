@@ -6,16 +6,36 @@ const authReducer = (state = initAuthState, action: any) => {
         case ACTION_TYPES.SIGN_IN_REQUEST:
         case ACTION_TYPES.SIGN_UP_REQUEST:
         case ACTION_TYPES.SIGN_OUT_REQUEST:
-            return { ...state, isLoading: true, error: null }
+            return {
+                ...state,
+                isLoading: true,
+                error: null,
+                isSignedUp: false,
+                isSignedIn: false,
+            }
 
-        case ACTION_TYPES.SET_TOKEN:
         case ACTION_TYPES.SIGN_IN_SUCCESS:
+            return {
+                ...state,
+                isLoading: false,
+                error: null,
+                isSignedIn: true,
+            }
+
+        case ACTION_TYPES.SIGN_OUT_SUCCESS:
+            return {
+                ...state,
+                isLoading: false,
+                error: null,
+                isSignedIn: false,
+                isSignedUp: false,
+            }
         case ACTION_TYPES.SIGN_UP_SUCCESS:
             return {
                 ...state,
-                token: action.payload.token,
                 isLoading: false,
                 error: null,
+                isSignedUp: true,
             }
 
         case ACTION_TYPES.SIGN_IN_FAILURE:
@@ -27,19 +47,12 @@ const authReducer = (state = initAuthState, action: any) => {
                 isLoading: false,
             }
 
-        case ACTION_TYPES.SIGN_OUT_SUCCESS:
-            return {
-                ...state,
-                token: null,
-                isLoading: false,
-                error: null,
-            }
-
         case ACTION_TYPES.REMOVE_AUTH_ERROR_AND_LOADING:
             return {
                 ...state,
                 error: null,
                 isLoading: false,
+                isSignedUp: false,
             }
 
         default:

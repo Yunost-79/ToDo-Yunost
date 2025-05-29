@@ -1,8 +1,8 @@
 import { FilterStatus, TodoState } from '../../globalVariables/typesVariables'
 import { ACTION_TYPES, ASYNC_ACTION_TYPES } from './actionTypes'
 
-export const setState = (todosState: TodoState) => ({
-    type: ACTION_TYPES.SET_STATE,
+export const setTodoState = (todosState: TodoState) => ({
+    type: ACTION_TYPES.SET_TODO_STATE,
     payload: { todosState },
 })
 

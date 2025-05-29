@@ -1,10 +1,10 @@
-import { useSelector } from 'react-redux'
 import { Navigate, Outlet } from 'react-router-dom'
 import { PATHS } from '../../globalVariables/pathsVariables'
-import { RootState } from '../../redux/store'
+import { getAccessToken } from '../cookies/cookies'
 
 const PublicRoutes = () => {
-    const { token } = useSelector((state: RootState) => state.auth)
+    const token = getAccessToken()
+
 
     return token ? <Navigate to={PATHS.MAIN} replace /> : <Outlet />
 }
