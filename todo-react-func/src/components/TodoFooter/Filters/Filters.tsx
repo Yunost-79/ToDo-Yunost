@@ -1,10 +1,8 @@
 import styled from '@emotion/styled'
-import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../../globalVariables/styledVariables'
 import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
 import { FilterStatus } from '../../../globalVariables/typesVariables'
-import { closeAllTodosIsEdit, filteringTodosByStatus } from '../../../redux/actions/todoActions'
 import { RootState } from '../../../redux/store'
 
 type FiltersForRender = {
@@ -23,7 +21,8 @@ const Filters = () => {
     ]
 
     const handleFilteringTodos = (status: FilterStatus) => {
-        dispatch(filteringTodosByStatus(status))
+        // dispatch(getFilteredTodos(status))
+        // dispatch(filteringTodosByStatus(status))
     }
 
     const handleChangeFilterStatus = (status: FilterStatus) => {
@@ -35,9 +34,9 @@ const Filters = () => {
     //     dispatch(closeAllTodosIsEdit())
     // }, [filterStatus])
 
-    useEffect(() => {
-        dispatch(closeAllTodosIsEdit())
-    }, [])
+    // useEffect(() => {
+    //     // dispatch(closeAllTodosIsEdit())
+    // }, [])
 
     return (
         <StyledTodoFilters>

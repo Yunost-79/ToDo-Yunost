@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../globalVariables/styledVariables'
 import { TodoState, Warning } from '../../globalVariables/typesVariables'
 import { horizontalShake } from '../../helpers/animations'
-import { asyncAddTodo } from '../../redux/actions/todoActions'
+import { addTodo } from '../../redux/actions/todoActions'
 import { RootState } from '../../redux/store'
 import Button from '../UI/Buttons/Button'
 import Input from '../UI/Inputs/Input'
@@ -31,7 +31,7 @@ const TodoAddInputBlock = () => {
         }
 
         // dispatch(addTodo(value))
-        dispatch(asyncAddTodo(value))
+        dispatch(addTodo(value))
         setWarning({ isWarning: false, warningText: '' })
         setAddInputValue('')
     }

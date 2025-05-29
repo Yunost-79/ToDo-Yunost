@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../globalVariables/styledVariables'
 import { TodoState } from '../../globalVariables/typesVariables'
-import { asyncRemoveAllTodos } from '../../redux/actions/todoActions'
 import { RootState } from '../../redux/store'
 import Button from '../UI/Buttons/Button'
 import Filters from './Filters/Filters'
@@ -19,7 +18,7 @@ const TodoFooter = () => {
 
     const handleRemoveAllTodos = () => {
         // dispatch(removeAllTodos())
-        dispatch(asyncRemoveAllTodos())
+        // dispatch(asyncRemoveAllTodos())
 
         setIsOpenModal(false)
     }

@@ -17,10 +17,8 @@ import { setUser } from '../actions/userActions'
 
 function* asyncSignInUser(action: { type: ActionType; payload: { credentials: SignInUserData } }) {
     try {
-        const response: AxiosResponse = yield call(
-            instance.post,
-            '/users/login',
-            action.payload.credentials,
+        const response: AxiosResponse = yield call(() =>
+            instance.post('/users/login', action.payload.credentials),
         )
 
         const token = getAccessToken()
@@ -38,10 +36,8 @@ function* asyncSignInUser(action: { type: ActionType; payload: { credentials: Si
 
 function* asyncSignUpUser(action: { type: ActionType; payload: { credentials: SignUpUserData } }) {
     try {
-        const response: AxiosResponse = yield call(
-            instance.post,
-            '/users/register',
-            action.payload.credentials,
+        const response: AxiosResponse = yield call(() =>
+            instance.post('/users/register', action.payload.credentials),
         )
 
         if (response) {
@@ -57,7 +53,8 @@ function* asyncSignUpUser(action: { type: ActionType; payload: { credentials: Si
 
 function* asyncSignOutUser() {
     try {
-        const response: AxiosResponse = yield call(instance.post, '/users/logout')
+        const response: AxiosResponse = yield call(() => instance.post('/users/logout'))
+
         if (response) {
             yield put(signOutSuccess())
             yield removeItem('todoState')

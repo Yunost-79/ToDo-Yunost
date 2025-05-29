@@ -3,7 +3,7 @@ import { FILTER_STATUS } from './todoVariables'
 export type FilterStatus = (typeof FILTER_STATUS)[keyof typeof FILTER_STATUS]
 
 export type Todo = {
-    id: number
+    taskId: number
     value: string
     isEdit: boolean
     status: FilterStatus

@@ -4,11 +4,6 @@ import { useDispatch } from 'react-redux'
 import { COLORS } from '../../../globalVariables/styledVariables'
 import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
 import { Todo } from '../../../globalVariables/typesVariables'
-import {
-    asyncRemoveTodo,
-    changeTodoIsEdit,
-    changeTodoStatus,
-} from '../../../redux/actions/todoActions'
 import TodoContext from '../TodoContext/TodoContext'
 import TodoControl from '../TodoControl/TodoControl'
 
@@ -19,29 +14,29 @@ type TodoItemProps = {
 const TodoItem: FC<TodoItemProps> = ({ todo }) => {
     const dispatch = useDispatch()
 
-    const handleRemoveTodo = (id: number) => {
-        // dispatch(removeTodo(id))
-        dispatch(asyncRemoveTodo(id))
+    const handleRemoveTodo = (taskId: number) => {
+        // dispatch(removeTodo(taskId))
+        // dispatch(asyncRemoveTodo(taskId))
     }
 
-    const handleTodoStatus = (id: number) => {
-        dispatch(changeTodoStatus(id))
+    const handleTodoStatus = (taskId: number) => {
+        // dispatch(changeTodoStatus(taskId))
     }
 
-    const handleTodoIsEdit = (id: number) => {
-        dispatch(changeTodoIsEdit(id))
+    const handleTodoIsEdit = (taskId: number) => {
+        // dispatch(changeTodoIsEdit(taskId))
     }
 
     return (
         <StyledLi className={todo.status === FILTER_STATUS.completed ? 'completed' : ''}>
             <TodoContext
                 todo={todo}
-                toggleTodoStatus={() => handleTodoStatus(todo.id)}
-                handleTodoIsEdit={() => handleTodoIsEdit(todo.id)}
+                toggleTodoStatus={() => handleTodoStatus(todo.taskId)}
+                handleTodoIsEdit={() => handleTodoIsEdit(todo.taskId)}
             />
             <TodoControl
-                handleTodoIsEdit={() => handleTodoIsEdit(todo.id)}
-                removeTodo={() => handleRemoveTodo(todo.id)}
+                handleTodoIsEdit={() => handleTodoIsEdit(todo.taskId)}
+                removeTodo={() => handleRemoveTodo(todo.taskId)}
             />
         </StyledLi>
     )

@@ -6,7 +6,7 @@ const filterReducer = (state: TodoState, action: any) => {
     switch (action.type) {
         case ACTION_TYPES.CHANGE_TODO_STATUS:
             const toggledTodos = state.todos.map((todo) => {
-                if (todo.id === action.payload.id) {
+                if (todo.taskId === action.payload.id) {
                     return {
                         ...todo,
                         status:

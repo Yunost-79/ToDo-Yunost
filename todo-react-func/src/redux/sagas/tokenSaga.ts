@@ -1,4 +1,4 @@
-import { put, takeLatest } from 'redux-saga/effects'
+import { takeLatest } from 'redux-saga/effects'
 import { getAccessToken } from '../../utils/cookies/cookies'
 import { ACTION_TYPES } from '../actions/actionTypes'
 
@@ -6,7 +6,7 @@ function* checkToken() {
     const token = getAccessToken()
 
     if (!token) {
-        yield put({ type: ACTION_TYPES.SIGN_OUT_REQUEST })
+        // yield put({ type: ACTION_TYPES.SIGN_OUT_REQUEST })
     }
 }
 
