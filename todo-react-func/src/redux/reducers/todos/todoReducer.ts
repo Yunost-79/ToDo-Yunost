@@ -7,7 +7,9 @@ import asyncChangeTodoStatusReducer from './reducers/asyncChangeTodoStatusReduce
 import asyncSetTodosReducer from './reducers/asyncSetTodosReducer'
 import changeTodoCounter from './reducers/changeTodoCounter'
 import changeTodoIsEditReducer from './reducers/changeTodoIsEditReducer'
+import closeAllTodosIsEditReducer from './reducers/closeAllTodosIsEditReducer'
 import filterTodosReducer from './reducers/filterTodosReducer'
+import reorderTodoReducer from './reducers/reorderTodoReducer'
 import setTodoStateReducer from './reducers/setTodoStateReducer'
 
 const savedState = getItem('todoState') || FILTER_STATUS.all
@@ -33,13 +35,16 @@ const todoReducer = (state: TodoState = initTodoState, action: TodoActions) => {
             return asyncChangeTodoStatusReducer(state, action)
 
         case ACTION_TYPES.CLOSE_ALL_TODOS_IS_EDIT:
-            return asyncChangeTodoStatusReducer(state, action)
+            return closeAllTodosIsEditReducer(state, action)
 
         case ACTION_TYPES.FILTER_TODOS:
             return filterTodosReducer(state, action)
 
         case ACTION_TYPES.CHANGE_TODO_COUNTER:
             return changeTodoCounter(state, action)
+
+        case ACTION_TYPES.REORDER_TODOS:
+            return reorderTodoReducer(state, action)
         default:
             return state
     }
