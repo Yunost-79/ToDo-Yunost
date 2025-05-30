@@ -17,7 +17,6 @@ type EmptyListItem = {
 const TodoList = () => {
     const todoState = useSelector((state: RootState) => state.todos)
     const { todos, filter } = todoState
-
     const dispatch = useDispatch()
 
     useEffect(() => {

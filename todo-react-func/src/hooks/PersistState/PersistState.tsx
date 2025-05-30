@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { TodoState, UserState } from '../../globalVariables/typesVariables'
+import { UserState } from '../../globalVariables/typesVariables'
 import { setTodoState } from '../../redux/actions/todoActions'
 import { setUserState } from '../../redux/actions/userActions'
 import { RootState } from '../../redux/store'
@@ -29,7 +29,7 @@ const PersistState = () => {
         }
 
         setHasLoaded(true)
-    }, [dispatch, hasLoaded])
+    }, [token, dispatch, hasLoaded])
 
     useEffect(() => {
         if (hasLoaded) {
