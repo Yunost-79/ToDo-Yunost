@@ -46,12 +46,6 @@ const SignInForm = () => {
         }
     }, [isSignedIn, token, navigate])
 
-    // useEffect(() => {
-    //     if (token) {
-    //         console.log('tokenin sign in ', token)
-    //         navigate(PATHS.MAIN)
-    //     }
-    // }, [token, navigate])
 
     const formik = useFormik({
         initialValues: {

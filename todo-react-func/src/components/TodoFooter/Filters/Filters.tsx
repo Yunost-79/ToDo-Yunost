@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../../globalVariables/styledVariables'
 import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
 import { FilterStatus } from '../../../globalVariables/typesVariables'
+import { filteringTodosByStatus } from '../../../redux/actions/todoActions'
 import { RootState } from '../../../redux/store'
 
 type FiltersForRender = {
@@ -12,7 +13,7 @@ type FiltersForRender = {
 
 const Filters = () => {
     const dispatch = useDispatch()
-    const filterStatus: FilterStatus = useSelector((state: RootState) => state.todos.filter)
+    const { filter } = useSelector((state: RootState) => state.todos)
 
     const filtersForRender: FiltersForRender[] = [
         { text: 'All', status: FILTER_STATUS.all },
@@ -21,32 +22,18 @@ const Filters = () => {
     ]
 
     const handleFilteringTodos = (status: FilterStatus) => {
-        // dispatch(getFilteredTodos(status))
-        // dispatch(filteringTodosByStatus(status))
+        dispatch(filteringTodosByStatus(status))
     }
-
-    const handleChangeFilterStatus = (status: FilterStatus) => {
-        handleFilteringTodos(status)
-    }
-
-    // useEffect(() => {
-    //     dispatch(filteringTodosByStatus(filterStatus))
-    //     dispatch(closeAllTodosIsEdit())
-    // }, [filterStatus])
-
-    // useEffect(() => {
-    //     // dispatch(closeAllTodosIsEdit())
-    // }, [])
 
     return (
         <StyledTodoFilters>
-            {filtersForRender.map((filter: FiltersForRender, index: number) => (
+            {filtersForRender.map((filterItem: FiltersForRender, index: number) => (
                 <FilterSpan
                     key={index}
-                    className={filter.status === filterStatus ? 'active' : ''}
-                    onClick={() => handleChangeFilterStatus(filter.status)}
+                    className={filterItem.status === filter ? 'active' : ''}
+                    onClick={() => handleFilteringTodos(filterItem.status)}
                 >
-                    {filter.text}
+                    {filterItem.text}
                 </FilterSpan>
             ))}
         </StyledTodoFilters>

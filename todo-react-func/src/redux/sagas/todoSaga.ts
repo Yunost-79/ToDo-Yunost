@@ -3,9 +3,9 @@
 import { AxiosError, AxiosResponse } from 'axios'
 import { call, put, takeEvery } from 'redux-saga/effects'
 import instance from '../../API/axiosInstance'
-import { FilterStatus, Todo } from '../../globalVariables/typesVariables'
+import { Todo } from '../../globalVariables/typesVariables'
 import { ASYNC_ACTION_TYPES, AsyncActionType } from '../actions/actionTypes'
-import { setFilteredTodos, setTodos } from '../actions/todoActions'
+import { setTodos } from '../actions/todoActions'
 
 function* asyncGetTodos() {
     try {
@@ -18,29 +18,8 @@ function* asyncGetTodos() {
             yield put(setTodos(todos))
         }
     } catch (err) {
-        const e = err as AxiosError | any
+        const e = err as AxiosError
         console.error('Error in asyncGetTodos', e)
-    }
-}
-
-function* asyncGetFilteredTodos(action: {
-    type: AsyncActionType
-    payload: { status: FilterStatus }
-}) {
-    try {
-        const response: AxiosResponse = yield call(() =>
-            instance.get(`/tasks/filter/${action.payload.status}`),
-        )
-
-        if (response.data) {
-            const todos = response.data.tasks.map((task: Todo) => {
-                return { ...task, isEdit: false }
-            })
-            yield setFilteredTodos(todos)
-        }
-    } catch (err) {
-        const e = err as AxiosError | any
-        console.error('Error in asyncGetFilteredTodos', e)
     }
 }
 
@@ -50,7 +29,7 @@ function* asyncAddTodo(action: { type: AsyncActionType; payload: { value: string
 
         yield call(asyncGetTodos)
     } catch (err) {
-        const e = err as AxiosError | any
+        const e = err as AxiosError
         console.error('Error in asyncAddTodo', e)
     }
 }
@@ -61,7 +40,7 @@ function* asyncRemoveTodoById(action: { type: AsyncActionType; payload: { taskId
 
         yield call(asyncGetTodos)
     } catch (err) {
-        const e = err as AxiosError | any
+        const e = err as AxiosError
         console.error('Error in asyncRemoveTodoById', e)
     }
 }
@@ -72,7 +51,7 @@ function* asyncRemoveAllTodos() {
 
         yield call(asyncGetTodos)
     } catch (err) {
-        const e = err as AxiosError | any
+        const e = err as AxiosError
         console.error('Error in asyncRemoveAllTodos', e)
     }
 }
@@ -88,7 +67,7 @@ function* asyncEditTodoById(action: {
 
         yield call(asyncGetTodos)
     } catch (err) {
-        const e = err as AxiosError | any
+        const e = err as AxiosError
         console.error('Error in asyncEditTodoById', e)
     }
 }
@@ -104,14 +83,13 @@ function* asyncChangeTodoStatusById(action: {
 
         yield call(asyncGetTodos)
     } catch (err) {
-        const e = err as AxiosError | any
+        const e = err as AxiosError
         console.error('Error in asyncChangeTodoStatusById', e)
     }
 }
 
 export function* todoWatcher() {
     yield takeEvery(ASYNC_ACTION_TYPES.ASYNC_GET_TODOS, asyncGetTodos)
-    yield takeEvery(ASYNC_ACTION_TYPES.ASYNC_GET_FILTERED_TODOS, asyncGetFilteredTodos)
     yield takeEvery(ASYNC_ACTION_TYPES.ASYNC_ADD_TODO, asyncAddTodo)
     yield takeEvery(ASYNC_ACTION_TYPES.ASYNC_REMOVE_TODO, asyncRemoveTodoById)
     yield takeEvery(ASYNC_ACTION_TYPES.ASYNC_EDIT_TODO, asyncEditTodoById)

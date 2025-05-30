@@ -13,7 +13,7 @@ export type Todo = {
 
 export type TodoState = {
     todos: Todo[]
-    filteredTodos: Todo[]
+    counter: 0
     filter: FilterStatus
 }
 

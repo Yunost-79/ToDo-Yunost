@@ -1,6 +1,10 @@
 import styled from '@emotion/styled'
+import { useSelector } from 'react-redux'
 import { COLORS } from '../../../globalVariables/styledVariables'
+import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
 import { FilterStatus } from '../../../globalVariables/typesVariables'
+import { handleSetListElement } from '../../../helpers/helpers'
+import { RootState } from '../../../redux/store'
 
 type CounterTitle = {
     title: string
@@ -8,25 +12,19 @@ type CounterTitle = {
 }
 
 const TodoCounter = () => {
-    // const todosState = useSelector((state: RootState) => state.todos)
-    // const dispatch = useDispatch()
+    const todoState = useSelector((state: RootState) => state.todos)
 
-    // const counterTitleBlock: CounterTitle[] = [
-    //     { title: 'Todos:', status: FILTER_STATUS.all },
-    //     { title: 'Active todos:', status: FILTER_STATUS.active },
-    //     { title: 'Completed todos:', status: FILTER_STATUS.completed },
-    // ]
+    const counterTitleBlock: CounterTitle[] = [
+        { title: 'Todos:', status: FILTER_STATUS.all },
+        { title: 'Active todos:', status: FILTER_STATUS.active },
+        { title: 'Completed todos:', status: FILTER_STATUS.completed },
+    ]
 
-    // const counterTitle = handleSetListElement(counterTitleBlock, todosState)
-
-    // useEffect(() => {
-    //     dispatch(filteringTodosByStatus(todosState.filter))
-    // }, [todosState.todos])
-
+    const counterTitle = handleSetListElement(counterTitleBlock, todoState)
     return (
         <StyledTodoCounter>
-            {/* <CounterSpan>{counterTitle?.title}</CounterSpan>
-            <CounterSpan>{todosState.filteredTodos.length}</CounterSpan> */}
+            <CounterSpan>{counterTitle?.title}</CounterSpan>
+            <CounterSpan>{todoState.counter}</CounterSpan>
         </StyledTodoCounter>
     )
 }

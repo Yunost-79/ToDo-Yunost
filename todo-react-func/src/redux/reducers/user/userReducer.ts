@@ -1,6 +1,12 @@
+import { UserState } from '../../../globalVariables/typesVariables'
 import { ACTION_TYPES } from '../../actions/actionTypes'
 import { UserActions } from '../../actions/userActions'
-import { initUserState } from './initUserState'
+
+const initUserState: UserState = {
+    userId: null,
+    username: null,
+    avatar: null,
+}
 
 const userReducer = (state = initUserState, action: UserActions) => {
     switch (action.type) {

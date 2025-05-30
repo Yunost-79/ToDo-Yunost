@@ -13,13 +13,13 @@ if (!JWT_SECRET_ACCESS || !JWT_SECRET_REFRESH) {
 
 export const generateTokenAndSetCookie = (ctx: Context, userId: number) => {
     const accessToken = jwt.sign({ userId }, JWT_SECRET_ACCESS as jwt.Secret, {
-        expiresIn: '30m',
+        expiresIn: '3h',
     })
     const refreshToken = jwt.sign({ userId }, JWT_SECRET_REFRESH as jwt.Secret, {
         expiresIn: '7d',
     })
 
-    const minutes = 30
+    const minutes = 180
     const days = 7
 
     ctx.cookies.set('accessToken', accessToken, {

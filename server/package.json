@@ -4,10 +4,10 @@
     "main": "dist/index.js",
     "license": "MIT",
     "scripts": {
-        "start": "ts-node-dev src/index.ts",
+        "node": "ts-node-dev src/index.ts",
         "build": "tsc",
         "serve": "node dist/index.js",
-        "dev": "nodemon"
+        "start": "nodemon"
     },
     "dependencies": {
         "@koa/cors": "^5.0.0",

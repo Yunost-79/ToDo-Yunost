@@ -1,5 +1,12 @@
+import { AuthState } from '../../../globalVariables/typesVariables'
 import { ACTION_TYPES } from '../../actions/actionTypes'
-import { initAuthState } from './initAuthState'
+
+const initAuthState: AuthState = {
+    isLoading: false,
+    error: null,
+    isSignedIn: false,
+    isSignedUp: false,
+}
 
 const authReducer = (state = initAuthState, action: any) => {
     switch (action.type) {
