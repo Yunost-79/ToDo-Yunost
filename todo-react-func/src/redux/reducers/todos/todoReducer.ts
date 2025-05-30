@@ -3,73 +3,43 @@ import { TodoState } from '../../../globalVariables/typesVariables'
 import { getItem } from '../../../utils/localStore/localStore'
 import { ACTION_TYPES, ASYNC_ACTION_TYPES } from '../../actions/actionTypes'
 import { TodoActions } from '../../actions/todoActions'
+import asyncChangeTodoStatusReducer from './reducers/asyncChangeTodoStatusReducer'
+import asyncSetTodosReducer from './reducers/asyncSetTodosReducer'
+import changeTodoCounter from './reducers/changeTodoCounter'
+import changeTodoIsEditReducer from './reducers/changeTodoIsEditReducer'
+import filterTodosReducer from './reducers/filterTodosReducer'
+import setTodoStateReducer from './reducers/setTodoStateReducer'
 
-const savedState = getItem('todoState')
+const savedState = getItem('todoState') || FILTER_STATUS.all
 
 const initTodoState: TodoState = {
     todos: [],
     counter: 0,
-    filter: savedState.filter || FILTER_STATUS.all,
+    filter: savedState.filter,
 }
 
 const todoReducer = (state: TodoState = initTodoState, action: TodoActions) => {
     switch (action.type) {
         case ACTION_TYPES.SET_TODO_STATE:
-            return {
-                ...state,
-                todos: action.payload.todosState.todos,
-            }
+            return setTodoStateReducer(state, action)
 
         case ASYNC_ACTION_TYPES.ASYNC_SET_TODOS:
-            return {
-                ...state,
-                todos: action.payload.todos,
-            }
+            return asyncSetTodosReducer(state, action)
 
         case ACTION_TYPES.CHANGE_TODO_IS_EDIT:
-            const changedTodos = state.todos.map((todo) => {
-                if (todo.taskId === action.payload.taskId) {
-                    return { ...todo, isEdit: true }
-                }
-                return { ...todo, isEdit: false }
-            })
-            return { ...state, todos: changedTodos }
+            return changeTodoIsEditReducer(state, action)
 
         case ASYNC_ACTION_TYPES.ASYNC_CHANGE_TODO_STATUS:
-            const toggledTodos = state.todos.map((todo) => {
-                if (todo.taskId === action.payload.taskId) {
-                    return {
-                        ...todo,
-                        status:
-                            todo.status === FILTER_STATUS.active
-                                ? FILTER_STATUS.completed
-                                : FILTER_STATUS.active,
-                    }
-                }
-                return todo
-            })
-            return {
-                ...state,
-                todos: toggledTodos,
-            }
+            return asyncChangeTodoStatusReducer(state, action)
 
         case ACTION_TYPES.CLOSE_ALL_TODOS_IS_EDIT:
-            const closeAllTodosIsEdit = state.todos.map((todo) => {
-                return { ...todo, isEdit: false }
-            })
-            return { ...state, todos: closeAllTodosIsEdit }
+            return asyncChangeTodoStatusReducer(state, action)
 
         case ACTION_TYPES.FILTER_TODOS:
-            if (action.type !== ACTION_TYPES.FILTER_TODOS) return state
-
-            const filter = action.payload.status || state.filter
-            return {
-                ...state,
-                filter,
-            }
+            return filterTodosReducer(state, action)
 
         case ACTION_TYPES.CHANGE_TODO_COUNTER:
-            return { ...state, counter: action.payload.counter }
+            return changeTodoCounter(state, action)
         default:
             return state
     }
