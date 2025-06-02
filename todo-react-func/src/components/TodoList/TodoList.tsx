@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import autoScroll from 'dom-autoscroller'
 import { useEffect, useMemo, useRef } from 'react'
 import dragula from 'react-dragula'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,7 +7,12 @@ import { COLORS } from '../../globalVariables/styledVariables'
 import { FILTER_STATUS } from '../../globalVariables/todoVariables'
 import { FilterStatus, Todo } from '../../globalVariables/typesVariables'
 import { handleSetListElement } from '../../helpers/helpers'
-import { changeTodoCounter, getTodos, reorderTodos } from '../../redux/actions/todoActions'
+import {
+    changeTodoCounter,
+    closeAllTodosIsEdit,
+    getTodos,
+    reorderTodos,
+} from '../../redux/actions/todoActions'
 import { RootState } from '../../redux/store'
 import EmptyBlock from './EmptyBlock/EmptyBlock'
 import TodoItem from './TodoItem/TodoItem'
@@ -75,6 +81,13 @@ const TodoList = () => {
             },
         })
 
+        const scroll = autoScroll([containerRef.current], {
+            margin: 50,
+            maxSpeed: 20,
+            scrollWhenOutside: false,
+            autoScroll: () => drake.dragging,
+        })
+
         drake.on('drop', (el, target) => {
             if (!target) return
 
@@ -87,10 +100,12 @@ const TodoList = () => {
 
             dispatch(reorderTodos(newTodosOrder))
             dispatch(getTodos())
+            dispatch(closeAllTodosIsEdit())
         })
 
         return () => {
             drake.destroy()
+            scroll.destroy()
         }
     }, [dispatch, todosForRender.length])
 
@@ -100,7 +115,11 @@ const TodoList = () => {
     return (
         <StyledUl ref={containerRef}>
             {todosForRender?.map((todo) => (
-                <DraggableItem key={todo.taskId} data-id={todo.taskId}>
+                <DraggableItem
+                    key={todo.taskId}
+                    data-id={todo.taskId}
+                    className={todo.status === FILTER_STATUS.completed ? 'completed' : ''}
+                >
                     <TodoItem todo={todo} />
                 </DraggableItem>
             ))}
@@ -117,9 +136,12 @@ const StyledUl = styled.ul`
     max-height: 60vh;
     overflow-y: auto;
     padding-right: 4px;
+
+    overflow-y: auto;
+    max-height: 70vh;
 `
 
-const DraggableItem = styled.li`
+const DraggableItem = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
@@ -127,18 +149,17 @@ const DraggableItem = styled.li`
     padding: 8px;
     background: ${COLORS.WHITE};
     border-radius: 4px;
-    box-shadow: 0 1px 3px ${COLORS.LIGHT_GREY};
+    box-shadow: 0 2px 2px ${COLORS.LIGHT_GREY};
     transition: all 0.2s ease;
 
     &.gu-transit {
         opacity: 0.5;
-        background-color: ${COLORS.LIGHT_GREY};
+        background-color: ${COLORS.LIGHT_GOLD};
     }
 
     &.gu-mirror {
         opacity: 0.2;
         transform: scale(1.02);
-        box-shadow: 0 4px 8px ${COLORS.LIGHT_GREY};
         z-index: 10;
     }
 `

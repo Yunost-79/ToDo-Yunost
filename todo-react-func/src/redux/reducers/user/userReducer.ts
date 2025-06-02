@@ -15,17 +15,9 @@ const userReducer = (state: UserState = initUserState, action: UserActions) => {
     switch (action.type) {
         case ACTION_TYPES.SET_USER_STATE:
             return setUserStateReducer(state, action)
-        // return {
-        //     ...state,
-        //     ...action.payload.userState,
-        // }
 
         case ACTION_TYPES.SET_USER:
             return setUserReducer(state, action)
-
-        // return {
-        //     ...action.payload.userData,
-        // }
 
         case ACTION_TYPES.REMOVE_USER:
             return removeUserReducer(state, action, initUserState)
