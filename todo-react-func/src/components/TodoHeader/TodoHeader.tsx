@@ -8,10 +8,12 @@ const TodoHeader = () => {
     return (
         <StyledTodoHeader>
             <H1>TODO LIST</H1>
-            <UserData>
-                {/* <UserName>{username}</UserName> */}
-                <UserAvatar src={avatar ? avatar : ''} />
-            </UserData>
+            {avatar && (
+                <UserData>
+                    {/* <UserName>{username}</UserName> */}
+                    <UserAvatar src={avatar} />
+                </UserData>
+            )}
         </StyledTodoHeader>
     )
 }

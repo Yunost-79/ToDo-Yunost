@@ -25,6 +25,11 @@ export const changeTodoCounter = (counter: number) => ({
     payload: { counter },
 })
 
+export const reorderTodos = (newOrder: Todo[]) => ({
+    type: ACTION_TYPES.REORDER_TODOS,
+    payload: { newOrder },
+})
+
 //asyncs
 
 export const getTodos = () => ({
@@ -72,3 +77,4 @@ export type TodoActions =
     | ReturnType<typeof changeStatus>
     | ReturnType<typeof filteringTodosByStatus>
     | ReturnType<typeof changeTodoCounter>
+    | ReturnType<typeof reorderTodos>
