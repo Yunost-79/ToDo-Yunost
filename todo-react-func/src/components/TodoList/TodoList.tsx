@@ -56,14 +56,16 @@ const TodoList = () => {
         dispatch(changeTodoCounter(currentTodos.length))
     }, [currentTodos, dispatch])
 
-    const todosForRender = useMemo(() => {
-        return currentTodos?.sort((a, b) => {
-            const dateA = new Date(a.createdAt).getTime()
-            const dateB = new Date(b.createdAt).getTime()
+    // const todosForRender = useMemo(() => {
+    //     return currentTodos?.sort((a, b) => {
+    //         const dateA = new Date(a.createdAt).getTime()
+    //         const dateB = new Date(b.createdAt).getTime()
 
-            return dateB - dateA
-        })
-    }, [currentTodos])
+    //         return dateB - dateA
+    //     })
+    // }, [currentTodos])
+
+    const todosForRender = currentTodos
 
     useEffect(() => {
         todosRef.current = todos
@@ -99,7 +101,6 @@ const TodoList = () => {
                 .filter(Boolean) as Todo[]
 
             dispatch(reorderTodos(newTodosOrder))
-            dispatch(getTodos())
             dispatch(closeAllTodosIsEdit())
         })
 
@@ -130,14 +131,10 @@ const TodoList = () => {
 const StyledUl = styled.ul`
     display: flex;
     flex-direction: column;
-    justify-content: center;
     gap: 6px;
     width: 100%;
-    max-height: 60vh;
-    overflow-y: auto;
-    padding-right: 4px;
 
-    overflow-y: auto;
+    overflow: auto;
     max-height: 70vh;
 `
 
