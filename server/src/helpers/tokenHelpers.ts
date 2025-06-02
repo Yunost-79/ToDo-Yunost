@@ -11,11 +11,11 @@ if (!JWT_SECRET_ACCESS || !JWT_SECRET_REFRESH) {
     throw new Error('Error with dotenv in generateTokenAndSetCookie')
 }
 
-export const generateTokenAndSetCookie = (ctx: Context, userId: number) => {
-    const accessToken = jwt.sign({ userId }, JWT_SECRET_ACCESS as jwt.Secret, {
+export const generateTokenAndSetCookie = (ctx: Context, userId: number, isAdmin: boolean) => {
+    const accessToken = jwt.sign({ userId, isAdmin }, JWT_SECRET_ACCESS as jwt.Secret, {
         expiresIn: '3h',
     })
-    const refreshToken = jwt.sign({ userId }, JWT_SECRET_REFRESH as jwt.Secret, {
+    const refreshToken = jwt.sign({ userId, isAdmin }, JWT_SECRET_REFRESH as jwt.Secret, {
         expiresIn: '7d',
     })
 

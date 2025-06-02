@@ -3,6 +3,7 @@ import logger from 'node-color-log'
 import { User } from '../../Models/UserModel'
 import { generateTokenAndSetCookie } from '../../helpers/tokenHelpers'
 import { STATUS_CODES } from '../../vars/statusCodesVars'
+import logout from './logout'
 
 type LoginReqBody = {
     username: string
@@ -37,7 +38,9 @@ const login = async (ctx: Context) => {
             avatar: currentUser.get('avatar'),
         }
 
-        generateTokenAndSetCookie(ctx, user.userId as number)
+        // generateTokenAndSetCookie(ctx, Number(user.userId), username === 'username') // checking for admin rules
+
+        generateTokenAndSetCookie(ctx, Number(user.userId), true) // checking for admin rules
 
         ctx.status = STATUS_CODES.OK
         ctx.body = {
@@ -48,6 +51,8 @@ const login = async (ctx: Context) => {
         logger.color('green').log('User logged in')
     } catch (e: any) {
         const errStatus = e.status || STATUS_CODES.INTERNAL_SERVER_ERROR
+
+        logout(ctx)
 
         ctx.status = errStatus
         ctx.body = {

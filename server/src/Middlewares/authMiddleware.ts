@@ -1,4 +1,5 @@
 import { Context } from 'koa'
+import logout from '../Controllers/userControllers/logout'
 import { getToken, verifyToken } from '../helpers/tokenHelpers'
 import { User } from '../Models/UserModel'
 import { STATUS_CODES } from '../vars/statusCodesVars'
@@ -17,6 +18,10 @@ const authMiddleware = async (ctx: Context, next: any) => {
             ctx.throw(STATUS_CODES.UNAUTHORIZED, 'Invalid token data')
         }
 
+        if (tokenData?.isAdmin === false) {
+            ctx.throw(STATUS_CODES.UNAUTHORIZED, 'User doesn`t have access')
+        }
+
         const userId = tokenData.userId
 
         const user = await User.findOne({ where: { userId } })
@@ -29,6 +34,8 @@ const authMiddleware = async (ctx: Context, next: any) => {
         await next()
     } catch (e: any) {
         const errStatus = e.status || STATUS_CODES.INTERNAL_SERVER_ERROR
+
+        logout(ctx)
 
         ctx.status = errStatus
         ctx.body = {
