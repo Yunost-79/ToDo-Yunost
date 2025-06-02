@@ -1,24 +1,28 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { PATHS } from '../../globalVariables/pathsVariables'
 import { COLORS } from '../../globalVariables/styledVariables'
 import { signOutRequest } from '../../redux/actions/authActions'
+import { RootState } from '../../redux/store'
+import { getAccessToken } from '../../utils/cookies/cookies'
 import Button from '../UI/Buttons/Button'
 import TodoSignOutModal from './TodoSignOutModal/TodoSignOutModal'
 
 const TodoSignOut = () => {
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
 
-    const dispatch = useDispatch()
+    const token = getAccessToken()
     const navigate = useNavigate()
+
+    const dispatch = useDispatch()
+    const { isSignedIn, isSignedUp } = useSelector((state: RootState) => state.auth)
 
     const handleSignOut = () => {
         try {
             dispatch(signOutRequest())
-            navigate(PATHS.SIGN_IN)
         } catch (e) {
             const err = e as Error
             console.error('Error in logout:', err)
@@ -32,6 +36,12 @@ const TodoSignOut = () => {
     const handleCloseModal = () => {
         setIsOpenModal(false)
     }
+
+    useEffect(() => {
+        if (!token && !isSignedIn && !isSignedUp) {
+            navigate(PATHS.SIGN_IN)
+        }
+    }, [token, handleSignOut])
 
     return (
         <StyledSignOutBlock>
