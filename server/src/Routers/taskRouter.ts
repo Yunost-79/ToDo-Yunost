@@ -5,7 +5,7 @@ import deleteTasks from '../Controllers/taskControllers/deleteTasks'
 import getTaskByFilterStatus from '../Controllers/taskControllers/getTaskByFilterStatus'
 import getTaskById from '../Controllers/taskControllers/getTaskById'
 import getTasks from '../Controllers/taskControllers/getTasks'
-import getTasksWithLimit from '../Controllers/taskControllers/getTasksWithLimit'
+import getTasksWithOffset from '../Controllers/taskControllers/getTasksWithOffset'
 import updateTaskById from '../Controllers/taskControllers/updateTaskById'
 import authMiddleware from '../Middlewares/authMiddleware'
 
@@ -18,13 +18,13 @@ router.use(authMiddleware)
 router.post('/', createTask)
 
 router.get('/', getTasks)
-router.post('/limit/:limit/page/:page', getTasksWithLimit)
+router.get('/paginated', getTasksWithOffset)
 router.get('/:id', getTaskById)
 
 router.get('/filter/:status', getTaskByFilterStatus)
 
-router.delete('/', deleteTasks)
-router.delete('/:id', deleteTaskById)
+router.delete('/remove', deleteTasks)
+router.delete('/remove/:id', deleteTaskById)
 
 router.put('/:id', updateTaskById)
 

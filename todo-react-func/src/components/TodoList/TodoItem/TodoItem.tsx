@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { COLORS } from '../../../globalVariables/styledVariables'
 import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
 import { Todo } from '../../../globalVariables/typesVariables'
-import { changeStatus, changeTodoIsEdit, removeTodo } from '../../../redux/actions/todoActions'
+import { removeTodoRequest } from '../../../redux/actions/todoActions'
 import DragIcon from '../../UI/Icons/DragIcon'
 import TodoContext from '../TodoContext/TodoContext'
 import TodoControl from '../TodoControl/TodoControl'
@@ -17,18 +17,18 @@ const TodoItem: FC<TodoItemProps> = ({ todo }) => {
     const dispatch = useDispatch()
 
     const handleRemoveTodo = (taskId: number) => {
-        dispatch(removeTodo(taskId))
+        dispatch(removeTodoRequest(taskId))
     }
 
     const handleTodoStatus = (taskId: number) => {
         const newStatus =
             todo.status === FILTER_STATUS.active ? FILTER_STATUS.completed : FILTER_STATUS.active
 
-        dispatch(changeStatus(taskId, newStatus))
+        // dispatch(changeStatus(taskId, newStatus))
     }
 
     const handleTodoIsEdit = (taskId: number) => {
-        dispatch(changeTodoIsEdit(taskId))
+        // dispatch(changeTodoIsEdit(taskId))
     }
 
     return (

@@ -5,7 +5,7 @@ import { STATUS_CODES } from '../../vars/statusCodesVars'
 
 const deleteTaskById = async (ctx: Context) => {
     try {
-        const { id: taskId } = ctx.params as { id: number }
+        const { id: taskId } = ctx.params as { id: string }
 
         const { userId } = ctx.state.user as { userId: number }
 

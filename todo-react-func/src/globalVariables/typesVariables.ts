@@ -17,6 +17,8 @@ export type TodoState = {
     filter: FilterStatus
     page: number
     isEnd: boolean
+    isLoading: boolean
+    error: string | Error | null
 }
 
 export type Warning = {
@@ -46,4 +48,6 @@ export type UserState = {
     userId: number | null
     username: string | null
     avatar: string | null
+    isLoading: boolean
+    error: string | Error | null
 }

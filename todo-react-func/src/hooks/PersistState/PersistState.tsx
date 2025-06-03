@@ -1,16 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { UserState } from '../../globalVariables/typesVariables'
-import { setTodoState } from '../../redux/actions/todoActions'
-import { setUserState } from '../../redux/actions/userActions'
+import { setFilter } from '../../redux/actions/todoActions'
 import { RootState } from '../../redux/store'
 import { getAccessToken } from '../../utils/cookies/cookies'
 import { getItem, setItem } from '../../utils/localStore/localStore'
 
 const PersistState = () => {
     const dispatch = useDispatch()
-    const todosState = useSelector((state: RootState) => state.todos)
-    const userState: UserState = useSelector((state: RootState) => state.user)
+    const { filter } = useSelector((state: RootState) => state.todos)
     const token = getAccessToken()
 
     const [hasLoaded, setHasLoaded] = useState<boolean>(false)
@@ -18,14 +15,10 @@ const PersistState = () => {
     useEffect(() => {
         if (hasLoaded && !token) return
 
-        const persistedTodoState = getItem('todoState')
-        const persistedUserState = getItem('userState')
+        const persistedFilterState = getItem('filter')
 
-        if (persistedTodoState) {
-            dispatch(setTodoState(persistedTodoState))
-        }
-        if (persistedUserState) {
-            dispatch(setUserState(persistedUserState))
+        if (persistedFilterState) {
+            dispatch(setFilter(filter))
         }
 
         setHasLoaded(true)
@@ -33,10 +26,9 @@ const PersistState = () => {
 
     useEffect(() => {
         if (hasLoaded) {
-            setItem('todoState', todosState)
-            setItem('userState', userState)
+            setItem('filter', filter)
         }
-    }, [todosState, userState, hasLoaded])
+    }, [filter, hasLoaded])
 
     return null
 }

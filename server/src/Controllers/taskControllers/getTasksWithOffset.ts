@@ -3,14 +3,17 @@ import logger from 'node-color-log'
 import { Task } from '../../Models/TaskModel'
 import { STATUS_CODES } from '../../vars/statusCodesVars'
 
-const getTasksWithLimit = async (ctx: Context) => {
+const getTasksWithOffset = async (ctx: Context) => {
     try {
-        const { offset } = ctx.params as { offset: string }
-        const { status } = ctx.request.body as { status: 'all' | 'active' | 'completed' }
+        const { offset, status } = ctx.query as {
+            offset: string
+            status: 'all' | 'active' | 'completed'
+        }
         const { userId } = ctx.state.user as { userId: number }
 
+        console.log('offset', offset, status)
         const numberOffset = parseInt(offset) || 0
-        const limit = 10
+        const limit = 5
 
         const whereRule = {
             userId,
@@ -30,7 +33,6 @@ const getTasksWithLimit = async (ctx: Context) => {
         ctx.body = {
             message: `Tasks received: ${tasks.length} for userId: ${userId}`,
             count: totalCount,
-            offset: numberOffset,
             limit,
             isEnd: tasks.length < limit,
             tasks,
@@ -49,4 +51,4 @@ const getTasksWithLimit = async (ctx: Context) => {
     }
 }
 
-export default getTasksWithLimit
+export default getTasksWithOffset

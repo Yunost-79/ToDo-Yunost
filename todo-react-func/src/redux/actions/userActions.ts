@@ -15,7 +15,24 @@ export const removeUser = () => ({
     type: ACTION_TYPES.REMOVE_USER,
 })
 
+export const getUserDataSuccess = (user: UserState) => ({
+    type: ACTION_TYPES.GET_USER_SUCCESS,
+    payload: { user },
+})
+
+export const getUserDataFailure = (error: string) => ({
+    type: ACTION_TYPES.GET_USER_FAILURE,
+    payload: { error },
+})
+
+export const getUserDataRequest = () => ({
+    type: ACTION_TYPES.GET_USER_REQUEST,
+})
+
 export type UserActions =
     | ReturnType<typeof setUserState>
     | ReturnType<typeof setUser>
     | ReturnType<typeof removeUser>
+    | ReturnType<typeof getUserDataSuccess>
+    | ReturnType<typeof getUserDataFailure>
+    | ReturnType<typeof getUserDataRequest>
