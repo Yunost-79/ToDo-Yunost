@@ -11,7 +11,7 @@ import FooterRemoveAllModal from './FooterRemoveAllModal/FooterRemoveAllModal'
 import TodoCounter from './TodoCounter/TodoCounter'
 
 const TodoFooter = () => {
-    const todosState = useSelector((state: RootState) => state.todos)
+    // const todosState = useSelector((state: RootState) => state.todos)
     const dispatch = useDispatch()
 
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
@@ -39,7 +39,7 @@ const TodoFooter = () => {
 
             <Button
                 customStyles={StyledRemoveButton}
-                disabled={todosState.todos?.length <= 0}
+                // disabled={todosState.todos?.length <= 0}
                 onClick={() => handleOpenModal()}
                 title="Empty todo list"
             >

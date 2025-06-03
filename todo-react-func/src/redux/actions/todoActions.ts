@@ -30,6 +30,20 @@ export const reorderTodos = (newOrder: Todo[]) => ({
     payload: { newOrder },
 })
 
+export const setPaginationPage = (page: number) => ({
+    type: ACTION_TYPES.SET_PAGINATION_PAGE,
+    payload: { page },
+})
+
+export const setIsEndTodos = (isEnd: boolean) => ({
+    type: ACTION_TYPES.SET_IS_END_TODOS,
+    payload: { isEnd },
+})
+
+export const resetTodoState = () => ({
+    type: ACTION_TYPES.RESET_TODO_STATE,
+})
+
 //asyncs
 
 export const getTodos = () => ({
@@ -65,6 +79,18 @@ export const changeStatus = (taskId: number, status: 'active' | 'completed') => 
     payload: { taskId, status },
 })
 
+export const setLoadingTodos = (
+    todos: Todo[],
+    options: { reset?: boolean; filter?: FilterStatus } = {},
+) => ({
+    type: ASYNC_ACTION_TYPES.ASYNC_SET_LOADING_TODOS,
+    payload: {
+        todos,
+        reset: options.reset || false,
+        filter: options.filter,
+    },
+})
+
 export type TodoActions =
     | ReturnType<typeof setTodoState>
     | ReturnType<typeof changeTodoIsEdit>
@@ -78,3 +104,7 @@ export type TodoActions =
     | ReturnType<typeof filteringTodosByStatus>
     | ReturnType<typeof changeTodoCounter>
     | ReturnType<typeof reorderTodos>
+    | ReturnType<typeof setLoadingTodos>
+    | ReturnType<typeof setPaginationPage>
+    | ReturnType<typeof setIsEndTodos>
+    | ReturnType<typeof resetTodoState>

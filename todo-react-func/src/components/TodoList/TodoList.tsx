@@ -1,3 +1,4 @@
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import autoScroll from 'dom-autoscroller'
 import { useEffect, useMemo, useRef } from 'react'
@@ -8,13 +9,13 @@ import { FILTER_STATUS } from '../../globalVariables/todoVariables'
 import { FilterStatus, Todo } from '../../globalVariables/typesVariables'
 import { handleSetListElement } from '../../helpers/helpers'
 import {
-    changeTodoCounter,
     closeAllTodosIsEdit,
     getTodos,
     reorderTodos,
+    setPaginationPage,
 } from '../../redux/actions/todoActions'
 import { RootState } from '../../redux/store'
-import EmptyBlock from './EmptyBlock/EmptyBlock'
+import MainLoader from '../UI/Loaders/MainLoader'
 import TodoItem from './TodoItem/TodoItem'
 
 type EmptyListItem = {
@@ -24,14 +25,15 @@ type EmptyListItem = {
 
 const TodoList = () => {
     const todoState = useSelector((state: RootState) => state.todos)
-    const { todos, filter } = todoState
+    const { todos, filter, isEnd, page } = todoState
     const dispatch = useDispatch()
     const todosRef = useRef<Todo[]>(todos)
     const containerRef = useRef<HTMLUListElement>(null)
+    const observerRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
         dispatch(getTodos())
-    }, [dispatch])
+    }, [dispatch, page, filter])
 
     const emptyList: EmptyListItem[] = [
         {
@@ -51,19 +53,6 @@ const TodoList = () => {
 
         return todos.filter((todo: Todo) => todo.status === filter)
     }, [todos, filter])
-
-    useEffect(() => {
-        dispatch(changeTodoCounter(currentTodos.length))
-    }, [currentTodos, dispatch])
-
-    // const todosForRender = useMemo(() => {
-    //     return currentTodos?.sort((a, b) => {
-    //         const dateA = new Date(a.createdAt).getTime()
-    //         const dateB = new Date(b.createdAt).getTime()
-
-    //         return dateB - dateA
-    //     })
-    // }, [currentTodos])
 
     const todosForRender = currentTodos
 
@@ -110,9 +99,30 @@ const TodoList = () => {
         }
     }, [dispatch, todosForRender.length])
 
-    if (!todosForRender || todosForRender.length === 0) {
-        return emptyListForRender ? <EmptyBlock title={emptyListForRender.title} /> : null
-    }
+    useEffect(() => {
+        const debounceTimer = setTimeout(() => {
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    if (entries[0].isIntersecting && !isEnd) {
+                        dispatch(setPaginationPage(page + 1))
+                    }
+                },
+                { threshold: 0.5 },
+            )
+
+            if (observerRef.current) observer.observe(observerRef.current)
+
+            return () => {
+                if (observerRef.current) observer.unobserve(observerRef.current)
+            }
+        }, 300)
+
+        return () => clearTimeout(debounceTimer)
+    }, [dispatch, page, isEnd])
+
+    // if (!todosForRender || todosForRender.length === 0) {
+    //     return emptyListForRender ? <EmptyBlock title={emptyListForRender.title} /> : null
+    // }
     return (
         <StyledUl ref={containerRef}>
             {todosForRender?.map((todo) => (
@@ -124,6 +134,12 @@ const TodoList = () => {
                     <TodoItem todo={todo} />
                 </DraggableItem>
             ))}
+
+            {!isEnd && (
+                <StyledLazyLoader ref={observerRef} style={{ height: '5px' }}>
+                    <MainLoader customStyles={StyledMainLoader} />
+                </StyledLazyLoader>
+            )}
         </StyledUl>
     )
 }
@@ -159,6 +175,16 @@ const DraggableItem = styled.div`
         transform: scale(1.02);
         z-index: 10;
     }
+`
+
+const StyledLazyLoader = styled.div`
+    margin: 20px auto;
+`
+
+const StyledMainLoader = css`
+    width: 20px;
+    border: 3px solid ${COLORS.LIGHT_GREY};
+    border-right-color: ${COLORS.HARD_GREY};
 `
 
 export default TodoList

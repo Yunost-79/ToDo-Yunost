@@ -1,21 +1,56 @@
 // const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
 
 import { AxiosError, AxiosResponse } from 'axios'
-import { call, put, takeEvery } from 'redux-saga/effects'
+import { call, put, select, takeEvery } from 'redux-saga/effects'
 import instance from '../../API/axiosInstance'
 import { Todo } from '../../globalVariables/typesVariables'
+import { removeItem } from '../../utils/localStore/localStore'
 import { ASYNC_ACTION_TYPES, AsyncActionType } from '../actions/actionTypes'
-import { setTodos } from '../actions/todoActions'
+import { changeTodoCounter, setIsEndTodos, setLoadingTodos } from '../actions/todoActions'
+import { RootState } from '../store'
+
+// function* asyncGetTodos() {
+//     try {
+//         const response: AxiosResponse = yield call(() => instance.get('/tasks'))
+
+//         if (response.data) {
+//             const todos = response.data.tasks.map((task: Todo) => {
+//                 return { ...task, isEdit: false }
+//             })
+//             yield put(setTodos(todos))
+//         }
+//     } catch (err) {
+//         const e = err as AxiosError
+//         console.error('Error in asyncGetTodos', e)
+//     }
+// }
 
 function* asyncGetTodos() {
+    let { page, filter } = yield select((state: RootState) => state.todos)
+
     try {
-        const response: AxiosResponse = yield call(() => instance.get('/tasks'))
+        const limit = 10
+
+
+
+        console.log('page in asyncGetTodos', page, filter)
+
+        const response: AxiosResponse = yield call(() =>
+            instance.post(`/tasks/limit/${limit}/page/${page}`, { status: filter }),
+        )
+
+        console.log('response', response.data)
 
         if (response.data) {
             const todos = response.data.tasks.map((task: Todo) => {
                 return { ...task, isEdit: false }
             })
-            yield put(setTodos(todos))
+
+            yield put(setIsEndTodos(response.data.isEnd))
+
+            yield put(setLoadingTodos(todos))
+
+            yield put(changeTodoCounter(response.data.count))
         }
     } catch (err) {
         const e = err as AxiosError

@@ -15,6 +15,8 @@ export type TodoState = {
     todos: Todo[]
     counter: 0
     filter: FilterStatus
+    page: number
+    isEnd: boolean
 }
 
 export type Warning = {
