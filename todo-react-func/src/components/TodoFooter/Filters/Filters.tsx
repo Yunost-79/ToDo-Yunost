@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../../globalVariables/styledVariables'
 import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
 import { FilterStatus } from '../../../globalVariables/typesVariables'
+import { setFilter } from '../../../redux/actions/todoActions'
 import { RootState } from '../../../redux/store'
 
 type FiltersForRender = {
@@ -12,7 +13,7 @@ type FiltersForRender = {
 
 const Filters = () => {
     const dispatch = useDispatch()
-    // const { filter } = useSelector((state: RootState) => state.todos)
+    const { filter } = useSelector((state: RootState) => state.todos)
 
     const filtersForRender: FiltersForRender[] = [
         { text: 'All', status: FILTER_STATUS.all },
@@ -21,7 +22,7 @@ const Filters = () => {
     ]
 
     const handleFilteringTodos = (status: FilterStatus) => {
-        // dispatch(filteringTodosByStatus(status))
+        dispatch(setFilter(status))
     }
 
     return (
@@ -29,7 +30,7 @@ const Filters = () => {
             {filtersForRender.map((filterItem: FiltersForRender, index: number) => (
                 <FilterSpan
                     key={index}
-                    // className={filterItem.status === filter ? 'active' : ''}
+                    className={filterItem.status === filter ? 'active' : ''}
                     onClick={() => handleFilteringTodos(filterItem.status)}
                 >
                     {filterItem.text}

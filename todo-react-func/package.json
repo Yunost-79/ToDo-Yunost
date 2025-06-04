@@ -40,7 +40,7 @@
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
-        "format": "prettier --write src/**/*.{js,jsx,json,css}"
+        "format": "prettier --write src/**/*.{ts,tsx,js,jsx,json,css}"
     },
     "eslintConfig": {
         "extends": [

@@ -11,7 +11,6 @@ const getTasksWithOffset = async (ctx: Context) => {
         }
         const { userId } = ctx.state.user as { userId: number }
 
-        console.log('offset', offset, status)
         const numberOffset = parseInt(offset) || 0
         const limit = 5
 
@@ -31,9 +30,8 @@ const getTasksWithOffset = async (ctx: Context) => {
 
         ctx.status = STATUS_CODES.OK
         ctx.body = {
-            message: `Tasks received: ${tasks.length} for userId: ${userId}`,
+            message: `Tasks received`,
             count: totalCount,
-            limit,
             isEnd: tasks.length < limit,
             tasks,
         }

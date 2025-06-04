@@ -3,14 +3,14 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../../redux/store'
 
 const TodoHeader = () => {
-    const { avatar } = useSelector((state: RootState) => state.user)
+    const { avatar, username } = useSelector((state: RootState) => state.user)
 
     return (
         <StyledTodoHeader>
             <H1>TODO LIST</H1>
             {avatar && (
                 <UserData>
-                    {/* <UserName>{username}</UserName> */}
+                    <UserName>{username}</UserName>
                     <UserAvatar src={avatar} />
                 </UserData>
             )}
@@ -39,9 +39,9 @@ const UserData = styled.div`
     gap: 10px;
 `
 
-// const UserName = styled.span`
-//     font-size: 18px;
-// `
+const UserName = styled.span`
+    font-size: 18px;
+`
 
 const UserAvatar = styled.img`
     width: 30px;

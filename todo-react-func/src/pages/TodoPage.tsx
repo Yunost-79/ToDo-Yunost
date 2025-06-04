@@ -34,7 +34,7 @@ const StyledTodoContainer = styled.div`
     justify-content: center;
     gap: 18px;
     background-color: ${COLORS.WHITE};
-    width: 50%;
+    width: 60%;
     padding: 24px;
     border-radius: 8px;
 

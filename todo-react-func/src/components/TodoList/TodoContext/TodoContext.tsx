@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { COLORS } from '../../../globalVariables/styledVariables'
 import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
 import { Todo } from '../../../globalVariables/typesVariables'
+import { closeAllTodosIsEdit, updateTodoRequest } from '../../../redux/actions/todoActions'
 import ChangeStatusRadioButton from '../../UI/RadioButtons/ChangeStatusRadioButton'
 import ContextEdit from './ContextEdit/ContextEdit'
 
@@ -21,15 +22,15 @@ const TodoContext: FC<TodoContextProps> = ({ todo, toggleTodoStatus, handleTodoI
     const handleSaveEdit = (taskId: number, value: string) => {
         if (value.trim() === '') {
             setEditInputValue(todo.value)
-            // dispatch(closeAllTodosIsEdit())
+            dispatch(closeAllTodosIsEdit())
             return
         }
 
-        // dispatch(editTodo(taskId, value))
+        dispatch(updateTodoRequest(taskId, { value }))
     }
 
     const handleCloseEdit = () => {
-        // dispatch(closeAllTodosIsEdit())
+        dispatch(closeAllTodosIsEdit())
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,14 +1,17 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
+import autoScroll from 'dom-autoscroller'
+import dragula from 'dragula'
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../globalVariables/styledVariables'
 import { FILTER_STATUS } from '../../globalVariables/todoVariables'
-import { FilterStatus } from '../../globalVariables/typesVariables'
-import { getTodosRequest } from '../../redux/actions/todoActions'
-import { getUserDataRequest } from '../../redux/actions/userActions'
+import { FilterStatus, Todo } from '../../globalVariables/typesVariables'
+import { handleSetListElement } from '../../helpers/helpers'
+import { closeAllTodosIsEdit, getTodosRequest, reorderTodos } from '../../redux/actions/todoActions'
 import { RootState } from '../../redux/store'
 import MainLoader from '../UI/Loaders/MainLoader'
+import EmptyBlock from './EmptyBlock/EmptyBlock'
 import TodoItem from './TodoItem/TodoItem'
 
 type EmptyListItem = {
@@ -17,19 +20,16 @@ type EmptyListItem = {
 }
 
 const TodoList = () => {
+    const dispatch = useDispatch()
     const { todos, filter, isEnd, isLoading } = useSelector((state: RootState) => state.todos)
 
-    // const todoState = useSelector((state: RootState) => state.todos)
-    // const { todos, filter, isEnd, page } = todoState
-    const dispatch = useDispatch()
-    // const todosRef = useRef<Todo[]>(todos)
+    const todosRef = useRef<Todo[]>(todos)
     const containerRef = useRef<HTMLUListElement>(null)
     const loaderRef = useRef<HTMLDivElement>(null)
 
-    useEffect(() => {
-        dispatch(getUserDataRequest())
-        // dispatch(getTodosRequest())
-    }, [dispatch])
+    // useEffect(() => {
+    //     dispatch(getUserDataRequest())
+    // }, [dispatch])
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -48,112 +48,72 @@ const TodoList = () => {
         return () => observer.disconnect()
     }, [filter, isLoading, isEnd, dispatch])
 
-    // const emptyList: EmptyListItem[] = [
-    //     {
-    //         status: FILTER_STATUS.active,
-    //         title: 'Active todos are empty',
-    //     },
-    //     {
-    //         status: FILTER_STATUS.completed,
-    //         title: 'Completed tasks are empty',
-    //     },
-    // ]
+    useEffect(() => {
+        todosRef.current = todos
+    }, [todos])
 
-    // const emptyListForRender = handleSetListElement(emptyList, todoState)
+    useEffect(() => {
+        if (!containerRef.current) return
 
-    // const currentTodos: Todo[] = useMemo(() => {
-    //     if (filter === FILTER_STATUS.all) return todos
+        const drake = dragula([containerRef.current], {
+            moves: (el, source, handle) => {
+                return (
+                    handle?.classList.contains('drag-handle') ||
+                    handle?.closest('.drag-handle') !== null
+                )
+            },
+        })
 
-    //     return todos.filter((todo: Todo) => todo.status === filter)
-    // }, [todos, filter])
+        const scroll = autoScroll([containerRef.current], {
+            margin: 50,
+            maxSpeed: 20,
+            scrollWhenOutside: false,
+            autoScroll: () => drake.dragging,
+        })
 
-    // const todosForRender = currentTodos
+        drake.on('drop', (el, target) => {
+            if (!target) return
 
-    // useEffect(() => {
-    //     todosRef.current = todos
-    // }, [todos])
+            const newTodosOrder = Array.from(target.children)
+                .map((child) => {
+                    const todoId = child.getAttribute('data-id')
+                    return todosRef.current.find((todo) => todo.taskId === Number(todoId))
+                })
+                .filter(Boolean) as Todo[]
 
-    // useEffect(() => {
-    //     if (!containerRef.current) return
+            dispatch(reorderTodos(newTodosOrder))
+            dispatch(closeAllTodosIsEdit())
+        })
 
-    //     const drake = dragula([containerRef.current], {
-    //         moves: (el, source, handle) => {
-    //             return (
-    //                 handle?.classList.contains('drag-handle') ||
-    //                 handle?.closest('.drag-handle') !== null
-    //             )
-    //         },
-    //     })
+        return () => {
+            drake.destroy()
+            scroll.destroy()
+        }
+    }, [dispatch, todos.length, filter])
 
-    //     const scroll = autoScroll([containerRef.current], {
-    //         margin: 50,
-    //         maxSpeed: 20,
-    //         scrollWhenOutside: false,
-    //         autoScroll: () => drake.dragging,
-    //     })
+    const emptyList: EmptyListItem[] = [
+        {
+            status: FILTER_STATUS.all,
+            title: 'Your todo list is empty',
+        },
+        {
+            status: FILTER_STATUS.active,
+            title: 'Active todos are empty',
+        },
+        {
+            status: FILTER_STATUS.completed,
+            title: 'Completed tasks are empty',
+        },
+    ]
 
-    //     drake.on('drop', (el, target) => {
-    //         if (!target) return
+    const emptyListForRender = handleSetListElement(emptyList, filter)
 
-    //         const newTodosOrder = Array.from(target.children)
-    //             .map((child) => {
-    //                 const todoId = child.getAttribute('data-id')
-    //                 return todosRef.current.find((todo) => todo.taskId === Number(todoId))
-    //             })
-    //             .filter(Boolean) as Todo[]
-
-    //         dispatch(reorderTodos(newTodosOrder))
-    //         dispatch(closeAllTodosIsEdit())
-    //     })
-
-    //     return () => {
-    //         drake.destroy()
-    //         scroll.destroy()
-    //     }
-    // }, [dispatch, todosForRender.length])
-
-    // useEffect(() => {
-    //     const debounceTimer = setTimeout(() => {
-    //         const observer = new IntersectionObserver(
-    //             (entries) => {
-    //                 if (entries[0].isIntersecting && !isEnd) {
-    //                     dispatch(setPaginationPage(page + 1))
-    //                 }
-    //             },
-    //             { threshold: 0.5 },
-    //         )
-
-    //         if (observerRef.current) observer.observe(observerRef.current)
-
-    //         return () => {
-    //             if (observerRef.current) observer.unobserve(observerRef.current)
-    //         }
-    //     }, 300)
-
-    //     return () => clearTimeout(debounceTimer)
-    // }, [dispatch, page, isEnd])
-
-    // // if (!todosForRender || todosForRender.length === 0) {
-    // //     return emptyListForRender ? <EmptyBlock title={emptyListForRender.title} /> : null
-    // // }
+    if (todos.length === 0 && isEnd && !isLoading) {
+        return emptyListForRender ? <EmptyBlock title={emptyListForRender.title} /> : null
+    }
     return (
         <StyledUl ref={containerRef}>
-            {/* {todosForRender?.map((todo) => (
-                <DraggableItem
-                    key={todo.taskId}
-                    data-id={todo.taskId}
-                    className={todo.status === FILTER_STATUS.completed ? 'completed' : ''}
-                >
-                    <TodoItem todo={todo} />
-                </DraggableItem>
-            ))}
-
-            {!isEnd && (
-                <StyledLazyLoader ref={observerRef} style={{ height: '5px' }}>
-                    <MainLoader customStyles={StyledMainLoader} />
-                </StyledLazyLoader>
-            )} */}
-            {todos?.map((todo) => (
+            {todos?.map((todo: Todo) => (
                 <DraggableItem
                     key={todo.taskId}
                     data-id={todo.taskId}

@@ -4,12 +4,10 @@ import { getItem } from '../../../utils/localStore/localStore'
 import { ACTION_TYPES } from '../../actions/actionTypes'
 import { TodoActions } from '../../actions/todoActions'
 
-const filterStatus = getItem('filter') || FILTER_STATUS.all
-
 const initTodoState: TodoState = {
     todos: [],
     counter: 0,
-    filter: filterStatus,
+    filter: getItem('filter') || FILTER_STATUS.all,
     page: 1,
     isEnd: false,
     isLoading: false,
@@ -25,12 +23,34 @@ const todoReducer = (state: TodoState = initTodoState, action: TodoActions) => {
             }
 
         case ACTION_TYPES.SET_FILTER:
+            const filter = action.payload.filter
             return {
                 ...state,
                 page: 1,
                 isEnd: false,
-                filter: action.payload.filter,
+                filter: filter,
+                todos: state.todos.filter((todo) => todo.status === filter),
             }
+
+        case ACTION_TYPES.REORDER_TODOS:
+            return { ...state, todos: action.payload.reorderedTodos }
+
+        case ACTION_TYPES.CHANGE_TODO_IS_EDIT:
+            const changedTodos = state.todos.map((todo) => {
+                if (todo.taskId === action.payload.taskId) {
+                    return { ...todo, isEdit: true }
+                }
+                return { ...todo, isEdit: false }
+            })
+            return { ...state, todos: changedTodos }
+
+        case ACTION_TYPES.CLOSE_ALL_TODOS_IS_EDIT:
+            const closeAllTodosIsEdit = state.todos.map((todo) => {
+                return { ...todo, isEdit: false }
+            })
+            return { ...state, todos: closeAllTodosIsEdit }
+
+        //Reducers for saga
 
         case ACTION_TYPES.GET_TODOS_REQUEST:
             return {
@@ -44,8 +64,9 @@ const todoReducer = (state: TodoState = initTodoState, action: TodoActions) => {
                 ...state,
                 todos: [...state.todos, ...action.payload.newTodos],
                 isEnd: action.payload.isEnd,
+                counter: action.payload.counter,
                 isLoading: false,
-                // counter: state.counter + action.payload.newTodos.length,
+                error: null,
             }
 
         case ACTION_TYPES.GET_TODOS_FAILURE:
@@ -62,9 +83,14 @@ const todoReducer = (state: TodoState = initTodoState, action: TodoActions) => {
                 error: null,
             }
         case ACTION_TYPES.ADD_TODO_SUCCESS:
+            const newTodo = action.payload.todo
+            const shouldShow = state.filter === FILTER_STATUS.all || newTodo.status === state.filter
             return {
                 ...state,
-                todos: [action.payload.todo, ...state.todos],
+                counter: state.counter + 1,
+                todos: shouldShow ? [newTodo, ...state.todos] : state.todos,
+                isLoading: false,
+                error: null,
             }
 
         case ACTION_TYPES.ADD_TODO_FAILURE:
@@ -82,15 +108,45 @@ const todoReducer = (state: TodoState = initTodoState, action: TodoActions) => {
             }
         case ACTION_TYPES.REMOVE_TODO_SUCCESS:
             const taskId = action.payload.taskId
-            if(taskId === 'all'){
-                return{ ...initTodoState}    
+            if (taskId === 'all') {
+                return { ...initTodoState }
             }
             return {
                 ...state,
+                counter: state.counter - 1,
                 todos: state.todos.filter((todo) => todo.taskId !== taskId),
+                isLoading: false,
+                error: null,
             }
 
         case ACTION_TYPES.REMOVE_TODO_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                error: action,
+            }
+
+        case ACTION_TYPES.UPDATE_TODO_REQUEST:
+            return {
+                ...state,
+                isLoading: true,
+                error: null,
+            }
+
+        case ACTION_TYPES.UPDATE_TODO_SUCCESS:
+            const updatedTodo = action.payload.todo
+            return {
+                ...state,
+                todos: state.todos.map((todo) =>
+                    todo.taskId === updatedTodo.taskId
+                        ? { ...todo, ...updatedTodo, isEdit: false }
+                        : todo,
+                ),
+                isLoading: false,
+                error: null,
+            }
+
+        case ACTION_TYPES.UPDATE_TODO_FAILURE:
             return {
                 ...state,
                 isLoading: false,
