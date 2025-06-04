@@ -1,4 +1,4 @@
-import { FilterStatus } from "../globalVariables/typesVariables"
+import { FilterStatus } from '../globalVariables/typesVariables'
 
 export const handleSetListElement = <T extends { status: string }>(
     renderList: T[],

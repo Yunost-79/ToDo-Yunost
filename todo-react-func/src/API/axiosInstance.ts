@@ -4,7 +4,6 @@ import { PATHS } from '../globalVariables/pathsVariables'
 const instance = axios.create({
     baseURL: 'http://localhost:4000',
     withCredentials: true,
-
 })
 
 instance.interceptors.response.use(

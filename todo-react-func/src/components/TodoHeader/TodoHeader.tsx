@@ -6,12 +6,13 @@ import { RootState } from '../../redux/store'
 
 const TodoHeader = () => {
     const { avatar, username } = useSelector((state: RootState) => state.user)
+
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getUserDataRequest())
-    }, [])
-    
+    }, [dispatch])
+
     return (
         <StyledTodoHeader>
             <H1>TODO LIST</H1>

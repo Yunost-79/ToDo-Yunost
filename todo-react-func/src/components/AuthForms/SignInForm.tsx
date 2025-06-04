@@ -46,7 +46,6 @@ const SignInForm = () => {
         }
     }, [isSignedIn, token, navigate])
 
-
     const formik = useFormik({
         initialValues: {
             username: '',

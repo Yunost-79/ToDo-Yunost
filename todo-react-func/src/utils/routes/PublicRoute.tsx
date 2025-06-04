@@ -5,7 +5,6 @@ import { getAccessToken } from '../cookies/cookies'
 const PublicRoutes = () => {
     const token = getAccessToken()
 
-
     return token ? <Navigate to={PATHS.MAIN} replace /> : <Outlet />
 }
 

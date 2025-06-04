@@ -5,4 +5,4 @@ declare module '*.svg' {
     export default src
 }
 
-declare module 'dom-autoscroller';
+declare module 'dom-autoscroller'

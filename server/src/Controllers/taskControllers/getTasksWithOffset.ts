@@ -12,7 +12,7 @@ const getTasksWithOffset = async (ctx: Context) => {
         const { userId } = ctx.state.user as { userId: number }
 
         const numberOffset = parseInt(offset) || 0
-        const limit = 5
+        const limit = 15
 
         const whereRule = {
             userId,
