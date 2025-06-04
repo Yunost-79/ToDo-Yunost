@@ -12,7 +12,7 @@ type CounterTitle = {
 }
 
 const TodoCounter = () => {
-    const todoState = useSelector((state: RootState) => state.todos)
+    const { counter, filter } = useSelector((state: RootState) => state.todos)
 
     const counterTitleBlock: CounterTitle[] = [
         { title: 'Todos:', status: FILTER_STATUS.all },
@@ -20,11 +20,11 @@ const TodoCounter = () => {
         { title: 'Completed todos:', status: FILTER_STATUS.completed },
     ]
 
-    const counterTitle = handleSetListElement(counterTitleBlock, todoState)
+    const counterTitle = handleSetListElement(counterTitleBlock, filter)
     return (
         <StyledTodoCounter>
             <CounterSpan>{counterTitle?.title}</CounterSpan>
-            <CounterSpan>{todoState.counter}</CounterSpan>
+            <CounterSpan>{counter}</CounterSpan>
         </StyledTodoCounter>
     )
 }

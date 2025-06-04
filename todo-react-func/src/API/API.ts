@@ -9,5 +9,4 @@ const api = async (path: string, option: object) => {
     return response.data
 }
 
-
 export default api

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../../globalVariables/styledVariables'
 import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
 import { FilterStatus } from '../../../globalVariables/typesVariables'
-import { filteringTodosByStatus } from '../../../redux/actions/todoActions'
+import { setFilter } from '../../../redux/actions/todoActions'
 import { RootState } from '../../../redux/store'
 
 type FiltersForRender = {
@@ -22,7 +22,7 @@ const Filters = () => {
     ]
 
     const handleFilteringTodos = (status: FilterStatus) => {
-        dispatch(filteringTodosByStatus(status))
+        dispatch(setFilter(status))
     }
 
     return (

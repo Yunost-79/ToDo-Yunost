@@ -3,21 +3,36 @@ import logger from 'node-color-log'
 import { Task } from '../../Models/TaskModel'
 import { STATUS_CODES } from '../../vars/statusCodesVars'
 
-const getTasks = async (ctx: Context) => {
+const getTasksWithOffset = async (ctx: Context) => {
     try {
+        const { offset, status } = ctx.query as {
+            offset: string
+            status: 'all' | 'active' | 'completed'
+        }
         const { userId } = ctx.state.user as { userId: number }
 
+        const numberOffset = parseInt(offset) || 0
+        const limit = 15
+
+        const whereRule = {
+            userId,
+            ...(status !== 'all' ? { status } : {}),
+        }
+
         const tasks = await Task.findAll({
-            where: {
-                userId,
-            },
+            where: whereRule,
+            limit,
+            offset: numberOffset,
             order: [['createdAt', 'DESC']],
         })
 
+        const totalCount = await Task.count({ where: whereRule })
+
         ctx.status = STATUS_CODES.OK
         ctx.body = {
-            message: `Tasks received: ${tasks.length} for userId: ${userId}`,
-            count: tasks.length,
+            message: `Tasks received`,
+            count: totalCount,
+            isEnd: tasks.length < limit,
             tasks,
         }
 
@@ -34,4 +49,4 @@ const getTasks = async (ctx: Context) => {
     }
 }
 
-export default getTasks
+export default getTasksWithOffset

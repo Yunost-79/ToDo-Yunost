@@ -14,6 +14,7 @@ import {
     signUpSuccess,
 } from '../actions/authActions'
 import { setUser } from '../actions/userActions'
+import { resetTodos } from '../actions/todoActions'
 
 function* asyncSignInUser(action: { type: ActionType; payload: { credentials: SignInUserData } }) {
     try {
@@ -57,8 +58,8 @@ function* asyncSignOutUser() {
 
         if (response) {
             yield put(signOutSuccess())
-            yield removeItem('todoState')
-            yield removeItem('userState')
+            yield removeItem('filter')
+            yield put(resetTodos())
         }
     } catch (err) {
         const e = err as AxiosError | any

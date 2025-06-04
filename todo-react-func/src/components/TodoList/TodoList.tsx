@@ -1,19 +1,16 @@
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import autoScroll from 'dom-autoscroller'
-import { useEffect, useMemo, useRef } from 'react'
-import dragula from 'react-dragula'
+import dragula from 'dragula'
+import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../globalVariables/styledVariables'
 import { FILTER_STATUS } from '../../globalVariables/todoVariables'
 import { FilterStatus, Todo } from '../../globalVariables/typesVariables'
 import { handleSetListElement } from '../../helpers/helpers'
-import {
-    changeTodoCounter,
-    closeAllTodosIsEdit,
-    getTodos,
-    reorderTodos,
-} from '../../redux/actions/todoActions'
+import { closeAllTodosIsEdit, getTodosRequest, reorderTodos } from '../../redux/actions/todoActions'
 import { RootState } from '../../redux/store'
+import MainLoader from '../UI/Loaders/MainLoader'
 import EmptyBlock from './EmptyBlock/EmptyBlock'
 import TodoItem from './TodoItem/TodoItem'
 
@@ -23,49 +20,33 @@ type EmptyListItem = {
 }
 
 const TodoList = () => {
-    const todoState = useSelector((state: RootState) => state.todos)
-    const { todos, filter } = todoState
     const dispatch = useDispatch()
+    const { todos, filter, isEnd, isLoading } = useSelector((state: RootState) => state.todos)
+
     const todosRef = useRef<Todo[]>(todos)
     const containerRef = useRef<HTMLUListElement>(null)
+    const loaderRef = useRef<HTMLDivElement>(null)
+
+    // useEffect(() => {
+    //     dispatch(getUserDataRequest())
+    // }, [dispatch])
 
     useEffect(() => {
-        dispatch(getTodos())
-    }, [dispatch])
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !isLoading && !isEnd) {
+                    dispatch(getTodosRequest())
+                }
+            },
+            { threshold: 0.1 },
+        )
 
-    const emptyList: EmptyListItem[] = [
-        {
-            status: FILTER_STATUS.active,
-            title: 'Active todos are empty',
-        },
-        {
-            status: FILTER_STATUS.completed,
-            title: 'Completed tasks are empty',
-        },
-    ]
+        if (loaderRef.current) {
+            observer.observe(loaderRef.current)
+        }
 
-    const emptyListForRender = handleSetListElement(emptyList, todoState)
-
-    const currentTodos: Todo[] = useMemo(() => {
-        if (filter === FILTER_STATUS.all) return todos
-
-        return todos.filter((todo: Todo) => todo.status === filter)
-    }, [todos, filter])
-
-    useEffect(() => {
-        dispatch(changeTodoCounter(currentTodos.length))
-    }, [currentTodos, dispatch])
-
-    // const todosForRender = useMemo(() => {
-    //     return currentTodos?.sort((a, b) => {
-    //         const dateA = new Date(a.createdAt).getTime()
-    //         const dateB = new Date(b.createdAt).getTime()
-
-    //         return dateB - dateA
-    //     })
-    // }, [currentTodos])
-
-    const todosForRender = currentTodos
+        return () => observer.disconnect()
+    }, [filter, isLoading, isEnd, dispatch])
 
     useEffect(() => {
         todosRef.current = todos
@@ -108,14 +89,31 @@ const TodoList = () => {
             drake.destroy()
             scroll.destroy()
         }
-    }, [dispatch, todosForRender.length])
+    }, [dispatch, todos.length, filter])
 
-    if (!todosForRender || todosForRender.length === 0) {
+    const emptyList: EmptyListItem[] = [
+        {
+            status: FILTER_STATUS.all,
+            title: 'Your todo list is empty',
+        },
+        {
+            status: FILTER_STATUS.active,
+            title: 'Active todos are empty',
+        },
+        {
+            status: FILTER_STATUS.completed,
+            title: 'Completed tasks are empty',
+        },
+    ]
+
+    const emptyListForRender = handleSetListElement(emptyList, filter)
+
+    if (todos.length === 0 && isEnd && !isLoading) {
         return emptyListForRender ? <EmptyBlock title={emptyListForRender.title} /> : null
     }
     return (
         <StyledUl ref={containerRef}>
-            {todosForRender?.map((todo) => (
+            {todos?.map((todo: Todo) => (
                 <DraggableItem
                     key={todo.taskId}
                     data-id={todo.taskId}
@@ -124,6 +122,12 @@ const TodoList = () => {
                     <TodoItem todo={todo} />
                 </DraggableItem>
             ))}
+
+            {!isEnd && (
+                <StyledLazyLoader ref={loaderRef} style={{ height: '5px' }}>
+                    <MainLoader customStyles={StyledMainLoader} />
+                </StyledLazyLoader>
+            )}
         </StyledUl>
     )
 }
@@ -159,6 +163,16 @@ const DraggableItem = styled.div`
         transform: scale(1.02);
         z-index: 10;
     }
+`
+
+const StyledLazyLoader = styled.div`
+    margin: 20px auto;
+`
+
+const StyledMainLoader = css`
+    width: 20px;
+    border: 3px solid ${COLORS.LIGHT_GREY};
+    border-right-color: ${COLORS.HARD_GREY};
 `
 
 export default TodoList

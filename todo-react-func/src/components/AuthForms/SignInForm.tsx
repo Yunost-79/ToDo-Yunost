@@ -46,7 +46,6 @@ const SignInForm = () => {
         }
     }, [isSignedIn, token, navigate])
 
-
     const formik = useFormik({
         initialValues: {
             username: '',
@@ -68,8 +67,6 @@ const SignInForm = () => {
                     navigate(PATHS.MAIN)
                 }
             } catch (e) {
-                // navigate(PATHS.SIGN_UP)
-
                 const err = e as Error
                 console.error('Error in sign in page', err)
             }

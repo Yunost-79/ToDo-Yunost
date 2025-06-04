@@ -46,7 +46,6 @@ const globalStyles = css`
         font-family: 'Helvetica', Sans-Serif;
         margin: 0;
         padding: 0;
-        overflow: auto;
 
         .gu-mirror {
             display: none;

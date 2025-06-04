@@ -5,14 +5,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { COLORS } from '../../globalVariables/styledVariables'
 import { Warning } from '../../globalVariables/typesVariables'
 import { horizontalShake } from '../../helpers/animations'
-import { addTodo } from '../../redux/actions/todoActions'
+import { addTodoRequest } from '../../redux/actions/todoActions'
 import { RootState } from '../../redux/store'
 import Button from '../UI/Buttons/Button'
 import Input from '../UI/Inputs/Input'
 
 const TodoAddInputBlock = () => {
     const dispatch = useDispatch()
-    const todoState = useSelector((state: RootState) => state.todos)
+    const { todos, filter } = useSelector((state: RootState) => state.todos)
 
     const [addInputValue, setAddInputValue] = useState<string>('')
     const [warning, setWarning] = useState<Warning>({ isWarning: false, warningText: '' })
@@ -30,15 +30,14 @@ const TodoAddInputBlock = () => {
             return
         }
 
-        // dispatch(addTodo(value))
-        dispatch(addTodo(value))
+        dispatch(addTodoRequest(value))
         setWarning({ isWarning: false, warningText: '' })
         setAddInputValue('')
     }
 
     useEffect(() => {
         setWarning({ isWarning: false, warningText: '' })
-    }, [todoState.filter, todoState.todos])
+    }, [todos, filter])
 
     return (
         <StyledTodoAddInputBlock>

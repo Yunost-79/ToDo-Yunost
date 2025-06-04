@@ -9,6 +9,8 @@ const initUserState: UserState = {
     userId: null,
     username: null,
     avatar: null,
+    isLoading: false,
+    error: null,
 }
 
 const userReducer = (state: UserState = initUserState, action: UserActions) => {
@@ -21,6 +23,30 @@ const userReducer = (state: UserState = initUserState, action: UserActions) => {
 
         case ACTION_TYPES.REMOVE_USER:
             return removeUserReducer(state, action, initUserState)
+
+        case ACTION_TYPES.GET_USER_REQUEST:
+            return {
+                ...state,
+                isLoading: true,
+                error: null,
+            }
+
+        case ACTION_TYPES.GET_USER_SUCCESS:
+            return {
+                ...state,
+                userId: action.payload.user.userId,
+                username: action.payload.user.username,
+                avatar: action.payload.user.avatar,
+                isLoading: false,
+                error: null,
+            }
+
+        case ACTION_TYPES.GET_USER_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+            }
 
         default:
             return state

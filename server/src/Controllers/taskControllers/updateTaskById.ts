@@ -4,30 +4,24 @@ import { Task } from '../../Models/TaskModel'
 import { STATUS_CODES } from '../../vars/statusCodesVars'
 import { FILTER_STATUS, FilterStatus } from '../../vars/tasksVars'
 
-type UpdateTaskReqBody = {
+type Updates = {
     value?: string
-    status?: FilterStatus
+    status?: 'active' | 'completed'
 }
 
 const updateTaskById = async (ctx: Context) => {
     try {
-        const { id: taskId } = ctx.params as { id: number }
-        const { value, status } = ctx.request.body as UpdateTaskReqBody
+        const { id } = ctx.params as { id: string }
+        const taskId = parseInt(id)
+        const { updates } = ctx.request.body as { updates: Updates }
 
         const { userId } = ctx.state.user as { userId: number }
 
         if (!taskId) ctx.throw(STATUS_CODES.BAD_REQUEST, 'Invalid or empty task id in params')
 
-        if (value === undefined && status === undefined)
-            ctx.throw(STATUS_CODES.BAD_REQUEST, 'No fields for update')
-        // if (!value || value.trim() === '')
-        //     ctx.throw(STATUS_CODES.BAD_REQUEST, 'Invalid or empty task value')
-
-        if (status && !Object.values(FILTER_STATUS).includes(status))
-            ctx.throw(
-                STATUS_CODES.BAD_REQUEST,
-                `Status must have one of these values: ${Object.values(FILTER_STATUS).join('; ')}`,
-            )
+        if (!updates || (updates.value === undefined && updates.status === undefined)) {
+            ctx.throw(STATUS_CODES.BAD_REQUEST, 'No update fields provided')
+        }
 
         const task = await Task.findOne({
             where: {
@@ -40,16 +34,21 @@ const updateTaskById = async (ctx: Context) => {
 
         const updateData: Partial<{ value: string; status: FilterStatus }> = {}
 
-        if (typeof value === 'string') {
-            const trimmed = value.trim()
-            if (trimmed === '') {
-                ctx.throw(STATUS_CODES.BAD_REQUEST, 'Value cannot be an empty string')
-            }
-            updateData.value = trimmed
+        if (typeof updates.value === 'string') {
+            const trimmedValue = updates.value.trim()
+            if (trimmedValue === '') ctx.throw(STATUS_CODES.BAD_REQUEST, 'Value cannot be empty')
+
+            updateData.value = trimmedValue
         }
 
-        if (status !== undefined) {
-            updateData.status = status
+        if (updates.status !== undefined) {
+            if (!Object.values(FILTER_STATUS).includes(updates.status)) {
+                ctx.throw(
+                    STATUS_CODES.BAD_REQUEST,
+                    `Status must be one of: ${Object.values(FILTER_STATUS).join(', ')}`,
+                )
+            }
+            updateData.status = updates.status
         }
 
         await Task.update(updateData, {

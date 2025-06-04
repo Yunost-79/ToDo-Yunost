@@ -10,13 +10,7 @@ const HideIcon: FC<HideIconProps> = ({ color = 'currentColor', error }) => {
     const currentColor = error ? COLORS.HARD_ALARM_RED : color
 
     return (
-        <svg
-            width="50px"
-            height="50px"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none">
             <g id="SVGRepo_bgCarrier" strokeWidth="0" />
 
             <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />

@@ -9,6 +9,7 @@ const requestReducer = (state: AuthState, action: AuthActions) => {
         case ACTION_TYPES.SIGN_OUT_REQUEST:
             return {
                 ...state,
+
                 isLoading: true,
                 error: null,
                 isSignedUp: false,
