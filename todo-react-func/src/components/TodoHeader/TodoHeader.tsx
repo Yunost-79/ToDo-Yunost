@@ -1,10 +1,17 @@
 import styled from '@emotion/styled'
-import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUserDataRequest } from '../../redux/actions/userActions'
 import { RootState } from '../../redux/store'
 
 const TodoHeader = () => {
     const { avatar, username } = useSelector((state: RootState) => state.user)
+    const dispatch = useDispatch()
 
+    useEffect(() => {
+        dispatch(getUserDataRequest())
+    }, [])
+    
     return (
         <StyledTodoHeader>
             <H1>TODO LIST</H1>

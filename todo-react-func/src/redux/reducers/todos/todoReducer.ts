@@ -135,13 +135,22 @@ const todoReducer = (state: TodoState = initTodoState, action: TodoActions) => {
 
         case ACTION_TYPES.UPDATE_TODO_SUCCESS:
             const updatedTodo = action.payload.todo
+            const filterStatus = state.filter
+
+            const isFilter =
+                filterStatus === FILTER_STATUS.all || updatedTodo.status === filterStatus
+
+            const updatedTodos = isFilter
+                ? state.todos.map((todo) =>
+                      todo.taskId === updatedTodo.taskId
+                          ? { ...todo, ...updatedTodo, isEdit: false }
+                          : todo,
+                  )
+                : state.todos.filter((todo) => todo.taskId !== updatedTodo.taskId)
+
             return {
                 ...state,
-                todos: state.todos.map((todo) =>
-                    todo.taskId === updatedTodo.taskId
-                        ? { ...todo, ...updatedTodo, isEdit: false }
-                        : todo,
-                ),
+                todos: updatedTodos,
                 isLoading: false,
                 error: null,
             }
