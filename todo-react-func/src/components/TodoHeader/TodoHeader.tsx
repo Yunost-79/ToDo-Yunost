@@ -49,6 +49,7 @@ const UserData = styled.div`
 
 const UserName = styled.span`
     font-size: 18px;
+    white-space: nowrap;
 `
 
 const UserAvatar = styled.img`

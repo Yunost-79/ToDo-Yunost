@@ -151,6 +151,7 @@ const todoReducer = (state: TodoState = initTodoState, action: TodoActions) => {
             return {
                 ...state,
                 todos: updatedTodos,
+                counter: isFilter ? state.counter : updatedTodos.length,
                 isLoading: false,
                 error: null,
             }
