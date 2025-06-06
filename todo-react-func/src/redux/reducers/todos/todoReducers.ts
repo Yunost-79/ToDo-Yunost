@@ -32,7 +32,6 @@ const todoReducers = (state: TodoState = initTodoState, action: TodoActions) => 
 
         case ACTION_TYPES.REORDER_TODOS:
             return reorderTodosReducers(state, action)
-        // return { ...state, todos: action.payload.reorderedTodos }
 
         case ACTION_TYPES.CHANGE_TODO_IS_EDIT:
         case ACTION_TYPES.CLOSE_ALL_TODOS_IS_EDIT:

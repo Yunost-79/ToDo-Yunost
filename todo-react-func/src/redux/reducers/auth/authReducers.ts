@@ -13,7 +13,7 @@ const initAuthState: AuthState = {
     isSignedUp: false,
 }
 
-const authReducers = (state: AuthState = initAuthState, action: AuthActions ) => {
+const authReducers = (state: AuthState = initAuthState, action: AuthActions) => {
     switch (action.type) {
         case ACTION_TYPES.SIGN_IN_REQUEST:
         case ACTION_TYPES.SIGN_IN_SUCCESS:
@@ -29,25 +29,6 @@ const authReducers = (state: AuthState = initAuthState, action: AuthActions ) =>
         case ACTION_TYPES.SIGN_OUT_SUCCESS:
         case ACTION_TYPES.SIGN_OUT_FAILURE:
             return signOutReducers(state, action)
-
-        // case ACTION_TYPES.SIGN_IN_REQUEST:
-        // case ACTION_TYPES.SIGN_UP_REQUEST:
-        // case ACTION_TYPES.SIGN_OUT_REQUEST:
-        //     return requestReducer(state, action)
-
-        // case ACTION_TYPES.SIGN_IN_SUCCESS:
-        //     return successSignInReducer(state, action)
-
-        // case ACTION_TYPES.SIGN_OUT_SUCCESS:
-        //     return successSignOutReducer(state, action)
-
-        // case ACTION_TYPES.SIGN_UP_SUCCESS:
-        //     return successSignUpReducer(state, action)
-
-        // case ACTION_TYPES.SIGN_IN_FAILURE:
-        // case ACTION_TYPES.SIGN_UP_FAILURE:
-        // case ACTION_TYPES.SIGN_OUT_FAILURE:
-        // return failureReducer(state, action)
 
         case ACTION_TYPES.REMOVE_AUTH_ERROR_AND_LOADING:
             return removeAuthErrorAndLoadingReducer(state, action)
