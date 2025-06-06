@@ -15,6 +15,8 @@ export const removeUser = () => ({
     type: ACTION_TYPES.REMOVE_USER,
 })
 
+//ACTION SECTION: get user data actions
+
 export const getUserDataSuccess = (user: UserState) => ({
     type: ACTION_TYPES.GET_USER_SUCCESS,
     payload: { user },

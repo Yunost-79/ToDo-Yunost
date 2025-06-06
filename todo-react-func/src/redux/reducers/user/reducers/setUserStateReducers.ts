@@ -2,14 +2,16 @@ import { UserState } from '../../../../globalVariables/typesVariables'
 import { ACTION_TYPES } from '../../../actions/actionTypes'
 import { UserActions } from '../../../actions/userActions'
 
-const removeUserReducer = (state: UserState, action: UserActions, initUserState: UserState) => {
+const setUserStateReducers = (state: UserState, action: UserActions) => {
     switch (action.type) {
-        case ACTION_TYPES.REMOVE_USER:
-            return initUserState
-
+        case ACTION_TYPES.SET_USER_STATE:
+            return {
+                ...state,
+                ...action.payload.userState,
+            }
         default:
             return state
     }
 }
 
-export default removeUserReducer
+export default setUserStateReducers

@@ -1,14 +1,15 @@
 import { applyMiddleware, combineReducers, legacy_createStore as createStore } from 'redux'
 import createSagaMiddleware from 'redux-saga'
-import authReducer from './reducers/auth/authReducer'
-import todoReducer from './reducers/todos/todoReducer'
-import userReducer from './reducers/user/userReducer'
+
+import authReducers from './reducers/auth/authReducers'
+import todoReducers from './reducers/todos/todoReducers'
+import userReducers from './reducers/user/userReducers'
 import { rootWatcher } from './sagas'
 
 const rootReducer = combineReducers({
-    todos: todoReducer,
-    auth: authReducer,
-    user: userReducer,
+    todos: todoReducers,
+    auth: authReducers,
+    user: userReducers,
 })
 
 const sagaMiddleware = createSagaMiddleware()

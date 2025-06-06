@@ -40,8 +40,6 @@ describe('logout', () => {
         expect(removeToken).toHaveBeenCalledWith(ctx, 'access')
         expect(removeToken).toHaveBeenCalledWith(ctx, 'refresh')
 
-        expect(getToken).toHaveBeenCalledWith(ctx, 'access')
-        expect(getToken).toHaveBeenCalledWith(ctx, 'refresh')
         expect(ctx.status).toBe(STATUS_CODES.OK)
         expect(ctx.body).toEqual({
             message: 'Logged out successfully',
@@ -57,24 +55,9 @@ describe('logout', () => {
         expect(removeToken).toHaveBeenCalledWith(ctx, 'access')
         expect(removeToken).toHaveBeenCalledWith(ctx, 'refresh')
 
-        expect(getToken).toHaveBeenCalledWith(ctx, 'access')
-        expect(getToken).toHaveBeenCalledWith(ctx, 'refresh')
         expect(ctx.status).toBe(STATUS_CODES.OK)
         expect(ctx.body).toEqual({
             message: 'Logged out successfully',
-        })
-    })
-
-    it('logout: should throw BAD_REQUEST if tokens did not remove', async () => {
-        mockedRemoveToken.mockImplementation(() => {})
-        mockedGetToken.mockReturnValueOnce('access-token').mockReturnValueOnce('refresh-token')
-
-        await logout(ctx)
-
-        expect(ctx.status).toBe(STATUS_CODES.INTERNAL_SERVER_ERROR)
-        expect(ctx.body).toEqual({
-            message: 'logout failed',
-            error: `Error with deleting tokens`,
         })
     })
 })

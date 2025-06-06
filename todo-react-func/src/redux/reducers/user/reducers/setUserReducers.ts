@@ -2,7 +2,7 @@ import { UserState } from '../../../../globalVariables/typesVariables'
 import { ACTION_TYPES } from '../../../actions/actionTypes'
 import { UserActions } from '../../../actions/userActions'
 
-const setUserReducer = (state: UserState, action: UserActions) => {
+const setUserReducers = (state: UserState, action: UserActions) => {
     switch (action.type) {
         case ACTION_TYPES.SET_USER:
             return {
@@ -13,4 +13,4 @@ const setUserReducer = (state: UserState, action: UserActions) => {
     }
 }
 
-export default setUserReducer
+export default setUserReducers
