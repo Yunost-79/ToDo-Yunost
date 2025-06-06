@@ -1,8 +1,12 @@
 import { Context } from 'koa'
 import logger from 'node-color-log'
-import { generateTokenAndSetCookie, getToken, verifyToken } from '../../helpers/tokenHelpers'
-import { STATUS_CODES } from '../../vars/statusCodesVars'
-import logout from '../userControllers/logout'
+import {
+    generateTokenAndSetCookie,
+    getToken,
+    verifyToken,
+} from '../../../helpers/tokenHelper/tokenHelpers'
+import { STATUS_CODES } from '../../../vars/statusCodesVars'
+import logout from '../../userControllers/logout/logout'
 
 const refreshToken = async (ctx: Context) => {
     try {
@@ -15,7 +19,7 @@ const refreshToken = async (ctx: Context) => {
 
         const isAdmin = decoded.isAdmin
 
-        console.log('is Admin in refresh token', isAdmin)
+        // console.log('is Admin in refresh token', isAdmin)
 
         if (!userId) ctx.throw(STATUS_CODES.UNAUTHORIZED, 'Invalid refresh token')
         if (!isAdmin) ctx.throw(STATUS_CODES.UNAUTHORIZED, 'User doesn`t have access')
@@ -34,7 +38,7 @@ const refreshToken = async (ctx: Context) => {
 
         ctx.status = errStatus
         ctx.body = {
-            message: 'Refresh token failed',
+            message: 'refreshToken failed',
             error: e.message,
         }
         logger.color('red').log(e.message)

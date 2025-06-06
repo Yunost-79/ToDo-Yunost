@@ -24,7 +24,7 @@ export const generateTokenAndSetCookie = (ctx: Context, userId: number, isAdmin:
 
     ctx.cookies.set('accessToken', accessToken, {
         maxAge: minutes * 60 * 1000,
-        httpOnly: false,
+        httpOnly: false, // important for working on client
         secure: false,
         sameSite: 'lax',
         overwrite: true,

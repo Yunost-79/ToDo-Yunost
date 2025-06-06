@@ -1,7 +1,7 @@
 import { Context } from 'koa'
 import logger from 'node-color-log'
-import { Task } from '../../Models/TaskModel'
-import { STATUS_CODES } from '../../vars/statusCodesVars'
+import { Task } from '../../../Models/TaskModel'
+import { STATUS_CODES } from '../../../vars/statusCodesVars'
 
 const deleteTasks = async (ctx: Context) => {
     try {
@@ -9,7 +9,7 @@ const deleteTasks = async (ctx: Context) => {
 
         const tasks = await Task.findAll({ where: { userId } })
 
-        if (!tasks.length) ctx.throw(STATUS_CODES.NOT_FOUNDS, 'Tasks not found')
+        if (tasks.length === 0) ctx.throw(STATUS_CODES.NOT_FOUNDS, 'Tasks not found')
 
         const destroyedTasksCount = await Task.destroy({
             where: {
@@ -28,7 +28,7 @@ const deleteTasks = async (ctx: Context) => {
 
         ctx.status = errStatus
         ctx.body = {
-            message: 'Delete tasks failed',
+            message: 'deleteTasks failed',
             error: e.message,
         }
         logger.color('red').log(e.message)

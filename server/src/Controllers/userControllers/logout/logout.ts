@@ -1,12 +1,18 @@
 import { Context } from 'koa'
 import logger from 'node-color-log'
-import { removeToken } from '../../helpers/tokenHelpers'
-import { STATUS_CODES } from '../../vars/statusCodesVars'
+import { getToken, removeToken } from '../../../helpers/tokenHelper/tokenHelpers'
+import { STATUS_CODES } from '../../../vars/statusCodesVars'
 
 const logout = async (ctx: Context) => {
     try {
         removeToken(ctx, 'access')
         removeToken(ctx, 'refresh')
+
+        const forCheckAccessToken = getToken(ctx, 'access')
+        const forCheckRefreshToken = getToken(ctx, 'refresh')
+
+        if (forCheckAccessToken || forCheckRefreshToken)
+            ctx.throw(STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error with deleting tokens')
 
         ctx.status = STATUS_CODES.OK
         ctx.body = {
@@ -19,7 +25,7 @@ const logout = async (ctx: Context) => {
 
         ctx.status = errStatus
         ctx.body = {
-            message: 'Logout failed',
+            message: 'logout failed',
             error: e.message,
         }
         logger.color('red').log(e.message)

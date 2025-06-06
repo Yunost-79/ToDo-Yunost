@@ -1,7 +1,7 @@
 import { Context } from 'koa'
 import logger from 'node-color-log'
-import { User } from '../../Models/UserModel'
-import { STATUS_CODES } from '../../vars/statusCodesVars'
+import { User } from '../../../Models/UserModel'
+import { STATUS_CODES } from '../../../vars/statusCodesVars'
 
 const getUserData = async (ctx: Context) => {
     try {
@@ -35,7 +35,7 @@ const getUserData = async (ctx: Context) => {
 
         ctx.status = errStatus
         ctx.body = {
-            message: 'Get task by id failed',
+            message: 'getUserData failed',
             error: e.message,
         }
         logger.color('red').log(e.message)

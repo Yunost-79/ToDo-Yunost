@@ -1,8 +1,8 @@
 import { Context } from 'koa'
 import logger from 'node-color-log'
-import { Task } from '../../Models/TaskModel'
-import { STATUS_CODES } from '../../vars/statusCodesVars'
-import { FilterStatus } from '../../vars/tasksVars'
+import { Task } from '../../../Models/TaskModel'
+import { STATUS_CODES } from '../../../vars/statusCodesVars'
+import { FilterStatus } from '../../../vars/tasksVars'
 
 const getTaskByFilterStatus = async (ctx: Context) => {
     try {
@@ -32,7 +32,7 @@ const getTaskByFilterStatus = async (ctx: Context) => {
 
         ctx.status = errStatus
         ctx.body = {
-            message: 'Get tasks failed',
+            message: 'getTaskByFilterStatus failed',
             error: e.message,
         }
         logger.color('red').log(e.message)

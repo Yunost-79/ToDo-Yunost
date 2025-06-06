@@ -1,8 +1,8 @@
 import { Context } from 'koa'
-import logout from '../Controllers/userControllers/logout'
-import { getToken, verifyToken } from '../helpers/tokenHelpers'
-import { User } from '../Models/UserModel'
-import { STATUS_CODES } from '../vars/statusCodesVars'
+import logout from '../../Controllers/userControllers/logout/logout'
+import { getToken, verifyToken } from '../../helpers/tokenHelper/tokenHelpers'
+import { User } from '../../Models/UserModel'
+import { STATUS_CODES } from '../../vars/statusCodesVars'
 
 const authMiddleware = async (ctx: Context, next: any) => {
     try {
@@ -27,7 +27,7 @@ const authMiddleware = async (ctx: Context, next: any) => {
         const user = await User.findOne({ where: { userId } })
 
         if (!user) {
-            ctx.throw(STATUS_CODES.UNAUTHORIZED, `User not found`)
+            ctx.throw(STATUS_CODES.NOT_FOUNDS, `User not found`)
         }
 
         ctx.state.user = user

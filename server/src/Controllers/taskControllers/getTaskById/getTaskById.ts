@@ -1,11 +1,11 @@
 import { Context } from 'koa'
 import logger from 'node-color-log'
-import { Task } from '../../Models/TaskModel'
-import { STATUS_CODES } from '../../vars/statusCodesVars'
+import { Task } from '../../../Models/TaskModel'
+import { STATUS_CODES } from '../../../vars/statusCodesVars'
 
 const getTaskById = async (ctx: Context) => {
     try {
-        const { id: taskId } = ctx.params as { id: number }
+        const { id: taskId } = ctx.params as { id: string }
 
         if (!taskId) ctx.throw(STATUS_CODES.BAD_REQUEST, 'Invalid or empty task id in params')
 
@@ -34,7 +34,7 @@ const getTaskById = async (ctx: Context) => {
 
         ctx.status = errStatus
         ctx.body = {
-            message: 'Get task by id failed',
+            message: 'getTaskById failed',
             error: e.message,
         }
         logger.color('red').log(e.message)

@@ -1,7 +1,7 @@
 import { Context } from 'koa'
 import logger from 'node-color-log'
-import { Task } from '../../Models/TaskModel'
-import { STATUS_CODES } from '../../vars/statusCodesVars'
+import { Task } from '../../../Models/TaskModel'
+import { STATUS_CODES } from '../../../vars/statusCodesVars'
 
 type CreateTaskReqBody = {
     value: string

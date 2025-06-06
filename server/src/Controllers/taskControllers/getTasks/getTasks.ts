@@ -1,7 +1,7 @@
 import { Context } from 'koa'
 import logger from 'node-color-log'
-import { Task } from '../../Models/TaskModel'
-import { STATUS_CODES } from '../../vars/statusCodesVars'
+import { Task } from '../../../Models/TaskModel'
+import { STATUS_CODES } from '../../../vars/statusCodesVars'
 
 const getTasks = async (ctx: Context) => {
     try {
@@ -11,7 +11,6 @@ const getTasks = async (ctx: Context) => {
             where: {
                 userId,
             },
-            order: [['createdAt', 'DESC']],
         })
 
         ctx.status = STATUS_CODES.OK
@@ -27,7 +26,7 @@ const getTasks = async (ctx: Context) => {
 
         ctx.status = errStatus
         ctx.body = {
-            message: 'Get tasks failed',
+            message: 'getTasks failed',
             error: e.message,
         }
         logger.color('red').log(e.message)

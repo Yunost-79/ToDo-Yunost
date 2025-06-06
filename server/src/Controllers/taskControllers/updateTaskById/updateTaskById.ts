@@ -1,8 +1,8 @@
 import { Context } from 'koa'
 import logger from 'node-color-log'
-import { Task } from '../../Models/TaskModel'
-import { STATUS_CODES } from '../../vars/statusCodesVars'
-import { FILTER_STATUS, FilterStatus } from '../../vars/tasksVars'
+import { Task } from '../../../Models/TaskModel'
+import { STATUS_CODES } from '../../../vars/statusCodesVars'
+import { FILTER_STATUS, FilterStatus } from '../../../vars/tasksVars'
 
 type Updates = {
     value?: string
@@ -11,8 +11,7 @@ type Updates = {
 
 const updateTaskById = async (ctx: Context) => {
     try {
-        const { id } = ctx.params as { id: string }
-        const taskId = parseInt(id)
+        const { id: taskId } = ctx.params as { id: string }
         const { updates } = ctx.request.body as { updates: Updates }
 
         const { userId } = ctx.state.user as { userId: number }
@@ -77,7 +76,7 @@ const updateTaskById = async (ctx: Context) => {
 
         ctx.status = errStatus
         ctx.body = {
-            message: 'Update task failed',
+            message: 'updateTaskById failed',
             error: e.message,
         }
         logger.color('red').log(e.message)

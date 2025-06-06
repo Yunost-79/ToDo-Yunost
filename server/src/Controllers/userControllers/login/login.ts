@@ -1,9 +1,9 @@
 import { Context } from 'koa'
 import logger from 'node-color-log'
-import { User } from '../../Models/UserModel'
-import { generateTokenAndSetCookie } from '../../helpers/tokenHelpers'
-import { STATUS_CODES } from '../../vars/statusCodesVars'
-import logout from './logout'
+import { User } from '../../../Models/UserModel'
+import { generateTokenAndSetCookie } from '../../../helpers/tokenHelper/tokenHelpers'
+import { STATUS_CODES } from '../../../vars/statusCodesVars'
+import logout from '../logout/logout'
 
 type LoginReqBody = {
     username: string
@@ -15,7 +15,7 @@ const login = async (ctx: Context) => {
         const { username, password } = ctx.request.body as LoginReqBody
 
         if (!username || username.trim() === '')
-            ctx.throw(STATUS_CODES.BAD_REQUEST, 'Invalid or empty email')
+            ctx.throw(STATUS_CODES.BAD_REQUEST, 'Invalid or empty username')
 
         if (!password || password.trim() === '')
             ctx.throw(STATUS_CODES.BAD_REQUEST, 'Invalid or empty password')
@@ -23,7 +23,7 @@ const login = async (ctx: Context) => {
         const currentUser = await User.findOne({ where: { username } })
 
         if (!currentUser) {
-            ctx.throw(STATUS_CODES.NOT_FOUNDS, `User with ${username} is not found`)
+            ctx.throw(STATUS_CODES.NOT_FOUNDS, `User with this username ${username} is not found`)
         }
 
         const isValidPassword = currentUser.dataValues.password === password
@@ -56,7 +56,7 @@ const login = async (ctx: Context) => {
 
         ctx.status = errStatus
         ctx.body = {
-            message: 'Login failed',
+            message: 'login failed',
             error: e.message,
         }
         logger.color('red').log(e.message)
