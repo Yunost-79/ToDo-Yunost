@@ -52,15 +52,6 @@ describe('registration', () => {
     })
 
     it('registration: should registration user and return status 200', async () => {
-        // mockedUserFindOne.mockResolvedValue({
-        //     get: (filed: string) => {
-        //         return user[filed as keyof typeof user]
-        //     },
-        //     dataValues: {
-        //         password: ctx.request.body.password,
-        //     },
-        // })
-
         mockedUserFindOne.mockResolvedValue(undefined)
         mockedUserCreate.mockImplementation(() => {})
         mockedGenerateUserAvatar.mockReturnValue(user.avatar)

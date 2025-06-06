@@ -22,7 +22,7 @@ const PersistState = () => {
         }
 
         setHasLoaded(true)
-    }, [token, dispatch, hasLoaded])
+    }, [token, dispatch, hasLoaded, filter])
 
     useEffect(() => {
         if (hasLoaded) {
