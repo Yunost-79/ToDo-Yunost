@@ -27,10 +27,6 @@ const TodoList = () => {
     const containerRef = useRef<HTMLUListElement>(null)
     const loaderRef = useRef<HTMLDivElement>(null)
 
-    // useEffect(() => {
-    //     dispatch(getUserDataRequest())
-    // }, [dispatch])
-
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
