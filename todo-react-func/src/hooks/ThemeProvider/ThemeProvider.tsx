@@ -13,7 +13,7 @@ const CustomThemeProvider: FC<CustomThemeProviderProps> = ({ children }) => {
     const { modeTheme } = useSelector((state: RootState) => state.theme)
 
     const theme = useMemo(() => {
-        return modeTheme ? darkTheme : lightTheme
+        return modeTheme === 'dark' ? darkTheme : lightTheme
     }, [modeTheme])
     return (
         <ThemeProvider theme={theme}>

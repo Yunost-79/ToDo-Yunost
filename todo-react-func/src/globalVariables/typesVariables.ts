@@ -53,5 +53,5 @@ export type UserState = {
 }
 
 export type ThemeState = {
-    modeTheme: boolean
+    modeTheme: 'light' | 'dark'
 }

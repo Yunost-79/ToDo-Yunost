@@ -138,7 +138,8 @@ export const lightTheme = createTheme(baseTheme, {
         },
 
         btn: {
-            main: grey[700],
+            main: grey[600],
+            helper: grey[400],
             support: grey[100],
             auth: orange[400],
             authSupport: orange[500],
@@ -151,6 +152,11 @@ export const lightTheme = createTheme(baseTheme, {
         },
         alarm: {
             primary: '#d32f2f',
+        },
+        loader: {
+            primary: grey[600],
+            secondary: grey[400],
+            tertiary: orange[400],
         },
     },
 })
@@ -179,7 +185,8 @@ export const darkTheme = createTheme(baseTheme, {
 
         btn: {
             main: orange[400],
-            support: orange[100],
+            helper: grey[300],
+            support: grey[100],
             auth: orange[400],
             authSupport: orange[500],
         },
@@ -187,6 +194,15 @@ export const darkTheme = createTheme(baseTheme, {
             primary: orange[400],
             secondary: orange[600],
             tertiary: orange[800],
+        },
+        alarm: {
+            primary: '#d32f2f',
+        },
+
+        loader: {
+            primary: grey[200],
+            secondary: grey[400],
+            tertiary: orange[400],
         },
     },
 })

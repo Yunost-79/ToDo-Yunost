@@ -1,29 +1,37 @@
-import { Theme } from '@emotion/react'
-import styled, { Interpolation } from '@emotion/styled'
-import { FC } from 'react'
+import { styled } from '@mui/material'
 
-type MainLoaderProps = {
-    customStyles?: Interpolation<Theme> | Array<Interpolation<Theme>>
+const MainLoader = () => {
+    return <StyledMainLoader></StyledMainLoader>
 }
 
-const MainLoader: FC<MainLoaderProps> = ({ customStyles }) => {
-    return <StyledMainLoader customStyles={[customStyles]}></StyledMainLoader>
-}
+const StyledMainLoader = styled('div')(({ theme }) => ({
+    aspectRatio: 1,
+    borderRadius: '50%',
+    border: `5px solid ${theme.palette.loader.primary}`,
+    borderRightColor: theme.palette.loader.tertiary,
+    animation: 'l2m 1s infinite linear',
 
-const StyledMainLoader = styled.div<MainLoaderProps>`
-    aspect-ratio: 1;
-    border-radius: 50%;
-    border: 5px solid lightblue;
-    border-right-color: orange;
-    animation: l2 1s infinite linear;
+    '@keyframes l2': {
+        to: {
+            transform: 'rotate(1turn)',
+        },
+    },
+}))
 
-    @keyframes l2 {
-        to {
-            transform: rotate(1turn);
-        }
-    }
+// `
+//     aspect-ratio: 1;
+//     border-radius: 50%;
+//     border: 5px solid lightblue;
+//     border-right-color: orange;
+//     animation: l2 1s infinite linear;
 
-    ${(props) => props.customStyles}
-`
+//     @keyframes l2 {
+//         to {
+//             transform: rotate(1turn);
+//         }
+//     }
+
+//     ${(props) => props.customStyles}
+// `
 
 export default MainLoader

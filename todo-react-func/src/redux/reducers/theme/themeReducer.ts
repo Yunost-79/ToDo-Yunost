@@ -4,13 +4,13 @@ import { ACTION_TYPES } from '../../actions/actionTypes'
 import { ThemeActions } from '../../actions/themeActions'
 
 const initTheme: ThemeState = {
-    modeTheme: getItem('modeTheme'),
+    modeTheme: getItem('modeTheme') === 'dark' ? 'dark' : 'light',
 }
 
 const themeReducer = (state: ThemeState = initTheme, action: ThemeActions) => {
     switch (action.type) {
         case ACTION_TYPES.SET_MODE_THEME:
-            return { ...state, ...action.payload }
+            return { ...state, modeTheme: action.payload.modeTheme }
         default:
             return state
     }

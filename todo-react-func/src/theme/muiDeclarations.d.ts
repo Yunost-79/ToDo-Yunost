@@ -14,6 +14,7 @@ export declare module '@mui/material/styles' {
     interface Palette {
         btn: {
             main: string
+            helper: string
             support: string
             auth: string
             authSupport: string
@@ -26,10 +27,16 @@ export declare module '@mui/material/styles' {
         alarm: {
             primary: string
         }
+        loader: {
+            primary: string
+            secondary: string
+            tertiary: string
+        }
     }
     interface PaletteOptions {
         btn?: {
             main: string
+            helper: string
             support: string
             auth: string
             authSupport: string
@@ -42,6 +49,11 @@ export declare module '@mui/material/styles' {
         }
         alarm: {
             primary: string
+        }
+        loader: {
+            primary: string
+            secondary: string
+            tertiary: string
         }
     }
 }

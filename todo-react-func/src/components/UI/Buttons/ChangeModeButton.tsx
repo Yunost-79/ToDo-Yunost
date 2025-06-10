@@ -15,12 +15,14 @@ const ChangeModeButton: FC<ChangeModeButtonProps> = ({ children, ...props }) => 
     const { modeTheme } = useSelector((state: RootState) => state.theme)
 
     const toggleChangeMode = () => {
-        dispatch(setModeTheme(!modeTheme))
+        const newTheme = modeTheme === 'light' ? 'dark' : 'light'
+
+        dispatch(setModeTheme(newTheme))
     }
 
     return (
         <StyledChangeModeButton onClick={() => toggleChangeMode()} {...props}>
-            {modeTheme ? <LightModeIcon /> : <DarkModeIcon />}
+            {modeTheme === 'light' ? <LightModeIcon /> : <DarkModeIcon />}
         </StyledChangeModeButton>
     )
 }
@@ -36,6 +38,10 @@ const StyledChangeModeButton = styled(Button)(({ theme }) => ({
     '&:hover': {
         backgroundColor: theme.palette.btn.support,
         opacity: 0.9,
+
+        '& svg': {
+            color: theme.palette.btn.authSupport,
+        },
     },
 }))
 

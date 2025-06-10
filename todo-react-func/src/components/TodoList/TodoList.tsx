@@ -1,16 +1,16 @@
-import { css } from '@emotion/react'
-import styled from '@emotion/styled'
+// import { css } from '@emotion/react'
+// import styled from '@emotion/styled'
+
+import { CircularProgress, styled } from '@mui/material'
 import autoScroll from 'dom-autoscroller'
 import dragula from 'dragula'
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { COLORS } from '../../globalVariables/styledVariables'
 import { FILTER_STATUS } from '../../globalVariables/todoVariables'
 import { FilterStatus, Todo } from '../../globalVariables/typesVariables'
 import { handleSetListElement } from '../../helpers/helpers'
 import { closeAllTodosIsEdit, getTodosRequest, reorderTodos } from '../../redux/actions/todoActions'
 import { RootState } from '../../redux/store'
-import MainLoader from '../UI/Loaders/MainLoader'
 import EmptyBlock from './EmptyBlock/EmptyBlock'
 import TodoItem from './TodoItem/TodoItem'
 
@@ -120,55 +120,50 @@ const TodoList = () => {
             ))}
 
             {!isEnd && (
-                <StyledLazyLoader ref={loaderRef} style={{ height: '5px' }}>
-                    <MainLoader customStyles={StyledMainLoader} />
+                <StyledLazyLoader ref={loaderRef}>
+                    <CircularProgress color="inherit" size={30} />
                 </StyledLazyLoader>
             )}
         </StyledUl>
     )
 }
 
-const StyledUl = styled.ul`
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    width: 100%;
+const StyledUl = styled('ul')({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '6px',
+    width: '100%',
+    paddingLeft: 0,
+    overflow: 'auto',
+    maxHeight: '70vh',
+})
 
-    overflow: auto;
-    max-height: 70vh;
-`
+const DraggableItem = styled('div')(({ theme }) => ({
+    width: '100%',
+    display: 'flex',
+    alignCenter: 'center',
+    gap: '8px',
+    background: theme.palette.background.default,
+    borderRadius: '4px',
+    boxShadow: `0 2px 2px ${theme.palette.secondary.contrastText}`,
+    transition: 'all 0.2s ease',
 
-const DraggableItem = styled.div`
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px;
-    background: ${COLORS.WHITE};
-    border-radius: 4px;
-    box-shadow: 0 2px 2px ${COLORS.LIGHT_GREY};
-    transition: all 0.2s ease;
+    '&.gu-transit': {
+        opacity: 0.5,
+        backgroundColor: theme.palette.primary.main,
+    },
+    '&.gu-mirror': {
+        opacity: 0.2,
+        transform: 'scale(1.02)',
+        zIndex: 10,
+    },
+}))
 
-    &.gu-transit {
-        opacity: 0.5;
-        background-color: ${COLORS.LIGHT_GOLD};
-    }
-
-    &.gu-mirror {
-        opacity: 0.2;
-        transform: scale(1.02);
-        z-index: 10;
-    }
-`
-
-const StyledLazyLoader = styled.div`
-    margin: 20px auto;
-`
-
-const StyledMainLoader = css`
-    width: 20px;
-    border: 3px solid ${COLORS.LIGHT_GREY};
-    border-right-color: ${COLORS.HARD_GREY};
-`
+const StyledLazyLoader = styled('div')({
+    heigh: '30px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+})
 
 export default TodoList

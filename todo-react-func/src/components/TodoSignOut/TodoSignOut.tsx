@@ -1,14 +1,12 @@
-import { css } from '@emotion/react'
-import styled from '@emotion/styled'
+import { styled } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { PATHS } from '../../globalVariables/pathsVariables'
-import { COLORS } from '../../globalVariables/styledVariables'
 import { signOutRequest } from '../../redux/actions/authActions'
 import { RootState } from '../../redux/store'
 import { getAccessToken } from '../../utils/cookies/cookies'
-import Button from '../UI/Buttons/Button'
+import LogoutButton from '../UI/Buttons/LogoutButton'
 import TodoSignOutModal from './TodoSignOutModal/TodoSignOutModal'
 
 const TodoSignOut = () => {
@@ -45,9 +43,8 @@ const TodoSignOut = () => {
 
     return (
         <StyledSignOutBlock>
-            <Button customStyles={StyledSignOutButton} onClick={() => handleOpenModal()}>
-                Logout
-            </Button>
+            <LogoutButton onClick={() => handleOpenModal()} />
+
             <TodoSignOutModal
                 isOpenModal={isOpenModal}
                 handleCloseModal={handleCloseModal}
@@ -57,16 +54,10 @@ const TodoSignOut = () => {
     )
 }
 
-const StyledSignOutBlock = styled.div`
-    position: absolute;
-    top: 10px;
-    right: 10px;
-`
-const StyledSignOutButton = css`
-    background-color: ${COLORS.LIGHT_ORANGE};
-    border: none;
-    font-size: 20px;
-    padding: 7px;
-`
+const StyledSignOutBlock = styled('div')({
+    position: 'absolute',
+    top: '10px',
+    right: '10px',
+})
 
 export default TodoSignOut

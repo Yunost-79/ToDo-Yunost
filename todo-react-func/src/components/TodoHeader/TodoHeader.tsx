@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import { styled, Typography } from '@mui/material'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserDataRequest } from '../../redux/actions/userActions'
@@ -15,7 +15,7 @@ const TodoHeader = () => {
 
     return (
         <StyledTodoHeader>
-            <H1>TODO LIST</H1>
+            <StyledTypography>TODO LIST</StyledTypography>
             {avatar && (
                 <UserData>
                     <UserName>{username}</UserName>
@@ -26,36 +26,36 @@ const TodoHeader = () => {
     )
 }
 
-const StyledTodoHeader = styled.div`
-    display: flex;
-    align-items: center;
-    width: 100%;
-`
+const StyledTodoHeader = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+})
 
-const H1 = styled.h1`
-    width: 100%;
-    text-align: center;
-    font-size: 24px;
-    text-transform: uppercase;
-    font-weight: 700;
-`
+const StyledTypography = styled(Typography)({
+    width: '100%',
+    textAlign: 'center',
+    fontSize: '24px',
+    textTransform: 'uppercase',
+    fontWeight: 700,
+})
 
-const UserData = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-`
+const UserData = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '10px',
+})
 
-const UserName = styled.span`
-    font-size: 18px;
-    white-space: nowrap;
-`
+const UserName = styled('span')({
+    fontSize: '18px',
+    whiteSpace: 'nowrap',
+})
 
-const UserAvatar = styled.img`
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-`
+const UserAvatar = styled('img')({
+    width: '30px',
+    height: '30px',
+    borderRadius: '50%',
+})
 
 export default TodoHeader

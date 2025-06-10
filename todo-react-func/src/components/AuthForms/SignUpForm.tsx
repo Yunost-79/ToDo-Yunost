@@ -1,12 +1,10 @@
-import { css } from '@emotion/react'
-import { IconButton, InputAdornment, styled, TextField } from '@mui/material'
+import { CircularProgress, IconButton, InputAdornment, styled, TextField } from '@mui/material'
 import { useFormik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { AUTH_VARS } from '../../globalVariables/authVariables'
 import { PATHS } from '../../globalVariables/pathsVariables'
-import { COLORS } from '../../globalVariables/styledVariables'
 import { SignUpUserData } from '../../globalVariables/typesVariables'
 import { removeAuthErrorAndLoading, signUpRequest } from '../../redux/actions/authActions'
 import { RootState } from '../../redux/store'
@@ -14,7 +12,6 @@ import { generateHashPassword } from '../../utils/bcrypt/bcrypt'
 import { signUpValidSchema } from '../../utils/yup/yupSchemas'
 import AuthButton from '../UI/Buttons/AuthButton/AuthButton'
 import ShowIcon from '../UI/Icons/ShowIcon'
-import MainLoader from '../UI/Loaders/MainLoader'
 import ErrorSpan from '../UI/Spans/ErrorSpan'
 
 type Show = {
@@ -146,7 +143,7 @@ const SignUpForm = () => {
             {error && <ErrorSpan>{error}</ErrorSpan>}
 
             <AuthButton disabled={isLoading} type="submit">
-                {isLoading ? <MainLoader customStyles={StyledMainLoader} /> : 'Sign up'}
+                {isLoading ? <StyledCircularProgress color="inherit" size={30} /> : 'Sign up'}
             </AuthButton>
         </StyledForm>
     )
@@ -161,10 +158,8 @@ const StyledForm = styled('form')(({ theme }) => ({
     gap: '9px',
 }))
 
-const StyledMainLoader = css`
-    width: 20px;
-    border: 3px solid ${COLORS.LIGHT_GREY};
-    border-right-color: ${COLORS.HARD_GREY};
-`
+const StyledCircularProgress = styled(CircularProgress)(({ theme }) => ({
+    padding: '5px',
+}))
 
 export default SignUpForm
