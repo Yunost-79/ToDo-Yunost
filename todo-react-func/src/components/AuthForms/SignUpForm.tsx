@@ -75,7 +75,7 @@ const SignUpForm = () => {
     }
 
     return (
-        <StyledForm onSubmit={() => formik.handleSubmit()}>
+        <StyledForm onSubmit={formik.handleSubmit}>
             <TextField
                 name={AUTH_VARS.username}
                 type="text"
