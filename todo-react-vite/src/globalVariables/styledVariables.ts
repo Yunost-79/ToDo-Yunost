@@ -1,0 +1,20 @@
+export const COLORS = {
+    MAIN_GREY: '#e0e0e0',
+    LIGHT_GREY: '#f0f0f0',
+    HARD_GREY: '#616161',
+    LIGHT_ORANGE: '#ffc1a7',
+    HARD_ORANGE: '#fca782',
+    HARD_ALARM_RED: '#fd0000',
+    MEDIUM_ALARM_RED: '#ff3d3d',
+    LIGHT_ALARM_RED: '#ffd3d5',
+    HARD_GREEN: '#008000',
+    LIGHT_GREEN: '#5ce65c',
+    LIGHT_GOLD: '#fdeba3',
+    WHITE: '#fff',
+    BLACK: '#000',
+
+    LIGHT_DEFAULT_BACKGROUND: '#e0e0e0',
+
+    
+    DARK_DEFAULT_BACKGROUND: '#1f1f1f',
+} as const
