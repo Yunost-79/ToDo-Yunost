@@ -51,3 +51,7 @@ export type UserState = {
     isLoading: boolean
     error: string | Error | null
 }
+
+export type ThemeState = {
+    modeTheme: boolean
+}

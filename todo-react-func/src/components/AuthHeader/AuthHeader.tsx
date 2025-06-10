@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import { styled, Typography } from '@mui/material'
 import { FC } from 'react'
 
 type AuthHeaderProps = {
@@ -6,13 +6,15 @@ type AuthHeaderProps = {
 }
 
 const AuthHeader: FC<AuthHeaderProps> = ({ title }) => {
-    return <H1>{title}</H1>
+    return <StyledTypography variant="h1">{title}</StyledTypography>
 }
 
-const H1 = styled.h1`
-    text-align: center;
-    font-size: 24px;
-    text-transform: uppercase;
-    font-weight: 600;
-`
+const StyledTypography = styled(Typography)(({ theme }) => ({
+    color: theme.palette.text.primary,
+    fontSize: '32px',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    fontWeight: 600,
+}))
+
 export default AuthHeader

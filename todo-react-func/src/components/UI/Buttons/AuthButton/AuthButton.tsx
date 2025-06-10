@@ -1,38 +1,40 @@
-import { Theme } from '@emotion/react'
-import styled, { Interpolation } from '@emotion/styled'
-import { ButtonHTMLAttributes, FC, ReactNode } from 'react'
-import { COLORS } from '../../../../globalVariables/styledVariables'
+import { Button, styled } from '@mui/material'
+import { FC, ReactNode } from 'react'
 
-type AuthButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-    customStyles?: Interpolation<Theme> | Array<Interpolation<Theme>>
+type AuthButtonProps = {
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+    type: 'submit'
+    disabled: boolean
     children?: ReactNode
 }
 
-const AuthButton: FC<AuthButtonProps> = ({ customStyles, children, ...props }) => {
+const AuthButton: FC<AuthButtonProps> = ({ onClick, type, disabled, children, ...props }) => {
     return (
-        <StyledAuthButton customStyles={[customStyles]} {...props}>
+        <StyledAuthButton
+            onClick={onClick}
+            type={type}
+            tabIndex={0}
+            disabled={disabled}
+            {...props}
+        >
             {children}
         </StyledAuthButton>
     )
 }
 
-const StyledAuthButton = styled.button<AuthButtonProps>`
-    width: 100%;
-    padding: 5px;
-    outline: none;
-    border-radius: 5px;
-    font-size: 20px;
-    white-space: nowrap;
-    border: none;
-    background-color: ${COLORS.LIGHT_ORANGE};
-    cursor: pointer;
-    transition: 0.25s;
+const StyledAuthButton = styled(Button)(({ theme }) => ({
+    width: '100%',
+    padding: '5px',
+    borderRadius: '5px',
+    fontSize: '20px',
+    whiteSpace: 'nowrap',
+    border: 'none',
+    color: theme.palette.text.primary,
+    backgroundColor: theme.palette.btn.auth,
 
-    &:hover {
-        background-color: ${COLORS.HARD_ORANGE};
-    }
-
-    ${(props) => props.customStyles}
-`
+    '&:hover': {
+        backgroundColor: theme.palette.btn.authSupport,
+    },
+}))
 
 export default AuthButton

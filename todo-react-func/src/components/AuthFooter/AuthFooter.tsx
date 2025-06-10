@@ -1,8 +1,7 @@
-import styled from '@emotion/styled'
+import { styled } from '@mui/material'
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
 import { PATHS } from '../../globalVariables/pathsVariables'
-import { COLORS } from '../../globalVariables/styledVariables'
 
 type AuthFooterProps = {
     to: string
@@ -20,15 +19,16 @@ const AuthFooter: FC<AuthFooterProps> = ({ to }) => {
     )
 }
 
-const Span = styled.span`
-    & a {
-        color: ${COLORS.HARD_GREY};
-        transition: 0.2s;
+const Span = styled('span')(({ theme }) => ({
+    color: theme.palette.text.primary,
 
-        &:hover {
-            color: ${COLORS.HARD_ORANGE};
-        }
-    }
-`
+    '& a': {
+        color: theme.palette.text.secondary,
+
+        '&:hover': {
+            color: theme.palette.text.support,
+        },
+    },
+}))
 
 export default AuthFooter

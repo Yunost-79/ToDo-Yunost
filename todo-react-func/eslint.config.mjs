@@ -1,7 +1,7 @@
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
 import pluginReact from 'eslint-plugin-react';
 import { defineConfig } from 'eslint/config';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 export default defineConfig([
     { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'], languageOptions: { globals: globals.browser } },
@@ -28,6 +28,8 @@ export default defineConfig([
             'react/jsx-props-no-spreading': 'off',
             'class-methods-use-this': 'off',
             'prettier/prettier': ['error', { endOfLine: 'auto' }],
+            'import/no-unresolved': 'off',
+            'import/extensions': 'off'
         },
     }),
 ]);

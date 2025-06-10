@@ -12,4 +12,9 @@ export const COLORS = {
     LIGHT_GOLD: '#fdeba3',
     WHITE: '#fff',
     BLACK: '#000',
+
+    LIGHT_DEFAULT_BACKGROUND: '#e0e0e0',
+
+    
+    DARK_DEFAULT_BACKGROUND: '#1f1f1f',
 } as const

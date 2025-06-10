@@ -1,23 +1,19 @@
-import { css, Global } from '@emotion/react'
-import styled from '@emotion/styled'
+import { styled } from '@mui/material/styles'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import { PATHS } from './globalVariables/pathsVariables'
-import { COLORS } from './globalVariables/styledVariables'
+import PersistState from './hooks/PersistState/PersistState'
+import CustomThemeProvider from './hooks/ThemeProvider/ThemeProvider'
 import SignInPage from './pages/SignInPage'
 import SignUpPage from './pages/SignUpPage'
 import TodoPage from './pages/TodoPage'
-
-import PersistState from './hooks/PersistState/PersistState'
 import PrivateRoutes from './utils/routes/PrivateRoute'
 import PublicRoutes from './utils/routes/PublicRoute'
 
 const App = () => {
     return (
-        <>
-            <Global styles={globalStyles} />
+        <CustomThemeProvider>
             <StyledWrapper>
                 <PersistState />
-
                 <Router
                     future={{
                         v7_startTransition: true,
@@ -36,25 +32,14 @@ const App = () => {
                     </Routes>
                 </Router>
             </StyledWrapper>
-        </>
+        </CustomThemeProvider>
     )
 }
 
-const globalStyles = css`
-    body {
-        background-color: ${COLORS.MAIN_GREY};
-        font-family: 'Helvetica', Sans-Serif;
-        margin: 0;
-        padding: 0;
-
-        .gu-mirror {
-            display: none;
-        }
-    }
-`
-
-const StyledWrapper = styled.div`
-    width: 100%;
-`
+const StyledWrapper = styled('div')(({ theme }) => ({
+    width: '100%',
+    minHeight: '100vh',
+    backgroundColor: theme.palette.background.paper,
+}))
 
 export default App
