@@ -1,4 +1,4 @@
-import { keyframes } from '@emotion/react'
+import { keyframes } from '@mui/material/styles'
 
 export const horizontalShake = keyframes`
   0% { transform: translateX(0) }

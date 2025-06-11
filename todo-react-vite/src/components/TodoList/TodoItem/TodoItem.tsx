@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import { styled } from '@mui/material'
 import { FC } from 'react'
 import { useDispatch } from 'react-redux'
 import { COLORS } from '../../../globalVariables/styledVariables'
@@ -53,36 +53,40 @@ const TodoItem: FC<TodoItemProps> = ({ todo }) => {
     )
 }
 
-const StyledLi = styled.li`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    width: 100%;
-    list-style-type: none;
-    padding: 5px;
-    border-radius: 5px;
-    transition: 0.2s;
+const StyledLi = styled('li')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: '12px',
+    width: '100%',
+    listStyleType: 'none',
+    padding: '5px',
+    borderRadius: '5px',
+    transition: '0.1 ease',
 
-    &.completed {
-        background-color: ${COLORS.LIGHT_GREY};
-    }
-`
+    '&.completed': {
+        transition: '0.1 ease',
 
-const DragHandle = styled.span`
-    cursor: grab;
-    user-select: none;
-    opacity: 0.75;
-    transition: 0.2s;
+        backgroundColor: theme.palette.text.main,
+    },
+}))
 
-    &:hover {
-        opacity: 1;
-    }
+const DragHandle = styled('span')({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'grab',
+    userSelect: 'none',
+    opacity: 0.75,
 
-    &:active {
-        cursor: grabbing;
-        opacity: 1;
-    }
-`
+    '&:hover': {
+        opacity: 1,
+    },
+
+    '&:active': {
+        cursor: 'grabbing',
+        opacity: 1,
+    },
+})
 
 export default TodoItem

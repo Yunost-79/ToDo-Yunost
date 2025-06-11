@@ -9,6 +9,7 @@ export declare module '@mui/material/styles' {
     interface TypeText {
         support: string
         tertiary: string
+        main: string
     }
 
     interface Palette {
@@ -18,6 +19,12 @@ export declare module '@mui/material/styles' {
             support: string
             auth: string
             authSupport: string
+            agree: string
+            agreeSupport: string
+            disagree: string
+            disagreeSupport: string
+            edit: string
+            editSupport: string
         }
         input: {
             primary: string
@@ -32,6 +39,9 @@ export declare module '@mui/material/styles' {
             secondary: string
             tertiary: string
         }
+        shadow: {
+            primary: string
+        }
     }
     interface PaletteOptions {
         btn?: {
@@ -40,6 +50,12 @@ export declare module '@mui/material/styles' {
             support: string
             auth: string
             authSupport: string
+            agree: string
+            agreeSupport: string
+            disagree: string
+            disagreeSupport: string
+            edit: string
+            editSupport: string
         }
 
         input?: {
@@ -47,13 +63,16 @@ export declare module '@mui/material/styles' {
             secondary: string
             tertiary: string
         }
-        alarm: {
+        alarm?: {
             primary: string
         }
-        loader: {
+        loader?: {
             primary: string
             secondary: string
             tertiary: string
+        }
+        shadow: {
+            primary: string
         }
     }
 }

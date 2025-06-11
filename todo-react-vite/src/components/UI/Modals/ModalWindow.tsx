@@ -1,69 +1,39 @@
-import { css, Interpolation, Theme } from '@emotion/react'
-import styled from '@emotion/styled'
+import { Box, Modal, styled } from '@mui/material'
 import { FC, ReactNode } from 'react'
-import { COLORS } from '../../../globalVariables/styledVariables'
 
 type ModalWindowProps = {
-    customStyles?: Interpolation<Theme>
-    isOpen?: boolean
-    onClose?: () => void
+    className?: string
+    open: boolean
+    handleClose: () => void
     children?: ReactNode
 }
 
-const ModalWindow: FC<ModalWindowProps> = ({ customStyles, onClose, children, ...props }) => {
+const ModalWindow: FC<ModalWindowProps> = ({
+    className,
+    open,
+    handleClose,
+    children,
+    ...props
+}) => {
     return (
-        <StyledModalWindow {...props}>
-            <StyledModalOverlay onClick={onClose} />
-            <StyledModalContent customStyles={customStyles}>{children}</StyledModalContent>
-        </StyledModalWindow>
+        <StyledModal open={open} onClose={handleClose} className={className} {...props}>
+            <StyledBox>{children}</StyledBox>
+        </StyledModal>
     )
 }
 
-const StyledModalWindow = styled.div<ModalWindowProps>`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    transition: 0.3s all ease-in-out;
-    z-index: 999;
-    ${({ isOpen }) =>
-        isOpen
-            ? css`
-                  display: flex;
-                  opacity: 1;
-                  pointer-events: auto;
-              `
-            : css`
-                  opacity: 0;
-                  pointer-events: none;
-              `}
-`
+const StyledModal = styled(Modal)({})
 
-const StyledModalOverlay = styled.div`
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: ${COLORS.BLACK};
-    opacity: 0.2;
-`
-
-const StyledModalContent = styled.div<ModalWindowProps>`
-    z-index: 100;
-    max-height: 100%;
-    overflow-y: auto;
-    box-shadow: -1px 2px 500px 10px ${COLORS.HARD_GREY};
-
-    @media (max-width: 576px) {
-        max-width: 80%;
-    }
-
-    ${(props) => props.customStyles}
-`
+const StyledBox = styled(Box)(({ theme }) => ({
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    backgroundColor: theme.palette.background.default,
+    padding: '24px',
+    borderRadius: '8px',
+    outline: 'none',
+    maxWidth: '80%',
+}))
 
 export default ModalWindow

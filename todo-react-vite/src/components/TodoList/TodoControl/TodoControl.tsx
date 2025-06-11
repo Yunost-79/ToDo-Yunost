@@ -1,10 +1,8 @@
-import { css } from '@emotion/react'
-import styled from '@emotion/styled'
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
+import { styled } from '@mui/material'
 import { FC } from 'react'
-import { COLORS } from '../../../globalVariables/styledVariables'
-import Button from '../../UI/Buttons/Button'
-import CloseIcon from '../../UI/Icons/CloseIcon'
-import EditIcon from '../../UI/Icons/EditIcon'
+import TodoButton from '../../UI/Buttons/TodoButton'
 
 type TodoControlProps = {
     handleTodoIsEdit: () => void
@@ -14,66 +12,50 @@ type TodoControlProps = {
 const TodoControl: FC<TodoControlProps> = ({ handleTodoIsEdit, removeTodo }) => {
     return (
         <StyledTodoControl>
-            <Button customStyles={StyledEditButton} onClick={handleTodoIsEdit}>
-                <EditIcon color={COLORS.HARD_GREY} />
-            </Button>
-            <Button customStyles={StyledRemoveButton} onClick={removeTodo}>
-                <CloseIcon color={COLORS.HARD_GREY} />
-            </Button>
+            <StyledTodoButton className="edit" onClick={() => handleTodoIsEdit()}>
+                <EditOutlinedIcon />
+            </StyledTodoButton>
+
+            <StyledTodoButton className="remove" onClick={() => removeTodo()}>
+                <CloseOutlinedIcon />
+            </StyledTodoButton>
         </StyledTodoControl>
     )
 }
 
-const StyledTodoControl = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-`
+const StyledTodoControl = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '12px',
+})
 
-const StyledControlButtons = css`
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    background-color: transparent;
-    padding: 5px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    opacity: 0.75;
-    gap: 6px;
-    transition: 0.2s;
+const StyledTodoButton = styled(TodoButton)(({ theme }) => ({
+    borderRadius: '5px',
+    padding: '2px',
 
-    &:hover {
-        cursor: pointer;
-        opacity: 1;
+    '& svg': {
+        color: theme.palette.btn.helper,
+        height: '25px',
+    },
 
-        svg {
-            opacity: 0.9;
-        }
-    }
+    '&:hover': {
+        '&.edit': {
+            backgroundColor: theme.palette.btn.editSupport,
 
-    svg {
-        width: 20px;
-        height: 20px;
-        opacity: 0.75;
-    }
-`
+            '& svg': {
+                color: theme.palette.btn.edit,
+            },
+        },
 
-const StyledEditButton = css`
-    ${StyledControlButtons}
-    &:hover {
-        background-color: ${COLORS.LIGHT_GOLD};
-    }
-`
+        '&.remove': {
+            backgroundColor: theme.palette.btn.disagreeSupport,
 
-const StyledRemoveButton = css`
-    ${StyledControlButtons}
-    &:hover {
-        background-color: ${COLORS.LIGHT_ALARM_RED};
-        color: ${COLORS.HARD_ALARM_RED};
-    }
-`
+            '& svg': {
+                color: theme.palette.btn.disagree,
+            },
+        },
+    },
+}))
 
 export default TodoControl

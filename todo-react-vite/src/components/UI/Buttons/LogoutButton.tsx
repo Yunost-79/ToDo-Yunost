@@ -1,5 +1,6 @@
 import LogoutIcon from '@mui/icons-material/Logout'
-import { Button, styled } from '@mui/material'
+import { Button } from '@mui/material'
+import { styled } from '@mui/material/styles'
 import { FC, ReactNode } from 'react'
 
 type LogoutButtonProps = {

@@ -1,6 +1,5 @@
-import styled from '@emotion/styled'
+import { styled } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { COLORS } from '../../../globalVariables/styledVariables'
 import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
 import { FilterStatus } from '../../../globalVariables/typesVariables'
 import { handleSetListElement } from '../../../helpers/helpers'
@@ -23,21 +22,17 @@ const TodoCounter = () => {
     const counterTitle = handleSetListElement(counterTitleBlock, filter)
     return (
         <StyledTodoCounter>
-            <CounterSpan>{counterTitle?.title}</CounterSpan>
-            <CounterSpan>{counter}</CounterSpan>
+            <span>{counterTitle?.title}</span>
+            <span>{counter}</span>
         </StyledTodoCounter>
     )
 }
 
-const StyledTodoCounter = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-`
-
-const CounterSpan = styled.span`
-    color: ${COLORS.HARD_GREY};
-`
+const StyledTodoCounter = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '5px',
+})
 
 export default TodoCounter

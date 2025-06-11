@@ -1,6 +1,5 @@
-import styled from '@emotion/styled'
+import { styled } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { COLORS } from '../../../globalVariables/styledVariables'
 import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
 import { FilterStatus } from '../../../globalVariables/typesVariables'
 import { setFilter } from '../../../redux/actions/todoActions'
@@ -40,23 +39,19 @@ const Filters = () => {
     )
 }
 
-const StyledTodoFilters = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 5px;
-`
-const FilterSpan = styled.span`
-    color: ${COLORS.HARD_GREY};
-    opacity: 0.7;
-    cursor: pointer;
-    transition: 0.2s;
+const StyledTodoFilters = styled('div')({
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+    gap: '5px',
+})
 
-    &.active {
-        opacity: 1;
-        color: ${COLORS.BLACK};
-        text-decoration: underline;
-    }
-`
+const FilterSpan = styled('span')(({ theme }) => ({
+    cursor: 'pointer',
+
+    '&.active': {
+        color: theme.palette.btn.auth,
+    },
+}))
 
 export default Filters

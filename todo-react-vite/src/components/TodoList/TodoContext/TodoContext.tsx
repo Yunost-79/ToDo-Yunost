@@ -1,11 +1,11 @@
-import styled from '@emotion/styled'
+import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined'
+import { styled, Typography } from '@mui/material'
 import { FC, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { COLORS } from '../../../globalVariables/styledVariables'
 import { FILTER_STATUS } from '../../../globalVariables/todoVariables'
 import { Todo } from '../../../globalVariables/typesVariables'
 import { closeAllTodosIsEdit, updateTodoRequest } from '../../../redux/actions/todoActions'
-import ChangeStatusRadioButton from '../../UI/RadioButtons/ChangeStatusRadioButton'
+import TodoButton from '../../UI/Buttons/TodoButton'
 import ContextEdit from './ContextEdit/ContextEdit'
 
 type TodoContextProps = {
@@ -40,18 +40,20 @@ const TodoContext: FC<TodoContextProps> = ({ todo, toggleTodoStatus, handleTodoI
 
     return (
         <StyledTodoContext>
-            <ChangeStatusRadioButton
+            <StyledRadioButton
                 className={todo.status === FILTER_STATUS.completed ? 'completed' : ''}
-                onClick={toggleTodoStatus}
-            />
+                onClick={() => toggleTodoStatus()}
+            >
+                <CheckOutlinedIcon />
+            </StyledRadioButton>
             {!todo.isEdit ? (
-                <ContextTitle
+                <StyledContextTitle
                     onDoubleClick={handleTodoIsEdit}
                     title="Double click to edit todo"
                     className={todo.status === FILTER_STATUS.completed ? 'completed' : ''}
                 >
                     {todo.value}
-                </ContextTitle>
+                </StyledContextTitle>
             ) : (
                 <ContextEdit
                     value={editInputValue}
@@ -64,27 +66,68 @@ const TodoContext: FC<TodoContextProps> = ({ todo, toggleTodoStatus, handleTodoI
     )
 }
 
-const StyledTodoContext = styled.div`
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 12px;
-`
+const StyledTodoContext = styled('div')({
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    gap: '12px',
+})
 
-const ContextTitle = styled.span`
-    font-size: 18px;
-    word-break: break-all;
-    color: ${COLORS.HARD_GREY};
-    transition: 0.2s;
+const StyledRadioButton = styled(TodoButton)(({ theme }) => ({
+    border: `1px solid ${theme.palette.btn.auth}`,
+    borderRadius: '6px',
 
-    &:hover {
-        color: ${COLORS.BLACK};
-    }
+    '& svg': {
+        margin: '1px',
+        color: theme.palette.btn.helper,
+        height: '23px',
+        width: '23px',
+        opacity: 0,
+        transition: '0.1s',
+    },
 
-    &.completed {
-        text-decoration: line-through;
-    }
-`
+    '&:hover': {
+        '& svg': {
+            opacity: 0.75,
+        },
+    },
+
+    '&.completed': {
+        '& svg': {
+            opacity: 1,
+            color: theme.palette.btn.auth,
+        },
+    },
+}))
+
+const StyledContextTitle = styled(Typography)(({ theme }) => ({
+    fontSize: '18px',
+    wordBreak: 'break-all',
+    color: theme.palette.text.primary,
+}))
+
+// const StyledTodoContext = styled.div`
+//     width: 100%;
+//     display: flex;
+//     align-items: center;
+//     justify-content: flex-start;
+//     gap: 12px;
+// `
+
+// const ContextTitle = styled.span`
+//     font-size: 18px;
+//     word-break: break-all;
+//     color: ${COLORS.HARD_GREY};
+//     transition: 0.2s;
+
+//     &:hover {
+//         color: ${COLORS.BLACK};
+//     }
+
+//     &.completed {
+//         text-decoration: line-through;
+//     }
+// `
 
 export default TodoContext

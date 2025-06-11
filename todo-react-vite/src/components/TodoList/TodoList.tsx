@@ -1,6 +1,3 @@
-// import { css } from '@emotion/react'
-// import styled from '@emotion/styled'
-
 import { CircularProgress, styled } from '@mui/material'
 import autoScroll from 'dom-autoscroller'
 import dragula from 'dragula'
@@ -34,7 +31,7 @@ const TodoList = () => {
                     dispatch(getTodosRequest())
                 }
             },
-            { threshold: 0.1 },
+            { threshold: 0.6 },
         )
 
         if (loaderRef.current) {
@@ -120,7 +117,7 @@ const TodoList = () => {
             ))}
 
             {!isEnd && (
-                <StyledLazyLoader ref={loaderRef}>
+                <StyledLazyLoader ref={loaderRef} style={{ margin: '15px 0' }}>
                     <CircularProgress color="inherit" size={30} />
                 </StyledLazyLoader>
             )}
@@ -145,7 +142,7 @@ const DraggableItem = styled('div')(({ theme }) => ({
     gap: '8px',
     background: theme.palette.background.default,
     borderRadius: '4px',
-    boxShadow: `0 2px 2px ${theme.palette.secondary.contrastText}`,
+    boxShadow: `0 2px 2px ${theme.palette.shadow.primary}`,
     transition: 'all 0.2s ease',
 
     '&.gu-transit': {

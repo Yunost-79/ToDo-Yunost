@@ -1,4 +1,13 @@
-import { blueGrey, common, green, grey, orange } from '@mui/material/colors'
+import {
+    blueGrey,
+    common,
+    green,
+    grey,
+    lightGreen,
+    orange,
+    red,
+    yellow,
+} from '@mui/material/colors'
 import { createTheme } from '@mui/material/styles'
 import { COLORS } from '../globalVariables/styledVariables'
 
@@ -10,11 +19,9 @@ const baseTheme = createTheme({
     customColors: { ...COLORS },
     components: {
         MuiCssBaseline: {
-            styleOverrides: {
-                '*': {
-                    transition:
-                        'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease',
-                    boxSizing: 'border-box',
+            styleOverrides: (theme) => ({
+                'html, body, #root': {
+                    transition: 'background-color 0.2s ease, color 0.2s ease',
                 },
                 '.gu-mirror': {
                     display: 'none !important',
@@ -32,7 +39,7 @@ const baseTheme = createTheme({
                         WebkitTextFillColor: 'inherit !important',
                         caretColor: 'currentColor !important',
                     },
-            },
+            }),
         },
         MuiButton: {
             styleOverrides: {
@@ -42,7 +49,7 @@ const baseTheme = createTheme({
                     minWidth: 0,
                     borderRadius: 0,
                     backgroundColor: 'transparent',
-                    transition: '0.2s ease',
+                    transition: '0.1s ease',
                     color: common.black,
                     textTransform: 'none',
                 },
@@ -133,18 +140,22 @@ export const lightTheme = createTheme(baseTheme, {
             primary: grey[800],
             secondary: grey[600],
             tertiary: grey[400],
-
+            main: grey[200],
             support: orange[400],
         },
-
         btn: {
             main: grey[600],
             helper: grey[400],
-            support: grey[100],
+            support: grey[200],
             auth: orange[400],
-            authSupport: orange[500],
+            authSupport: orange[600],
+            agree: lightGreen.A200,
+            agreeSupport: green[700],
+            disagree: red[100],
+            disagreeSupport: red[700],
+            edit: yellow[800],
+            editSupport: yellow[100],
         },
-
         input: {
             primary: orange[400],
             secondary: orange[600],
@@ -158,6 +169,9 @@ export const lightTheme = createTheme(baseTheme, {
             secondary: grey[400],
             tertiary: orange[400],
         },
+        shadow: {
+            primary: grey[200],
+        },
     },
 })
 
@@ -165,7 +179,7 @@ export const darkTheme = createTheme(baseTheme, {
     palette: {
         mode: 'dark',
         background: {
-            default: blueGrey[800],
+            default: blueGrey[700],
             paper: blueGrey[900],
         },
         primary: {
@@ -178,17 +192,23 @@ export const darkTheme = createTheme(baseTheme, {
         },
         text: {
             primary: grey[200],
-            secondary: grey[600],
+            secondary: grey[400],
             tertiary: grey[800],
+            main: blueGrey[500],
             support: orange[400],
         },
-
         btn: {
             main: orange[400],
             helper: grey[300],
             support: grey[100],
             auth: orange[400],
-            authSupport: orange[500],
+            authSupport: orange[600],
+            agree: lightGreen.A200,
+            agreeSupport: green[700],
+            disagree: red[100],
+            disagreeSupport: red[700],
+            edit: yellow[800],
+            editSupport: yellow[100],
         },
         input: {
             primary: orange[400],
@@ -203,6 +223,9 @@ export const darkTheme = createTheme(baseTheme, {
             primary: grey[200],
             secondary: grey[400],
             tertiary: orange[400],
+        },
+        shadow: {
+            primary: blueGrey[900],
         },
     },
 })
